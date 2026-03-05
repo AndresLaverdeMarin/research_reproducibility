@@ -1,0 +1,330 @@
+---
+title: Publications in 21^st^ Century
+subtitle: Reproducibility of Scientific Research
+format:
+  clean-revealjs:
+    mermaid:
+      theme: default
+    scrollable: false
+author:
+  - name: Nikiforos Zacharof
+    orcid: 0000-0003-4176-3226
+    email: Nikiforos-Georgios.ZACHAROF@ext.ec.europa.eu
+    affiliations: Joint Research Center
+  - name: Andres L. Marin
+    orcid: 0000-0002-9578-4412
+    email: Andres.LAVERDE-MARIN@ec.europa.eu
+    affiliations: Joint Research Center
+  - name: Georgios Fontaras
+    orcid: 0000-0001-9924-4731
+    email: Georgios.FONTARAS@ec.europa.eu
+    affiliations: Joint Research Center
+date: last-modified
+---
+
+```{=html}
+<style>
+#mermaid-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.9);
+  z-index: 9999;
+  overflow: hidden;
+}
+#mermaid-overlay .zoom-container {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  transform-origin: 0 0;
+}
+#mermaid-overlay svg {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: none;
+  height: auto;
+}
+#mermaid-overlay .controls {
+  position: fixed;
+  top: 15px; right: 15px;
+  z-index: 10000;
+  display: flex;
+  gap: 8px;
+}
+#mermaid-overlay .controls button {
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 6px;
+  width: 40px; height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#mermaid-overlay .controls button:hover {
+  background: #fff;
+}
+.mermaid-js svg, .mermaid svg {
+  cursor: pointer;
+}
+.diagram-scroll {
+  overflow: auto;
+  max-height: 75vh;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+}
+.diagram-scroll .cell-output-display,
+.diagram-scroll .mermaid-js,
+.diagram-scroll .mermaid {
+  min-width: max-content;
+}
+</style>
+<div id="mermaid-overlay"></div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    var overlay = document.getElementById('mermaid-overlay');
+    var scale = 1, panX = 0, panY = 0;
+    var isDragging = false, startX, startY;
+
+    function openOverlay(svg) {
+      scale = 1; panX = 0; panY = 0;
+      overlay.innerHTML =
+        '<div class="controls">' +
+          '<button id="zm-in" title="Zoom in">+</button>' +
+          '<button id="zm-out" title="Zoom out">&minus;</button>' +
+          '<button id="zm-reset" title="Reset">&#8634;</button>' +
+          '<button id="zm-close" title="Close (Esc)">&times;</button>' +
+        '</div>' +
+        '<div class="zoom-container"></div>';
+      var container = overlay.querySelector('.zoom-container');
+      var clone = svg.cloneNode(true);
+      clone.style.cursor = 'grab';
+      clone.removeAttribute('width');
+      clone.removeAttribute('height');
+      clone.style.minWidth = '80vw';
+      container.appendChild(clone);
+      overlay.style.display = 'block';
+      applyTransform(container);
+
+      overlay.querySelector('#zm-in').onclick = function(e) { e.stopPropagation(); scale *= 1.3; applyTransform(container); };
+      overlay.querySelector('#zm-out').onclick = function(e) { e.stopPropagation(); scale /= 1.3; applyTransform(container); };
+      overlay.querySelector('#zm-reset').onclick = function(e) { e.stopPropagation(); scale = 1; panX = 0; panY = 0; applyTransform(container); };
+      overlay.querySelector('#zm-close').onclick = function() { overlay.style.display = 'none'; };
+
+      container.addEventListener('mousedown', function(e) {
+        isDragging = true; startX = e.clientX - panX; startY = e.clientY - panY;
+        clone.style.cursor = 'grabbing';
+        e.preventDefault();
+      });
+      document.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        panX = e.clientX - startX; panY = e.clientY - startY;
+        applyTransform(container);
+      });
+      document.addEventListener('mouseup', function() {
+        isDragging = false;
+        if (clone) clone.style.cursor = 'grab';
+      });
+      overlay.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        var delta = e.deltaY > 0 ? 0.9 : 1.1;
+        scale *= delta;
+        scale = Math.max(0.2, Math.min(scale, 10));
+        applyTransform(container);
+      }, {passive: false});
+    }
+
+    function applyTransform(container) {
+      container.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
+    }
+
+    document.querySelectorAll('.mermaid-js svg, .mermaid svg').forEach(function(svg) {
+      svg.addEventListener('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        openOverlay(svg);
+      });
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') overlay.style.display = 'none';
+    });
+  }, 2000);
+});
+</script>
+```
+
+## Scientific Reproducibility Index {.smaller}
+
+### Agentic AI for Automated Paper Validation
+
+An automated system that **reads**, **extracts**, and **generates code** to validate the reproducibility of scientific papers.
+
+```{mermaid}
+%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '25px'}}}%%
+flowchart LR
+    A["Scientific<br>Paper"] --> B["AI Agent<br>Reader"]
+    B --> C["Extract<br>Methodology<br>& Data"]
+    C --> D["Generate<br>Reproduction<br>Code"]
+    D --> E["Execute &<br>Validate<br>Results"]
+    E --> F["Reproducibility<br>Score"]
+
+    style A fill:#107895,color:#fff,stroke:none
+    style B fill:#9a2515,color:#fff,stroke:none
+    style C fill:#107895,color:#fff,stroke:none
+    style D fill:#9a2515,color:#fff,stroke:none
+    style E fill:#107895,color:#fff,stroke:none
+    style F fill:#9a2515,color:#fff,stroke:none
+```
+
+- **Read**: AI agent ingests the full paper — text, figures, tables, and supplementary materials
+- **Extract**: Identifies methodology, datasets, parameters, and expected results
+- **Generate Code**: Produces executable reproduction scripts from extracted information
+- **Validate**: Runs the code and compares outputs against published results to compute a reproducibility score
+
+## EU Vehicle CO2 Emissions — Methodology {.smaller}
+
+::: {.diagram-scroll}
+
+```{mermaid}
+%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '25px'}}}%%
+flowchart TD
+    %% ── DATA SOURCES ──────────────────────────────────────
+    subgraph SOURCES["Data Sources"]
+        direction LR
+        OBFCM["OBFCM Data<br/>7.7M passenger cars<br/>2021 - 2023"]
+        EEA["EEA CO2<br/>Monitoring DB<br/>Full new-vehicle registry"]
+        EURO["Eurostat<br/>Population density<br/>Weather / Infrastructure"]
+        VEH["Vehicle DBs<br/>Dimensions<br/>Transmission details"]
+    end
+
+    %% ── PREPROCESSING ─────────────────────────────────────
+    subgraph PREPROC["Preprocessing"]
+        MERGE["Merge and Augment<br/>OBFCM + EEA + Eurostat<br/>+ Vehicle databases"]
+        DEDUP["Deduplication<br/>Keep most recent<br/>entry per vehicle"]
+        OUTLIER["Outlier Filtering<br/>CO2_TA - 30 &lt; CO2_RW &lt; 3 x CO2_TA"]
+        FINAL["Final Dataset<br/>7.7M vehicles<br/>31% of total registrations"]
+
+        MERGE --> DEDUP --> OUTLIER --> FINAL
+    end
+
+    OBFCM --> MERGE
+    EEA --> MERGE
+    EURO --> MERGE
+    VEH --> MERGE
+
+    %% ── REAL-WORLD CALCULATIONS ───────────────────────────
+    subgraph RWCALC["Real-World Calculations"]
+        RWFC["RW Fuel Consumption<br/>Lifetime fuel / Lifetime distance"]
+        RWCO2["RW CO2 Emissions<br/>RW FC x Fuel conversion factor"]
+        EDS["Electric Driving Share<br/>Electric energy / Total energy<br/>PHEVs only"]
+        GAP["TA vs RW Gap<br/>Absolute: RW - TA g/km<br/>Relative: percent difference"]
+
+        RWFC --> RWCO2
+        RWCO2 --> GAP
+        EDS --> GAP
+    end
+
+    FINAL --> RWCALC
+
+    %% ── STATISTICAL METHODS ───────────────────────────────
+    subgraph STATS["Statistical Modelling"]
+        VIF["Variable Selection<br/>VIF &lt; 5 threshold<br/>AIC stepwise selection"]
+        PRED["Predictors<br/>Mass / Power / Tyre radius<br/>Fuel / Year / Country<br/>Mileage / EDS"]
+        MLR["Multivariable Linear<br/>Regression - MLR<br/>Transparency for policy"]
+        LMG["Variance Decomposition<br/>LMG method<br/>R2 attribution per predictor"]
+
+        VIF --> MLR
+        PRED --> MLR
+        MLR --> LMG
+    end
+
+    RWCALC --> STATS
+
+    %% ── KEY RESULTS ───────────────────────────────────────
+    subgraph RESULTS["Key Results"]
+        direction TB
+
+        subgraph EF["RW Emission Factors - g/km"]
+            direction LR
+            ICEV["ICEV<br/>Petrol 166 / Diesel 170"]
+            HEV["HEV<br/>Petrol 149 / Diesel 190"]
+            PHEV["PHEV<br/>Petrol 131 / Diesel 150"]
+        end
+
+        subgraph GAPRES["TA vs RW Gap"]
+            direction LR
+            GAPICV["ICEV and HEV<br/>19 - 20% gap<br/>+25 to +32 g/km"]
+            GAPPHV["PHEV<br/>280 - 320% gap<br/>+98 to +117 g/km"]
+        end
+
+        subgraph FLEET["Total EU Fleet Emissions"]
+            direction LR
+            Y21["2021<br/>20.9 Mt"]
+            Y22["2022<br/>18.7 Mt"]
+            Y23["2023<br/>20.4 Mt"]
+        end
+
+        subgraph DRIVERS["Key Variability Drivers"]
+            direction LR
+            MASS["Vehicle Mass<br/>+15.2 g/km per<br/>100 kg - Petrol"]
+            POWER["Engine Power<br/>Primary driver<br/>ICEV and HEV"]
+            EDSD["Electric Driving<br/>Share - EDS<br/>51% of PHEV variance"]
+        end
+    end
+
+    STATS --> RESULTS
+
+    %% ── FLEET ESTIMATION ──────────────────────────────────
+    subgraph FLEST["Fleet-Level Estimation"]
+        REGMOD["Best Regression Models<br/>Applied to full EEA registry"]
+        STOCH["Stochastic Imputation<br/>Mileage + EDS from<br/>OBFCM distributions"]
+        AGG["Aggregation<br/>CO2 = Avg RW x Mileage x N<br/>/ 1e9 to Mt CO2"]
+
+        REGMOD --> STOCH --> AGG
+    end
+
+    EEA --> REGMOD
+    STATS --> REGMOD
+
+    AGG --> FLEET
+
+    %% ── PHEV INSIGHTS ─────────────────────────────────────
+    subgraph PHEVINS["PHEV-Specific Insights"]
+        direction LR
+        CHARGE["Users charge<br/>less than regs assume"]
+        MILES["PHEVs drive farther<br/>15,100 vs 11,600 km/yr"]
+        OPTRANGE["Optimal range<br/>~70 km electric<br/>yields ~100 g/km"]
+    end
+
+    GAPPHV --> PHEVINS
+
+    %% ── STYLES ────────────────────────────────────────────
+    classDef source fill:#87CEEB,stroke:#333,stroke-width:2px,color:#00008B
+    classDef preproc fill:#90EE90,stroke:#333,stroke-width:2px,color:#006400
+    classDef calc fill:#FFFACD,stroke:#333,stroke-width:2px,color:#333
+    classDef stats fill:#DDA0DD,stroke:#333,stroke-width:2px,color:#4B0082
+    classDef result fill:#FFD700,stroke:#333,stroke-width:2px,color:#333
+    classDef gap fill:#FFB6C1,stroke:#DC143C,stroke-width:2px,color:#333
+    classDef fleet fill:#98FB98,stroke:#2E7D32,stroke-width:2px,color:#006400
+    classDef phev fill:#B0E0E6,stroke:#4682B4,stroke-width:2px,color:#00008B
+    classDef driver fill:#FFDAB9,stroke:#FF8C00,stroke-width:2px,color:#333
+
+    class OBFCM,EEA,EURO,VEH source
+    class MERGE,DEDUP,OUTLIER,FINAL preproc
+    class RWFC,RWCO2,EDS,GAP calc
+    class MLR,VIF,LMG,PRED stats
+    class ICEV,HEV,PHEV,EF result
+    class GAPICV,GAPPHV gap
+    class Y21,Y22,Y23,REGMOD,STOCH,AGG fleet
+    class CHARGE,MILES,OPTRANGE phev
+    class MASS,POWER,EDSD driver
+
+```
+
+:::
