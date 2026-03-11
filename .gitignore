@@ -175,3 +175,4 @@ jrc_transport_analysis/obfcm_data.csv
 # OS files
 .DS_Store
 Thumbs.db
+.Rproj.user
