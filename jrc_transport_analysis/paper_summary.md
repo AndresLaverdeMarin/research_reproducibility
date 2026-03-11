@@ -1,9 +1,9 @@
 # Towards Zero CO2 Emissions: Insights from EU Vehicle On-Board Data
 
-**Authors:** Jaime Suarez, Alessandro Tansini, Markos A. Ktistakis, Andres L. Marin, Dimitrios Komnos, Jelica Pavlovic, and Georgios Fontaras
-**Published in:** European Transport Research Review (2025)
-**DOI:** [10.1186/s12544-025-00718-9](https://doi.org/10.1186/s12544-025-00718-9)
-**Dataset:** [JRC OBFCM Dataset](https://data.jrc.ec.europa.eu/dataset/9528c82b-37fa-4da3-9b6b-b54eaf0ba4ac)
+**Authors:** Jaime Suarez, Alessandro Tansini, Markos A. Ktistakis, Andres L. Marin, Dimitrios Komnos, Jelica Pavlovic, and Georgios Fontaras <br>
+**Published in:** European Transport Research Review (2025) <br>
+**DOI:** [10.1186/s12544-025-00718-9](https://doi.org/10.1186/s12544-025-00718-9) <br>
+**Dataset:** [JRC OBFCM Dataset](https://data.jrc.ec.europa.eu/dataset/9528c82b-37fa-4da3-9b6b-b54eaf0ba4ac) <br>
 
 ---
 
