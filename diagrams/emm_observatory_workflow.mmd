@@ -1,0 +1,81 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#E8EDF2', 'primaryTextColor': '#2C3E50', 'primaryBorderColor': '#7B8D9E', 'lineColor': '#5D6D7E', 'secondaryColor': '#F4F6F8', 'tertiaryColor': '#FAFBFC', 'fontSize': '14px', 'fontFamily': 'Helvetica, Arial, sans-serif'}}}%%
+
+flowchart TD
+    %% ── Phase 1: EMM Collection ──
+    subgraph EMM["EMM Weekly Collection"]
+        direction TB
+        A1([Weekly Trigger]):::trigger --> A2["API Export<br/>Articles from predefined categories"]:::emm
+        A2 --> A3["Structured Metadata Extraction<br/>Companies, organisations, geography,<br/>detected entities"]:::emm
+    end
+
+    %% ── Phase 2: Agentic AI ──
+    A3 --> B0
+
+    subgraph AI["Agentic AI Processing"]
+        direction TB
+        B0["Receive exported articles<br/>with metadata"]:::ai
+
+        B0 --> B1
+        B0 --> B2
+        B0 --> B3
+
+        subgraph T1["  1 - Relevance Check  "]
+            B1["Convert text to embeddings<br/>Compute similarity scores<br/>against database records"]:::ai
+            B1 --> B1f{Above<br/>threshold?}:::decision
+        end
+
+        subgraph T2["  2 - Topic Detection  "]
+            B2["Identify emerging topics<br/>Technological trends<br/>Regulatory developments<br/>Market signals"]:::ai
+        end
+
+        subgraph T3["  3 - Verification  "]
+            B3["Cross-reference metadata entities<br/>with semantic analysis results<br/>to assess confidence"]:::ai
+        end
+    end
+
+    %% ── Filtering ──
+    B1f -->|No| DISC["Filtered out"]:::discard
+
+    %% ── Phase 3: Routing ──
+    B1f -->|Yes| C0
+
+    B2 --> C0
+    B3 --> C0
+
+    C0{"Entity match with<br/>existing record?"}:::decision
+
+    C0 -->|"Match found"| D1["Link article to record<br/>Flag new thematic information"]:::match
+    C0 -->|"No match"| D2["Alert research team<br/>Provide metadata and<br/>similarity analysis"]:::alert
+
+    %% ── Phase 4: Human Review ──
+    D1 --> E0
+    D2 --> E0
+
+    subgraph HR["Researcher Review"]
+        direction TB
+        E0["Final relevance decision"]:::human
+        E0 --> E1{Relevant?}:::decision
+        E1 -->|No| E2["Discard"]:::discard
+        E1 -->|Yes| E3["Create or enrich entry<br/>Organisation role, technologies,<br/>deployments, services"]:::outcome
+        E3 --> E4[("Observatory<br/>Database")]:::db
+    end
+
+    %% ── Styles ──
+    classDef trigger fill:#D5E8D4,stroke:#82B366,stroke-width:1.5px,color:#2D6A2E
+    classDef emm fill:#DAE8FC,stroke:#6C8EBF,stroke-width:1.5px,color:#1A3C5E
+    classDef ai fill:#E1D5E7,stroke:#9673A6,stroke-width:1.5px,color:#4A235A
+    classDef decision fill:#FFF2CC,stroke:#D6AE00,stroke-width:1.5px,color:#7D6608
+    classDef match fill:#D5E8D4,stroke:#82B366,stroke-width:1.5px,color:#2D6A2E
+    classDef alert fill:#FFE6CC,stroke:#D79B00,stroke-width:1.5px,color:#7D5A00
+    classDef human fill:#F5F5F5,stroke:#999999,stroke-width:1.5px,color:#333333
+    classDef outcome fill:#D5E8D4,stroke:#82B366,stroke-width:2px,color:#2D6A2E
+    classDef discard fill:#F8D7DA,stroke:#C0392B,stroke-width:1px,color:#922B21
+    classDef db fill:#DAE8FC,stroke:#6C8EBF,stroke-width:2px,color:#1A3C5E
+
+    %% ── Subgraph styles ──
+    style EMM fill:#F0F5FA,stroke:#6C8EBF,stroke-width:2px,color:#1A3C5E,stroke-dasharray:0
+    style AI fill:#F5F0FA,stroke:#9673A6,stroke-width:2px,color:#4A235A,stroke-dasharray:0
+    style HR fill:#FAFAFA,stroke:#999999,stroke-width:2px,color:#333333,stroke-dasharray:0
+    style T1 fill:#FAF5FF,stroke:#B39DDB,stroke-width:1px,color:#4A235A,stroke-dasharray:5 5
+    style T2 fill:#FAF5FF,stroke:#B39DDB,stroke-width:1px,color:#4A235A,stroke-dasharray:5 5
+    style T3 fill:#FAF5FF,stroke:#B39DDB,stroke-width:1px,color:#4A235A,stroke-dasharray:5 5

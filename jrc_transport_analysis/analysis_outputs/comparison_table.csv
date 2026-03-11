@@ -1,0 +1,33 @@
+Metric,Paper,Computed,Diff
+ICEV Petrol -- RW CO2 [g/km],166.2,171.4,5.2
+ICEV Petrol -- Gap [g/km],27.3,28.7,1.4
+ICEV Diesel -- RW CO2 [g/km],170.1,170.9,0.8
+ICEV Diesel -- Gap [g/km],28.1,25.5,-2.6
+HEV Petrol -- RW CO2 [g/km],149.1,147.5,-1.6
+HEV Petrol -- Gap [g/km],24.9,24.0,-0.9
+HEV Diesel -- RW CO2 [g/km],189.6,191.9,2.3
+HEV Diesel -- Gap [g/km],31.7,32.4,0.7
+PHEV Petrol -- RW CO2 [g/km],131.4,133.8,2.4
+PHEV Petrol -- Gap [g/km],97.6,98.4,0.8
+PHEV Diesel -- RW CO2 [g/km],149.5,156.4,6.9
+PHEV Diesel -- Gap [g/km],116.6,121.7,5.1
+Model III-a R2 (ICEV/HEV),75%,75.4%,+0.4pp
+Model III-b R2 (PHEV),82%,82.1%,+0.1pp
+Coef III-a: TA CO2,1.0136,1.011,-0.0026
+Coef III-a: Engine Power,0.1473,0.1502,0.0029
+Coef III-a: Mass,-0.0063,-0.0077,-0.0014
+Coef III-b: TA CO2,0.6518,0.6897,0.0379
+Coef III-b: Engine Power,0.1814,0.1613,-0.0201
+Coef III-b: EDS,-1.8606,-1.9224,-0.0618
+TA-RW Correlation R2 (ICEV),0.99,0.9922,0.0022
+TA-RW Correlation R2 (HEV),0.99,0.9977,0.0077
+TA-RW Correlation R2 (PHEV),0.94,0.878,-0.062
+LMG III-a: TA CO2 [%],49.0%,29.4%,-19.6pp
+LMG III-a: Engine Power [%],18.0%,17.5%,-0.5pp
+LMG III-a: Mass [%],10.0%,9.8%,-0.2pp
+LMG III-b: EDS [%],51.0%,50.1%,-0.9pp
+Total Emissions 2021 [Mt],20.9,8.91 (sample),N/A -- needs FleetEU
+Total Emissions 2022 [Mt],18.7,7.05 (sample),N/A -- needs FleetEU
+Total Emissions 2023 [Mt],20.5,3.95 (sample),N/A -- needs FleetEU
+Annual mileage Petrol [km],"~11,500","9,717",
+Annual mileage Diesel [km],"~22,700","18,621",

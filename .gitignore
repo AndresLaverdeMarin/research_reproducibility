@@ -168,6 +168,7 @@ CLAUDE.md
 
 # Large data files
 jrc_transport_analysis/obfcm_data.csv
+jrc_transport_analysis/analysis_outputs/*.pkl
 
 # Editor / IDE history
 .history/
