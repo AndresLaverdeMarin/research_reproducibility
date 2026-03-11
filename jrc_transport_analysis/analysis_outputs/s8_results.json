@@ -1,0 +1,11 @@
+{
+  "pred_rw_ICEV_Petrol": 170.9619902885757,
+  "pred_rw_ICEV_Diesel": 171.0965425940493,
+  "pred_rw_HEV_Petrol": 148.37431757819488,
+  "pred_rw_HEV_Diesel": 188.57508395494153,
+  "pred_rw_PHEV_Petrol": 133.5411780024924,
+  "pred_rw_PHEV_Diesel": 156.41881183230942,
+  "mt_sample_2021": 8.907647870178469,
+  "mt_sample_2022": 7.045735728447706,
+  "mt_sample_2023": 3.9472022725049403
+}

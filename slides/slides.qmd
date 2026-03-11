@@ -6,6 +6,7 @@ format:
     mermaid:
       theme: default
     scrollable: false
+    include-after-body: mermaid-overlay.html
 author:
   - name: Nikiforos Zacharof
     orcid: 0000-0003-4176-3226
@@ -20,144 +21,123 @@ author:
     email: Georgios.FONTARAS@ec.europa.eu
     affiliations: Joint Research Center
 date: last-modified
+bibliography: references.bib
 ---
 
-```{=html}
-<style>
-#mermaid-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.9);
-  z-index: 9999;
-  overflow: hidden;
-}
-#mermaid-overlay .zoom-container {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  transform-origin: 0 0;
-}
-#mermaid-overlay svg {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: none;
-  height: auto;
-}
-#mermaid-overlay .controls {
-  position: fixed;
-  top: 15px; right: 15px;
-  z-index: 10000;
-  display: flex;
-  gap: 8px;
-}
-#mermaid-overlay .controls button {
-  background: rgba(255,255,255,0.9);
-  border: none;
-  border-radius: 6px;
-  width: 40px; height: 40px;
-  font-size: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#mermaid-overlay .controls button:hover {
-  background: #fff;
-}
-.mermaid-js svg, .mermaid svg {
-  cursor: pointer;
-}
-.diagram-scroll {
-  overflow: auto;
-  max-height: 75vh;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 10px;
-}
-.diagram-scroll .cell-output-display,
-.diagram-scroll .mermaid-js,
-.diagram-scroll .mermaid {
-  min-width: max-content;
-}
-</style>
-<div id="mermaid-overlay"></div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(function() {
-    var overlay = document.getElementById('mermaid-overlay');
-    var scale = 1, panX = 0, panY = 0;
-    var isDragging = false, startX, startY;
+## Why Does This Matter?
 
-    function openOverlay(svg) {
-      scale = 1; panX = 0; panY = 0;
-      overlay.innerHTML =
-        '<div class="controls">' +
-          '<button id="zm-in" title="Zoom in">+</button>' +
-          '<button id="zm-out" title="Zoom out">&minus;</button>' +
-          '<button id="zm-reset" title="Reset">&#8634;</button>' +
-          '<button id="zm-close" title="Close (Esc)">&times;</button>' +
-        '</div>' +
-        '<div class="zoom-container"></div>';
-      var container = overlay.querySelector('.zoom-container');
-      var clone = svg.cloneNode(true);
-      clone.style.cursor = 'grab';
-      clone.removeAttribute('width');
-      clone.removeAttribute('height');
-      clone.style.minWidth = '80vw';
-      container.appendChild(clone);
-      overlay.style.display = 'block';
-      applyTransform(container);
+Science advances through **confirmation** and **self-correction**.
 
-      overlay.querySelector('#zm-in').onclick = function(e) { e.stopPropagation(); scale *= 1.3; applyTransform(container); };
-      overlay.querySelector('#zm-out').onclick = function(e) { e.stopPropagation(); scale /= 1.3; applyTransform(container); };
-      overlay.querySelector('#zm-reset').onclick = function(e) { e.stopPropagation(); scale = 1; panX = 0; panY = 0; applyTransform(container); };
-      overlay.querySelector('#zm-close').onclick = function() { overlay.style.display = 'none'; };
+When a scientific effort fails to independently confirm prior results, it can signal either:
 
-      container.addEventListener('mousedown', function(e) {
-        isDragging = true; startX = e.clientX - panX; startY = e.clientY - panY;
-        clone.style.cursor = 'grabbing';
-        e.preventDefault();
-      });
-      document.addEventListener('mousemove', function(e) {
-        if (!isDragging) return;
-        panX = e.clientX - startX; panY = e.clientY - startY;
-        applyTransform(container);
-      });
-      document.addEventListener('mouseup', function() {
-        isDragging = false;
-        if (clone) clone.style.cursor = 'grab';
-      });
-      overlay.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        var delta = e.deltaY > 0 ? 0.9 : 1.1;
-        scale *= delta;
-        scale = Math.max(0.2, Math.min(scale, 10));
-        applyTransform(container);
-      }, {passive: false});
-    }
+- A **lack of rigor** in the original study, or
+- An important **precursor to new discovery**
 
-    function applyTransform(container) {
-      container.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
-    }
+Understanding these concepts helps us design better research and evaluate existing work.
 
-    document.querySelectorAll('.mermaid-js svg, .mermaid svg').forEach(function(svg) {
-      svg.addEventListener('click', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        openOverlay(svg);
-      });
-    });
+::: {.callout-note appearance="minimal"}
+Report: *Reproducibility and Replicability in Science* [@nasem2019reproducibility]
+:::
 
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') overlay.style.display = 'none';
-    });
-  }, 2000);
-});
-</script>
+## Three Distinct Concepts
+
+:::{.r-fit-text}
+
+| | **Reproducibility** | **Replicability** | **Transparency / Rigor** |
+|---|---|---|---|
+| **Core question** | Same data + same code → same results? | New data + similar methods → consistent results? | Is the process fully documented and well-designed? |
+| **Focus** | Computational verification | Scientific consistency | Research quality & openness |
+| **Scope** | Single study (code & data) | Across studies | Entire research lifecycle |
+
+:::
+
+&nbsp;
+
+### Reproducibility
+
+:::{.columns}
+
+:::{.column width="70%"}
+
+**What it involves:**
+
+- Re-running the original analysis pipeline
+- Using the same data, software, and parameters
+- Verifying that outputs match the reported results
+
+:::
+
+:::{.column width="30%"}
+
+**Key enablers:** shared code, open data, containers (Docker), computational notebooks, version control
+
+:::
+
+:::
+
+## Three Distinct Concepts {.smaller}
+
+:::{.columns}
+
+:::{.column width="50%"}
+
+### Replicability
+
+> Obtaining **consistent results** across studies aimed at answering the **same scientific question**, each with its **own data**.
+
+**What it involves:**
+
+- Independent data collection
+- Similar (not identical) methods
+- Testing whether findings hold across contexts
+
+**Important nuance:** Even rigorous, well-conducted studies may fail to replicate — this is sometimes informative, not necessarily a failure.
+
+:::
+
+:::{.column width="50%"}
+
+### Transparency & Rigor
+
+**Rigor** = strict application of the scientific method to ensure robust, unbiased experimental design, methodology, analysis, and reporting.
+
+**Transparency** = making clear:
+
+- Whether the study was exploratory or confirmatory
+- How data was collected and prepared
+- Which analyses were planned vs. post-hoc
+- The level of uncertainty in results
+
+:::
+
+:::
+
+## How They Relate
+
+::: {style="display: flex; justify-content: center; transform: scale(2.5); transform-origin: center center;"}
+
+```{mermaid}
+%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '25px', 'fontFamily': 'arial', 'nodeSpacing': 60, 'rankSpacing': 80}}}%%
+flowchart LR
+    T["Transparency<br/>& Rigor"] -->|enables| R["Reproducibility"]
+    T -->|enables| RE["Replicability"]
+    R -->|"desired<br/>step"| RE
+    RE -->|"builds"| C["Scientific<br/>Credibility"]
+    R -->|"builds"| C
+
+    style T fill:#B85042,color:white,font-weight:bold
+    style R fill:#065A82,color:white,font-weight:bold
+    style RE fill:#2C5F2D,color:white,font-weight:bold
+    style C fill:#1E2761,color:white,font-weight:bold
 ```
+
+:::
+
+- **Transparency & Rigor** underpin everything — without them, neither reproducibility nor replicability is achievable
+- **Reproducibility** is the computational baseline — same data, same code, same results
+- **Replicability** is the scientific goal — findings that hold across independent studies
+- Together, they build **confidence** in scientific knowledge
+
 
 ## Scientific Reproducibility Index {.smaller}
 
@@ -327,4 +307,9 @@ flowchart TD
 
 ```
 
+:::
+
+## References {.smaller}
+
+::: {#refs}
 :::
