@@ -38,6 +38,7 @@ The motivation stems from the principle of **scientific falsifiability**: if the
 - Average repository quality: between **Level 2 and 3** on a 5-point scale
 
 **Repository quality distribution:**
+
 | Level | Description | Share |
 |-------|-------------|-------|
 | 1 | Not empty | 17.21% |
@@ -56,7 +57,7 @@ The motivation stems from the principle of **scientific falsifiability**: if the
 
 | Comparison | T-Test p-value | Mann-Whitney U p-value | Kruskal-Wallis H p-value |
 |---|---|---|---|
-| Non-Simulation vs. Simulation | 9.06 x 10^-45 | 1.93 x 10^-110 | 3.87 x 10^-110 |
+| Non-Simulation vs. Simulation | 9.06 x 10^-45^ | 1.93 x 10^-110^ | 3.87 x 10^-110^ |
 | With vs. Without Repository | 0.324 | 0.218 | 0.437 |
 
 - **Simulation studies receive significantly more citations** (mean 4.39/year) than non-simulation studies (mean 3.55/year)
