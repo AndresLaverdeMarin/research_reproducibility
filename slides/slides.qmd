@@ -169,13 +169,34 @@ flowchart LR
 - **Generate Code**: Produces executable reproduction scripts from extracted information
 - **Validate**: Runs the code and compares outputs against published results to compute a reproducibility score
 
-## Reproducibility Score {.smaller}
+## Transparency Score {.smaller}
+### A scoring method to assess research transparency
 
+The table shows how transparency is scored by combining result type with data origin:
+
+- Confirmatory results that can be verified from both the publication and own data receive the highest score
+- Converging-consistent results verified only partially receive a medium score
+- Diverging results that cannot be reproduced from either source receive the lowest score
+- The sum of the results consistency based on publication and own data delivers a total transparency score
 
 :::{.columns}
 
 :::{.column width="70%"}
-<div style="display:flex; justify-content:center;">
+<style>
+table td:not(:first-child),
+table th:not(:first-child) {
+  text-align: center;
+}
+</style>
+
+<div style="display:flex; justify-content:center; align-items:center; height:100%;">
+<style>
+table td:not(:first-child),
+table th:not(:first-child) {
+  text-align: center;
+}
+</style>
+
 <table>
 <thead>
 <tr>
@@ -217,43 +238,13 @@ flowchart LR
 
 ::: {.column width="30%"}
 
-```{r}
-#| echo: false
-library(tidyverse)
-
-scale_data = tibble(score = seq(2, 10, length.out = 200))
-
-ggplot(scale_data, aes(x = 1, y = score, fill = score)) +
-  geom_tile(width = 0.12) +  # thin bar
-  scale_fill_gradientn(
-    colours = c("#FE0000", "#FFC702", "#32CB00"),
-    limits = c(2, 10)
-  ) +
-  scale_y_continuous(
-    breaks = c(2, 6, 10),
-    labels = c("2", "6", "10")
-  ) +
-  annotate("text", x = 1.08, y = 10, label = "High transparency", hjust = 0, size = 10) +
-  annotate("text", x = 1.08, y = 6, label = "Medium transparency", hjust = 0, size = 10) +
-  annotate("text", x = 1.08, y = 2, label = "Low transparency", hjust = 0, size = 10) +
-  labs(
-    x = NULL,
-    y = "Total transparency score"
-  ) +
-  coord_cartesian(xlim = c(0.9, 1.45), clip = "off") +
-  theme_minimal(base_size = 30) +
-  theme(
-    legend.position = "none",
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank(),
-    panel.grid = element_blank()
-  )
-```
+![](images/scale_score_p.svg){width="100%" style="display:block; margin-top:0;"}
 
 :::
 :::
       
-## Investigated papers - Selection of papers {.smaller}
+## Evaluating Transparency in Recent Transportation Studies {.smaller}
+###  Testing Reproducibility and Replicability in Practice
 
 To assess **practical reproducibility**, we selected two recent transportation studies.
 
@@ -269,13 +260,13 @@ This allows us to evaluate different levels of reproducibility:
 - **Computational reproducibility** – can results be reproduced using the original code?
 
 
-## Investigated papers - The two papers {.smaller}
+## The Two Publications {.smaller}
 
 :::{.columns}
 
 :::{.column width="50%"}
 
-### Revisiting Reproducibility in Transportation Simulation Studies
+#### Study 1 - Revisiting Reproducibility in Transportation Simulation Studies
 
 **Authors:** Kevin Riehl, Anastasios Kouvelas, Michail A. Makridis  
 **Journal:** *European Transport Research Review* (2025)  
@@ -291,7 +282,7 @@ This allows us to evaluate different levels of reproducibility:
 
 :::{.column width="50%"}
 
-### Towards Zero CO~2~ Emissions: Insights from EU Vehicle On-Board Data
+#### Study 2 - Towards Zero CO~2~ Emissions: Insights from EU Vehicle On-Board Data
 
 **Authors:** Jaime Suarez et al.  
 **Journal:** *Science of the Total Environment* (2025)  
@@ -306,11 +297,14 @@ This allows us to evaluate different levels of reproducibility:
 
 :::
 
-## Revisiting Reproducibility in Transportation Simulation Studies - Methodology {.smaller}
+## Publication's methodology - 1 {.smaller}
+#### Revisiting Reproducibility in Transportation Simulation Studies [@riehlRevisitingReproducibilityTransportation2025]
 
 
 
-## Towards Zero CO~2~ Emissions: Insights from EU Vehicle On-Board Data — Methodology {.smaller}
+
+## Publication's methodology - 2 {.smaller}
+#### Towards Zero CO~2~ Emissions: Insights from EU Vehicle On-Board Data [@suarezZeroCO2Emissions2025]
 
 ::: {.diagram-scroll}
 
