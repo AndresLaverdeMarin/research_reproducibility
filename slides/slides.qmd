@@ -147,22 +147,7 @@ flowchart LR
 
 An automated system that **reads**, **extracts**, and **generates code** to validate the reproducibility of scientific papers.
 
-```{mermaid}
-%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '25px'}}}%%
-flowchart LR
-    A["Scientific<br>Paper"] --> B["AI Agent<br>Reader"]
-    B --> C["Extract<br>Methodology<br>& Data"]
-    C --> D["Generate<br>Reproduction<br>Code"]
-    D --> E["Execute &<br>Validate<br>Results"]
-    E --> F["Reproducibility<br>Score"]
-
-    style A fill:#107895,color:#fff,stroke:none
-    style B fill:#9a2515,color:#fff,stroke:none
-    style C fill:#107895,color:#fff,stroke:none
-    style D fill:#9a2515,color:#fff,stroke:none
-    style E fill:#107895,color:#fff,stroke:none
-    style F fill:#9a2515,color:#fff,stroke:none
-```
+![](21st%20cent.%20publication%20methodology.png)
 
 - **Read**: AI agent ingests the full paper — text, figures, tables, and supplementary materials
 - **Extract**: Identifies methodology, datasets, parameters, and expected results
@@ -219,7 +204,8 @@ flowchart LR
 
 ```{r}
 #| echo: false
-library(tidyverse)
+library(ggplot2)
+library(tibble)
 
 scale_data = tibble(score = seq(2, 10, length.out = 200))
 
