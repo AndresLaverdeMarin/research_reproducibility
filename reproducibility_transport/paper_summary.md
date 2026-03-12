@@ -1,8 +1,8 @@
 # Revisiting Reproducibility in Transportation Simulation Studies
 
-**Authors:** Kevin Riehl, Anastasios Kouvelas, Michail A. Makridis
-**Published in:** European Transport Research Review, 17, 22 (2025)
-**DOI:** [10.1186/s12544-025-00718-9](https://doi.org/10.1186/s12544-025-00718-9)
+**Authors:** Kevin Riehl, Anastasios Kouvelas, Michail A. Makridis<br>
+**Published in:** European Transport Research Review, 17, 22 (2025)<br>
+**DOI:** [10.1186/s12544-025-00718-9](https://doi.org/10.1186/s12544-025-00718-9)<br>
 
 ---
 

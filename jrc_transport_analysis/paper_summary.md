@@ -1,21 +1,21 @@
-# Towards Zero CO2 Emissions: Insights from EU Vehicle On-Board Data
+# Towards Zero CO~2~ Emissions: Insights from EU Vehicle On-Board Data
 
 **Authors:** Jaime Suarez, Alessandro Tansini, Markos A. Ktistakis, Andres L. Marin, Dimitrios Komnos, Jelica Pavlovic, and Georgios Fontaras <br>
 **Published in:** European Transport Research Review (2025) <br>
-**DOI:** [10.1186/s12544-025-00718-9](https://doi.org/10.1186/s12544-025-00718-9) <br>
+**DOI:** [10.1016/j.scitotenv.2025.180454](https://doi.org/10.1016/j.scitotenv.2025.180454) <br>
 **Dataset:** [JRC OBFCM Dataset](https://data.jrc.ec.europa.eu/dataset/9528c82b-37fa-4da3-9b6b-b54eaf0ba4ac) <br>
 
 ---
 
 ## 1. Main Idea
 
-This paper presents a **data-driven methodology to assess real-world (RW) CO2 emissions** of European passenger cars using On-Board Fuel and Energy Consumption Monitoring (OBFCM) data. Transportation accounts for roughly one-quarter of total CO2 emissions, and despite the EU's ambitious target of zero-tailpipe-emission vehicles by 2035, a persistent **gap exists between official type-approval (TA) laboratory values and actual real-world performance**.
+This paper presents a **data-driven methodology to assess real-world (RW) CO~2~ emissions** of European passenger cars using On-Board Fuel and Energy Consumption Monitoring (OBFCM) data. Transportation accounts for roughly one-quarter of total CO~2~ emissions, and despite the EU's ambitious target of zero-tailpipe-emission vehicles by 2035, a persistent **gap exists between official type-approval (TA) laboratory values and actual real-world performance**.
 
 The study leverages a massive dataset of **7.7 million passenger cars** registered in the EU (plus Norway and Iceland) between 2021 and 2023 to:
 
 - Quantify real-world emission factors for different powertrain technologies (ICEV, HEV, PHEV) and fuel types
-- Identify the most influential factors driving real-world CO2 variability (vehicle attributes, driver behaviour, geography)
-- Estimate total annual real-world CO2 emissions for the entire new EU vehicle fleet
+- Identify the most influential factors driving real-world CO~2~ variability (vehicle attributes, driver behaviour, geography)
+- Estimate total annual real-world CO~2~ emissions for the entire new EU vehicle fleet
 - Assess how vehicle ageing and accumulated mileage affect fuel efficiency over time
 - Provide environmental modellers and policymakers with measured, harmonised data for validating emission calculation models
 
@@ -41,9 +41,9 @@ The study leverages a massive dataset of **7.7 million passenger cars** register
 | HEV | +24.9 | +31.7 |
 | PHEV | +97.6 | +116.6 |
 
-### 2.3 Total Annual Real-World CO2 Emissions (EU fleet)
+### 2.3 Total Annual Real-World CO~2~ Emissions (EU fleet)
 
-| Year | Total (Mt CO2) |
+| Year | Total (Mt CO~2~) |
 |---|---|
 | 2021 | 20.9 |
 | 2022 | 18.7 |
@@ -55,7 +55,7 @@ Petrol ICEVs are the largest emission source (~35%), while diesel's share fell f
 
 - **Vehicle mass and engine power** are the primary drivers for ICEVs and HEVs
 - Mass sensitivity: +15.2 g/km per 100 kg extra mass (petrol), +9.4 g/km (diesel)
-- **Electric Driving Share (EDS)** is the dominant variable for PHEVs, explaining **51%** of their RW CO2 variance
+- **Electric Driving Share (EDS)** is the dominant variable for PHEVs, explaining **51%** of their RW CO~2~ variance
 - **Ageing/mileage effects:**
   - ICEV emissions *decrease* by ~10 g/km after 100,000 km (reduced friction, more highway driving)
   - PHEV emissions *increase* with mileage (up to +40 g/km for petrol) due to reduced battery use
@@ -65,14 +65,14 @@ Petrol ICEVs are the largest emission source (~35%), while diesel's share fell f
 
 | Model | R-squared |
 |---|---|
-| TA CO2 (ICEV/HEV) | 86% |
-| TA CO2 (PHEV) | 80% |
+| TA CO~2~ (ICEV/HEV) | 86% |
+| TA CO~2~ (PHEV) | 80% |
 | RW Baseline (ICEV/HEV) | 68% |
 | RW Baseline (PHEV) | 36% |
 | RW Extended incl. EDS/TA (ICEV/HEV) | 75% |
 | RW Extended incl. EDS/TA (PHEV) | 82% |
 
-Key coefficients: EDS (PHEV) = -1.8606 (higher electric share significantly lowers CO2); TA CO2 = 1.0136 (ICEV/HEV), 0.6518 (PHEV).
+Key coefficients: EDS (PHEV) = -1.8606 (higher electric share significantly lowers CO~2~); TA CO~2~ = 1.0136 (ICEV/HEV), 0.6518 (PHEV).
 
 ### 2.6 PHEV-Specific Findings
 
@@ -89,7 +89,7 @@ Key coefficients: EDS (PHEV) = -1.8606 (higher electric share significantly lowe
 
 ## 3. Constraints and Limitations
 
-1. **Non-random sampling:** The OBFCM dataset may overrepresent certain fleet segments (e.g., corporate vehicles), potentially skewing emission estimates. The sample overestimates RW CO2 by an average of 1.8 g/km compared to full fleet extrapolation.
+1. **Non-random sampling:** The OBFCM dataset may overrepresent certain fleet segments (e.g., corporate vehicles), potentially skewing emission estimates. The sample overestimates RW CO~2~ by an average of 1.8 g/km compared to full fleet extrapolation.
 
 2. **No transient data:** OBFCM records lifetime cumulative values, so it cannot capture transient conditions such as weather fluctuations, road gradients, or individual trip dynamics.
 
@@ -103,7 +103,7 @@ Key coefficients: EDS (PHEV) = -1.8606 (higher electric share significantly lowe
 
 7. **Aggregation effects:** Country-level aggregation smooths within-country variability, potentially overestimating macro-level factor contributions.
 
-8. **PHEV scope:** The study focuses on tailpipe CO2 only and does not integrate electricity use into a full well-to-wheel (WTW) energy analysis.
+8. **PHEV scope:** The study focuses on tailpipe CO~2~ only and does not integrate electricity use into a full well-to-wheel (WTW) energy analysis.
 
 ---
 
@@ -120,9 +120,9 @@ Key coefficients: EDS (PHEV) = -1.8606 (higher electric share significantly lowe
 ### 4.2 Real-World Calculations
 
 - **RW Fuel Consumption** = Total lifetime fuel consumed / Total lifetime distance
-- **RW CO2 Emissions** (g/km) = RW fuel consumption x fuel-dependent conversion factor
+- **RW CO~2~ Emissions** (g/km) = RW fuel consumption x fuel-dependent conversion factor
 - **Electric Driving Share (EDS)** for PHEVs = proportion of useful traction energy delivered electrically relative to total energy from grid and combustion
-- **Gap** = RW CO2 - TA CO2 (absolute, g/km) or (RW CO2 - TA CO2) / TA CO2 x 100 (relative, %)
+- **Gap** = RW CO2 - TA CO~2~ (absolute, g/km) or (RW CO~2~ - TA CO~2~) / TA CO~2~ x 100 (relative, %)
 
 ### 4.3 Statistical Methods
 
@@ -133,6 +133,6 @@ Key coefficients: EDS (PHEV) = -1.8606 (higher electric share significantly lowe
 
 ### 4.4 Total Fleet Emissions Estimation
 
-- Applied best-performing regression models (from OBFCM sample) to the official EEA CO2 monitoring dataset (full registry of new vehicles)
+- Applied best-performing regression models (from OBFCM sample) to the official EEA CO~2~ monitoring dataset (full registry of new vehicles)
 - **Stochastic imputation:** Mileage and EDS values imputed via stochastic sampling from OBFCM distributions, stratified by powertrain, country, and year
-- **Aggregation formula:** Total CO2 = Average RW CO2 x Annual Mileage x Number of Vehicles / 10^9 (yielding million tonnes)
+- **Aggregation formula:** Total CO~2~ = Average RW CO~2~ x Annual Mileage x Number of Vehicles / 10^9 (yielding million tonnes)
