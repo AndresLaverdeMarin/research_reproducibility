@@ -1,0 +1,95 @@
+flowchart TD
+    Start([Revisiting Reproducibility in<br/>Transportation Simulation Studies]) --> JournalSel
+
+    subgraph DataCollection ["Data Collection Pipeline"]
+        JournalSel["Journal Selection<br/>Top 20 by h5-index"] --> APIAccess{"API<br/>Access?"}
+        APIAccess -->|"14 journals<br/>via ScienceDirect,<br/>Wiley, Taylor and Francis"| Retrieval["Article Retrieval<br/>2000 - Aug 2024"]
+        APIAccess -->|"6 excluded<br/>no API"| Excluded([Excluded])
+        Retrieval --> Corpus["Corpus: 46,015 Articles<br/>PDF, HTML, XML"]
+        Corpus --> Metadata["Metadata Enrichment<br/>CrossRef API: citations,<br/>authors, references"]
+    end
+
+    subgraph SimIdentification ["Simulation Study Identification"]
+        Metadata --> KeywordFilter{"Keyword simulat<br/>at least 5 times?"}
+        KeywordFilter -->|"Yes: 25.82%"| SimStudies["11,879 Simulation Studies<br/>33% of studies by 2024"]
+        KeywordFilter -->|"No: 74.18%"| NonSim["34,136 Non-Simulation Studies"]
+    end
+
+    subgraph RepoDiscovery ["Repository Discovery"]
+        SimStudies --> LinkExtract["Link Extraction<br/>GitHub, Zenodo, BitBucket,<br/>Mendeley, YouTube, etc."]
+        LinkExtract --> ManualReview["Manual Review<br/>2,388 links inspected"]
+        ManualReview --> ValidRepos["672 Valid Repositories<br/>Only 1.82% of simulation studies"]
+    end
+
+    ValidRepos --> Branch1
+    SimStudies --> Branch2
+    NonSim --> Branch2
+    ValidRepos --> Branch3
+
+    subgraph StatAnalysis ["Statistical Analysis"]
+        Branch2["Citation Comparison"] --> GroupTests["T-test, Mann-Whitney U,<br/>Kruskal-Wallis H"]
+        GroupTests --> SimCite["Simulation vs Non-Simulation<br/>4.39 vs 3.55 cites/year<br/>p < 0.001"]
+        GroupTests --> RepoCite["With vs Without Repository<br/>4.56 vs 4.39 cites/year<br/>p = 0.324 -- Not significant"]
+        SimCite --> Regression["Negative Binomial Regression<br/>11 model variants"]
+        RepoCite --> Regression
+        Regression --> RegResult["Repository has no<br/>significant citation impact<br/>Pseudo R2 up to 6.7%"]
+    end
+
+    subgraph QualityAssess ["Repository Quality Assessment"]
+        Branch1["Repository Scoring<br/>5-Level System"] --> L1["Level 1: Non-empty<br/>17.21%"]
+        Branch1 --> L2["Level 2: Multiple file types<br/>23.93%"]
+        Branch1 --> L3["Level 3: Basic README<br/>28.03%"]
+        Branch1 --> L4["Level 4: Reader-friendly docs<br/>18.36%"]
+        Branch1 --> L5["Level 5: Comprehensive<br/>12.46%"]
+        L1 --> QualResult["Average Quality: Level 2-3"]
+        L2 --> QualResult
+        L3 --> QualResult
+        L4 --> QualResult
+        L5 --> QualResult
+        QualResult --> Contents["Contents Found:<br/>Datasets 67.7%<br/>Source Code 64.8%<br/>Documentation 59.5%<br/>Models 39.8%<br/>Licenses 38.7%"]
+        Contents --> Languages["Languages:<br/>Python 48.9%<br/>Jupyter 19.5%<br/>R 16.5%<br/>Matlab 6.6%"]
+    end
+
+    subgraph Survey ["Researcher Survey"]
+        Branch3["87 Respondents<br/>27 Questions<br/>Nov - Dec 2024"] --> Perception["Perception:<br/>Reproducibility is significant<br/>issue: 4.11 / 5<br/>Need more transparency:<br/>4.51 / 5"]
+        Branch3 --> Barriers["Primary Barriers:<br/>Time constraints: 64%<br/>Legal issues: 54%<br/>Intentional withholding: 35%"]
+        Branch3 --> Support["Community Support:<br/>Publish models: 80%<br/>Publish source code: 78%<br/>Mandatory plans: 74%<br/>Already have strategies: 52%"]
+    end
+
+    RegResult --> Findings
+    Languages --> Findings
+    Perception --> Findings
+    Barriers --> Findings
+    Support --> Findings
+
+    subgraph KeyFindings ["Key Findings and Recommendations"]
+        Findings(["Convergence of Evidence"]) --> F1["Only 1.82% of simulation<br/>studies share repositories"]
+        Findings --> F2["No citation benefit from<br/>sharing code or data"]
+        Findings --> F3["Community recognizes the<br/>problem but faces barriers"]
+        F1 --> Rec["Recommendations"]
+        F2 --> Rec
+        F3 --> Rec
+        Rec --> R1["Mandatory reproducibility<br/>plans by funding agencies"]
+        Rec --> R2["Best-practice templates<br/>and repository guidelines"]
+        Rec --> R3["Professional standards for<br/>open-source in transportation"]
+    end
+
+    classDef startEnd fill:#E6E6FA,stroke:#333,stroke-width:2px,color:darkblue
+    classDef pipeline fill:#90EE90,stroke:#333,stroke-width:2px,color:darkgreen
+    classDef decision fill:#FFD700,stroke:#333,stroke-width:2px,color:black
+    classDef stat fill:#87CEEB,stroke:#333,stroke-width:2px,color:darkblue
+    classDef quality fill:#FFDAB9,stroke:#333,stroke-width:2px,color:#8B4513
+    classDef survey fill:#DDA0DD,stroke:#333,stroke-width:2px,color:#4B0082
+    classDef finding fill:#FFB6C1,stroke:#DC143C,stroke-width:2px,color:black
+    classDef rec fill:#98FB98,stroke:#2E7D2E,stroke-width:2px,color:darkgreen
+    classDef excluded fill:#D3D3D3,stroke:#999,stroke-width:1px,color:#666
+
+    class Start,Findings startEnd
+    class JournalSel,Retrieval,Corpus,Metadata,KeywordFilter,SimStudies,LinkExtract,ManualReview,ValidRepos pipeline
+    class APIAccess decision
+    class NonSim,Branch2,GroupTests,SimCite,RepoCite,Regression,RegResult stat
+    class Branch1,L1,L2,L3,L4,L5,QualResult,Contents,Languages quality
+    class Branch3,Perception,Barriers,Support survey
+    class F1,F2,F3 finding
+    class Rec,R1,R2,R3 rec
+    class Excluded excluded
