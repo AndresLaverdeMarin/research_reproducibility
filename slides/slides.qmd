@@ -154,7 +154,7 @@ flowchart LR
     B --> C["Extract<br>Methodology<br>& Data"]
     C --> D["Generate<br>Reproduction<br>Code"]
     D --> E["Execute &<br>Validate<br>Results"]
-    E --> F["Reproducibility<br>Score"]
+    E --> F["Transparency<br>Score"]
 
     style A fill:#107895,color:#fff,stroke:none
     style B fill:#9a2515,color:#fff,stroke:none
@@ -174,10 +174,10 @@ flowchart LR
 
 The table shows how transparency is scored by combining result type with data origin:
 
-- Confirmatory results that can be verified from both the publication and own data receive the highest score
-- Converging-consistent results verified only partially receive a medium score
-- Diverging results that cannot be reproduced from either source receive the lowest score
-- The sum of the results consistency based on publication and own data delivers a total transparency score
+- **Confirmatory results** that can be verified from both the publication and own data receive the highest score
+- **Converging-consistent results** verified only partially receive a medium score
+- **Diverging results** that cannot be reproduced from either source receive the lowest score
+- The sum of the results consistency based on publication and own data delivers a **total transparency score**
 
 :::{.columns}
 
@@ -242,6 +242,39 @@ table th:not(:first-child) {
 
 :::
 :::
+   
+## Testing the Evaluation Process {.smaller}
+### Steps of the Evaluation Process Applied in the Current Stage
+
+* The evaluation process is still under development, therefore in the current presentation it was not possible to apply all the steps 
+* Based on the available information it was possible to reproduce the results; **missing information** would mean essentially replication of the results
+* The transparency score was not applied at this stage as it requires further development to assess reproducibility and replicability
+
+
+```{mermaid}
+%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '25px'}}}%%
+flowchart LR
+    subgraph applied["Applied steps"]
+        A["Scientific<br>Paper"] --> B["AI Agent<br>Reader"]
+        B --> C["Extract<br>Methodology<br>& Data"]
+    end
+    subgraph repro["Reproduce or Replicate"]
+    C --> D["Generate<br>Reproduction<br>Code"]
+    D --> E["Execute &<br>Validate<br>Results"]
+    end
+    subgraph notapplied["Not applied"]
+    E --> F["Transparency<br>Score"]
+    end
+    style A fill:#107895,color:#fff,stroke:none
+    style B fill:#9a2515,color:#fff,stroke:none
+    style C fill:#107895,color:#fff,stroke:none
+    style D fill:#9a2515,color:#fff,stroke:none
+    style E fill:#107895,color:#fff,stroke:none
+    style F fill:#9a2515,color:#fff,stroke:none
+    style applied fill:#f0f0f0,stroke:#555,stroke-width:2px,color:#333
+```
+
+
       
 ## Evaluating Transparency in Recent Transportation Studies {.smaller}
 ###  Testing Reproducibility and Replicability in Practice
@@ -258,6 +291,10 @@ This allows us to evaluate different levels of reproducibility:
 
 - **Data reproducibility** – can results be recreated from the data?
 - **Computational reproducibility** – can results be reproduced using the original code?
+
+
+
+
 
 
 ## The Two Publications {.smaller}
@@ -278,13 +315,15 @@ This allows us to evaluate different levels of reproducibility:
 - Dataset  
 - Code  
 
+> Reproduced the results by re-writing the code based on the scripts and methodology and using the provided dataset
+
 :::
 
 :::{.column width="50%"}
 
 #### Study 2 - Towards Zero CO~2~ Emissions: Insights from EU Vehicle On-Board Data
 
-**Authors:** Jaime Suarez et al.  
+**Authors:** Jaime Suarez, Alessandro Tansini, Markos A. Ktistakis, Andres L. Marin, Dimitrios Komnos, Jelica Pavlovic, and Georgios Fontaras  
 **Journal:** *Science of the Total Environment* (2025)  
 **DOI:** [10.1016/j.scitotenv.2025.180454](https://doi.org/10.1016/j.scitotenv.2025.180454)
 
@@ -293,17 +332,22 @@ This allows us to evaluate different levels of reproducibility:
 - Text  
 - Dataset  
 
-:::
+> Attempted to reproduce, but essentially replicated the results by re-writing the code based on methodology and using the provided dataset
 
 :::
 
-## Publication's methodology - 1 {.smaller}
+:::
+
+
+
+
+## Publication's Mapping - 1 {.smaller}
 #### Revisiting Reproducibility in Transportation Simulation Studies [@riehlRevisitingReproducibilityTransportation2025]
 
 
 
 
-## Publication's methodology - 2 {.smaller}
+## Publication's Mapping - 2 {.smaller}
 #### Towards Zero CO~2~ Emissions: Insights from EU Vehicle On-Board Data [@suarezZeroCO2Emissions2025]
 
 ::: {.diagram-scroll}
@@ -445,6 +489,32 @@ flowchart TD
 ```
 
 :::
+
+## Comparison of Results {.smaller}
+### Key Parameters Comparison between Publication and Evaluation
+
+:::{.columns}
+
+:::{.column width="50%"}
+
+#### Study 1 - Revisiting Reproducibility in Transportation Simulation Studies
+
+**TO BE ADDED**
+
+:::
+
+:::{.column width="50%"}
+
+#### Study 2 - Towards Zero CO~2~ Emissions: Insights from EU Vehicle On-Board Data
+
+
+**TO BE ADDED**
+
+
+:::
+
+:::
+
 
 ## References {.smaller}
 
