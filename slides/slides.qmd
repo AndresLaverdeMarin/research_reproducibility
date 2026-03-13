@@ -477,8 +477,7 @@ flowchart TD
 
 :::
 
-## Comparison of Results {.smaller}
-### Key Parameters Comparison between Publication and Evaluation
+## Comparison of Key Parameters {.smaller}
 
 :::{.columns}
 
@@ -490,7 +489,7 @@ flowchart TD
 ✔️ **Reproducibility:** Ran the code - did not use the environment <br>
 ✔️ **Transparency:** Re-created the code based on text and scripts <br>
 
-
+**ADD QUANTITATIVE DATA?**
 
 :::
 
@@ -502,8 +501,7 @@ flowchart TD
 ❌  **Reproducibility:**  No available code to run <br>
 ✔️ **Transparency:** Re-created the code based on the text; missing details showed divergence in reproducibility <br>
 
-
-
+**ADD QUANTITATIVE DATA?**
 
 :::
 
