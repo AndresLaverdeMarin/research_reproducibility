@@ -147,14 +147,18 @@ flowchart LR
 
 An automated system that **reads**, **extracts**, and **generates code** to validate the reproducibility of scientific papers.
 
-
-![](images/21st cent publication methodology.png)
-
+::: {style="text-align: center;"}
+![](images/21st cent publication methodology.png){width="50%"}
+:::
 
 - **Read**: AI agent ingests the full paper — text, figures, tables, and supplementary materials
 - **Extract**: Identifies methodology, datasets, parameters, and expected results
 - **Generate Code**: Produces executable reproduction scripts from extracted information
 - **Validate**: Runs the code and compares outputs against published results to compute a reproducibility score
+
+::: {.callout-note appearance="minimal"}
+Reference: [What is an MCP Server?](https://mcpmarket.com/what-is-an-mcp-server)
+:::
 
 ## Transparency Score {.smaller}
 ### A scoring method to assess research transparency
@@ -238,28 +242,7 @@ table th:not(:first-child) {
 * The transparency score was not applied at this stage as it requires further development to assess reproducibility and replicability
 
 
-```{mermaid}
-%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '25px'}}}%%
-flowchart LR
-    subgraph applied["Applied steps"]
-        A["Scientific<br>Paper"] --> B["AI Agent<br>Reader"]
-        B --> C["Extract<br>Methodology<br>& Data"]
-    end
-    subgraph repro["Reproduce or Replicate"]
-    C --> D["Generate<br>Reproduction<br>Code"]
-    D --> E["Execute &<br>Validate<br>Results"]
-    end
-    subgraph notapplied["Not applied"]
-    E --> F["Transparency<br>Score"]
-    end
-    style A fill:#107895,color:#fff,stroke:none
-    style B fill:#9a2515,color:#fff,stroke:none
-    style C fill:#107895,color:#fff,stroke:none
-    style D fill:#9a2515,color:#fff,stroke:none
-    style E fill:#107895,color:#fff,stroke:none
-    style F fill:#9a2515,color:#fff,stroke:none
-    style applied fill:#f0f0f0,stroke:#555,stroke-width:2px,color:#333
-```
+![](images/21st cent publication methodology.png)
 
 
       
