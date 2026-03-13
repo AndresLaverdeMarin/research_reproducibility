@@ -1,0 +1,16 @@
+.diagram-scroll {
+  overflow-x: scroll;
+  overflow-y: visible;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.diagram-scroll .mermaid {
+  display: inline-block;
+  min-width: max-content;
+}
+
+.diagram-scroll svg {
+  max-width: none !important;
+  height: auto !important;
+}

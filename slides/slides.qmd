@@ -6,6 +6,7 @@ format:
     mermaid:
       theme: default
     scrollable: false
+    css: styles.css
     include-after-body: mermaid-overlay.html
 author:
   - name: Nikiforos Zacharof
@@ -159,6 +160,8 @@ An automated system that **reads**, **extracts**, and **generates code** to vali
 ::: {.callout-note appearance="minimal"}
 Reference: [What is an MCP Server?](https://mcpmarket.com/what-is-an-mcp-server)
 :::
+
+
 
 ## Transparency Score {.smaller}
 ### A scoring method to assess research transparency
@@ -571,11 +574,10 @@ flowchart TD
 
 #### Study 1 - Revisiting Reproducibility in Transportation Simulation Studies
 
-✔️ **Trustworthiness:** Checked output results from text and code <br>
 ✔️ **Reproducibility:** Ran the code - did not use the environment <br>
-✔️ **Transparency:** Re-created the code based on text and scripts <br>
+✔️ **Replicability:** Checked output results from text and code <br>
+✔️ **Transparency:** All data were available to conduct the test <br>
 
-**ADD QUANTITATIVE DATA?**
 
 :::
 
@@ -583,15 +585,31 @@ flowchart TD
 
 #### Study 2 - Towards Zero CO~2~ Emissions: Insights from EU Vehicle On-Board Data
 
-✔️ **Trustworthiness:** Checked output results from text and code <br>
 ❌  **Reproducibility:**  No available code to run <br>
-✔️ **Transparency:** Re-created the code based on the text; missing details showed divergence in reproducibility <br>
+✔️ **Replicability:** Re-created the code based on the text; missing details showed divergence<br>
+✔️ **Transparency:** Code was missing and it was not possible to reproduce the results. Replicated from methodology with slight divergences; improvement in the description needed<br>
 
-**ADD QUANTITATIVE DATA?**
+
+:::
 
 :::
 
+## Some Ideas and Next Steps {.smaller}
+
+* Develop fully the transparency scoring
+* The work focused on two papers; the proceess needs to be:
+  * Streamlined and automated 
+  * Applied on a larger pool of papers to quantify the results
+* Work on the idea of interactive papers that communicate with each other using a machine layer
+
+::: {style="text-align: center;"}
+![](images/nano_banana_infographics.png){width="50%"}
 :::
+
+::: {.callout-note appearance="minimal"}
+**Reference:** Science Should Be Machine-Readable [@booeshaghiScienceShouldBe2026]
+:::
+
 
 
 ## References {.smaller}
