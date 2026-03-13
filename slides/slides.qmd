@@ -244,8 +244,11 @@ table th:not(:first-child) {
 
 ![](images/21st cent publication methodology.png)
 
+::: {style="font-size: 0.5em;"}
+[@siegel_core-bench_2024]
+:::
 
-      
+
 ## Evaluating Transparency in Recent Transportation Studies {.smaller}
 ###  Testing Reproducibility and Replicability in Practice
 
