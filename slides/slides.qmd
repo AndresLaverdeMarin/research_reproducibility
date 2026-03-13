@@ -164,6 +164,9 @@ flowchart LR
     style F fill:#9a2515,color:#fff,stroke:none
 ```
 
+![](21st%20cent.%20publication%20methodology.png)
+
+
 - **Read**: AI agent ingests the full paper — text, figures, tables, and supplementary materials
 - **Extract**: Identifies methodology, datasets, parameters, and expected results
 - **Generate Code**: Produces executable reproduction scripts from extracted information
