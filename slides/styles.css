@@ -10,7 +10,12 @@
   min-width: max-content;
 }
 
-.diagram-scroll svg {
+.diagram-scroll, svg {
   max-width: none !important;
   height: auto !important;
+}
+.caption, figcaption {
+  font-size: 0.2em;
+  color: #888;
+  font-style: italic;
 }
