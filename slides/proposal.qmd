@@ -602,9 +602,9 @@ flowchart TD
 
 ## Benchmarking
 
-**TO BE ADDED**
 
-# Food for Thought and Next steps
+
+# Conclusion & Next steps
 
 ## Ideas and Next Steps {.smaller}
 
@@ -612,6 +612,7 @@ flowchart TD
 ::: {.column width = "50%"}
 ### Next steps
 
+* AI
 * Develop fully the transparency scoring
 * Expand the work on more papers
 * Streamline and automate the process
