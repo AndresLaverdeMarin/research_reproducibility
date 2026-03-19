@@ -1,21 +1,37 @@
 .diagram-scroll {
-  overflow-x: scroll;
-  overflow-y: visible;
-  white-space: nowrap;
+  overflow-y: auto;
+  overflow-x: auto;
+  max-height: 65vh;
   width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 6px;
+  box-sizing: border-box;
+  cursor: zoom-in;
 }
 
-.diagram-scroll .mermaid {
-  display: inline-block;
-  min-width: max-content;
+.diagram-scroll .mermaid,
+.diagram-scroll .mermaid-js {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
 }
 
-.diagram-scroll, svg {
+.diagram-scroll svg {
   max-width: none !important;
-  height: auto !important;
+  display: block;
 }
+
 .caption, figcaption {
   font-size: 0.2em;
   color: #888;
   font-style: italic;
+}
+
+.reveal .slides section {
+  overflow: visible !important;
+}
+
+.reveal .slides {
+  overflow: visible !important;
 }

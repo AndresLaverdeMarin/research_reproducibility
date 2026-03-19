@@ -12,7 +12,7 @@
   <meta name="author" content="Nikiforos Zacharof">
   <meta name="author" content="Andres L. Marin">
   <meta name="author" content="Georgios Fontaras">
-  <meta name="dcterms.date" content="2026-03-18">
+  <meta name="dcterms.date" content="2026-03-19">
   <title>Publications in 21st Century</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -71,6 +71,7 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
+      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -197,7 +198,7 @@ Georgios Fontaras <a href="https://orcid.org/0000-0001-9924-4731" class="quarto-
     </div>
 </div>
 
-  <p class="date">18 March 2026</p>
+  <p class="date">19 March 2026</p>
 </section>
 <section>
 <section id="transparency-in-science-in-the-21st-century" class="title-slide slide level1 center">
@@ -812,13 +813,45 @@ flowchart TD
 <p>🧐️ <strong>Transparency:</strong> Code was missing and it was not possible to reproduce the results. Replicated from methodology with slight divergences; improvement in the description needed<br> ❌ <strong>Reproducibility:</strong> No available code to run <br> ✔️ <strong>Replicability:</strong> Re-created the code based on the text; missing details showed divergence<br></p>
 </div></div>
 </section>
-<section id="benchmarking" class="slide level2">
-<h2>Benchmarking</h2>
-<p><strong>TO BE ADDED</strong></p>
+<section id="method-evaluation-and-benchmarking" class="slide level2 smaller">
+<h2>Method Evaluation and Benchmarking</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<h3 id="current-state">Current State</h3>
+<p>Manual comparison of our results against published findings, assessing both numerical accuracy and reporting transparency.</p>
+<h3 id="goal">Goal</h3>
+<p>A scalable, automated benchmarking pipeline across a large paper pool — with both AI and human reviewers reproducing code and results independently.</p>
+</div><div class="column" style="width:60%;">
+<div class="diagram-scroll">
+<div class="cell" data-reveal="true" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<pre class="mermaid mermaid-js">%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '14px'}}}%%
+flowchart TB
+    A[Paper Pool] --&gt; B[Code Reproduction]
+    B --&gt; C1[AI Reviewer]
+    B --&gt; C2[Human Reviewer]
+    C1 --&gt; D[Transparency Score]
+    C2 --&gt; D
+    D --&gt; E{Difficulties?}
+    E -- Yes --&gt; F[Flag Issues]
+    E -- No --&gt; G[Validated]
+    F --&gt; H[AI &amp; Human Collaboration]
+    H --&gt; B
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+</div></div>
 </section></section>
 <section>
-<section id="food-for-thought-and-next-steps" class="title-slide slide level1 center">
-<h1>Food for Thought and Next steps</h1>
+<section id="conclusion-next-steps" class="title-slide slide level1 center">
+<h1>Conclusion &amp; Next steps</h1>
 
 </section>
 <section id="ideas-and-next-steps" class="slide level2 smaller">
@@ -827,6 +860,7 @@ flowchart TD
 <div class="column" style="width:50%;">
 <h3 id="next-steps">Next steps</h3>
 <ul>
+<li>AI</li>
 <li>Develop fully the transparency scoring</li>
 <li>Expand the work on more papers</li>
 <li>Streamline and automate the process</li>
@@ -1211,155 +1245,166 @@ Suarez, Jaime, Alessandro Tansini, Markos A. Ktistakis, Andres L. Marin, Dimitri
 
     </style>
 
+    
+
     <div id="mermaid-overlay"></div>
+
+    
 
     <script>
 
-    document.addEventListener('DOMContentLoaded', function() {
+    (function() {
 
-      setTimeout(function() {
-
-        var overlay = document.getElementById('mermaid-overlay');
-
-        var scale = 1, panX = 0, panY = 0;
-
-        var isDragging = false, startX, startY;
+      var SCALE_FACTOR = 0.55; // adjust this value to fit your slide
 
     
 
-        function openOverlay(svg) {
+      function scaleSVG(svg) {
 
-          scale = 1; panX = 0; panY = 0;
+        if (svg.closest('#mermaid-overlay')) return;
 
-          overlay.innerHTML =
+        if (svg.dataset.scaled === 'true') return;
 
-            '<div class="controls">' +
+        // Check SVG has real dimensions set by mermaid
 
-              '<button id="zm-in" title="Zoom in">+</button>' +
+        var w = parseFloat(svg.getAttribute('width'));
 
-              '<button id="zm-out" title="Zoom out">&minus;</button>' +
+        var h = parseFloat(svg.getAttribute('height'));
 
-              '<button id="zm-reset" title="Reset">&#8634;</button>' +
+        if (!w || !h || w < 10 || h < 10) return;
 
-              '<button id="zm-close" title="Close (Esc)">&times;</button>' +
+        // Use viewBox from existing attributes rather than getBBox
 
-            '</div>' +
+        // to avoid layout-not-ready issues
 
-            '<div class="zoom-container"></div>';
+        if (!svg.getAttribute('viewBox')) {
 
-          var container = overlay.querySelector('.zoom-container');
-
-          var clone = svg.cloneNode(true);
-
-          clone.style.cursor = 'grab';
-
-          clone.removeAttribute('width');
-
-          clone.removeAttribute('height');
-
-          clone.style.minWidth = '80vw';
-
-          container.appendChild(clone);
-
-          overlay.style.display = 'block';
-
-          applyTransform(container);
-
-    
-
-          overlay.querySelector('#zm-in').onclick = function(e) { e.stopPropagation(); scale *= 1.3; applyTransform(container); };
-
-          overlay.querySelector('#zm-out').onclick = function(e) { e.stopPropagation(); scale /= 1.3; applyTransform(container); };
-
-          overlay.querySelector('#zm-reset').onclick = function(e) { e.stopPropagation(); scale = 1; panX = 0; panY = 0; applyTransform(container); };
-
-          overlay.querySelector('#zm-close').onclick = function() { overlay.style.display = 'none'; };
-
-    
-
-          container.addEventListener('mousedown', function(e) {
-
-            isDragging = true; startX = e.clientX - panX; startY = e.clientY - panY;
-
-            clone.style.cursor = 'grabbing';
-
-            e.preventDefault();
-
-          });
-
-          document.addEventListener('mousemove', function(e) {
-
-            if (!isDragging) return;
-
-            panX = e.clientX - startX; panY = e.clientY - startY;
-
-            applyTransform(container);
-
-          });
-
-          document.addEventListener('mouseup', function() {
-
-            isDragging = false;
-
-            if (clone) clone.style.cursor = 'grab';
-
-          });
-
-          overlay.addEventListener('wheel', function(e) {
-
-            e.preventDefault();
-
-            var delta = e.deltaY > 0 ? 0.9 : 1.1;
-
-            scale *= delta;
-
-            scale = Math.max(0.2, Math.min(scale, 10));
-
-            applyTransform(container);
-
-          }, {passive: false});
+          svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
 
         }
 
-    
+        svg.setAttribute('width',  w * SCALE_FACTOR);
 
-        function applyTransform(container) {
+        svg.setAttribute('height', h * SCALE_FACTOR);
 
-          container.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
-
-        }
+        svg.dataset.scaled = 'true';
 
     
 
-        document.querySelectorAll('.mermaid-js svg, .mermaid svg').forEach(function(svg) {
+        // Attach click-to-overlay
 
-          svg.addEventListener('click', function(e) {
+        svg.addEventListener('click', function(e) {
 
-            e.stopPropagation();
+          e.stopPropagation();
 
-            e.preventDefault();
+          e.preventDefault();
 
-            openOverlay(svg);
+          openOverlay(svg);
+
+        });
+
+      }
+
+    
+
+      // Watch for mermaid SVGs being added or modified
+
+      var observer = new MutationObserver(function(mutations) {
+
+        mutations.forEach(function(mutation) {
+
+          mutation.addedNodes.forEach(function(node) {
+
+            if (node.nodeType !== 1) return;
+
+            // Direct SVG insertion
+
+            if (node.tagName === 'svg') { scaleSVG(node); }
+
+            // SVG inside added container
+
+            node.querySelectorAll && node.querySelectorAll('svg').forEach(scaleSVG);
 
           });
 
+          // Also catch attribute changes on existing SVGs (mermaid sets width/height late)
+
+          if (mutation.type === 'attributes' && mutation.target.tagName === 'svg') {
+
+            scaleSVG(mutation.target);
+
+          }
+
         });
+
+      });
 
     
 
-        document.addEventListener('keydown', function(e) {
+      observer.observe(document.documentElement, {
 
-          if (e.key === 'Escape') overlay.style.display = 'none';
+        childList: true,
 
-        });
+        subtree: true,
 
-      }, 2000);
+        attributes: true,
 
-    });
+        attributeFilter: ['width', 'height']
 
-    </script>
+      });
 
-    <script id="quarto-html-after-body" type="application/javascript">
+    
+
+      // Overlay logic
+
+      var overlay;
+
+      var scale = 1, panX = 0, panY = 0;
+
+      var isDragging = false, startX, startY;
+
+      var currentClone = null;
+
+    
+
+      function openOverlay(svg) {
+
+        scale = 1; panX = 0; panY = 0;
+
+        overlay.innerHTML =
+
+          '<div class="controls">' +
+
+            '<button id="zm-in" title="Zoom in">+</button>' +
+
+            '<button id="zm-out" title="Zoom out">&minus;</button>' +
+
+            '<button id="zm-reset" title="Reset">&#8634;</button>' +
+
+            '<button id="zm-close" title="Close (Esc)">&times;</button>' +
+
+          '</div>' +
+
+          '<div class="zoom-container"></div>';
+
+        var container = overlay.querySelector('.zoom-container');
+
+        currentClone = svg.cloneNode(true);
+
+        currentClone.style.cursor = 'grab';
+
+        currentClone.removeAttribute('width');
+
+        currentClone.removeAttribute('height');
+
+        currentClone.removeAttribute('data-scaled');
+
+        currentClone.style.minWidth = '80vw';
+
+        container.appendChild(currentClone);
+
+        overlay.style
+    <script id = "quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
         tabsets.forEach(function(tabset) {

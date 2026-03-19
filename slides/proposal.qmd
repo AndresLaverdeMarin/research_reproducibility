@@ -6,7 +6,7 @@ format:
     chalkboard: true
     mermaid:
       theme: default
-    scrollable: false
+    scrollable: true
     css: styles.css
     include-after-body: mermaid-overlay.html
 author:
@@ -600,7 +600,37 @@ flowchart TD
 
 :::
 
-## Benchmarking
+
+## Method Evaluation and Benchmarking {.smaller}
+
+::: {.columns}
+::: {.column width="40%"}
+### Current State
+Manual comparison of our results against published findings, assessing both numerical accuracy and reporting transparency.
+
+### Goal
+A scalable, automated benchmarking pipeline across a large paper pool — with both AI and human reviewers reproducing code and results independently.
+:::
+
+::: {.column width="60%"}
+::: {.diagram-scroll}
+```{mermaid}
+%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '14px'}}}%%
+flowchart TB
+    A[Paper Pool] --> B[Code Reproduction]
+    B --> C1[AI Reviewer]
+    B --> C2[Human Reviewer]
+    C1 --> D[Transparency Score]
+    C2 --> D
+    D --> E{Difficulties?}
+    E -- Yes --> F[Flag Issues]
+    E -- No --> G[Validated]
+    F --> H[AI & Human Collaboration]
+    H --> B
+```
+:::
+:::
+:::
 
 
 
@@ -612,7 +642,6 @@ flowchart TD
 ::: {.column width = "50%"}
 ### Next steps
 
-* AI
 * Develop fully the transparency scoring
 * Expand the work on more papers
 * Streamline and automate the process

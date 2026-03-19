@@ -58,77 +58,83 @@
   min-width: max-content;
 }
 </style>
+
 <div id="mermaid-overlay"></div>
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(function() {
-    var overlay = document.getElementById('mermaid-overlay');
-    var scale = 1, panX = 0, panY = 0;
-    var isDragging = false, startX, startY;
+(function() {
+  var SCALE_FACTOR = 0.55; // adjust this value to fit your slide
 
-    function openOverlay(svg) {
-      scale = 1; panX = 0; panY = 0;
-      overlay.innerHTML =
-        '<div class="controls">' +
-          '<button id="zm-in" title="Zoom in">+</button>' +
-          '<button id="zm-out" title="Zoom out">&minus;</button>' +
-          '<button id="zm-reset" title="Reset">&#8634;</button>' +
-          '<button id="zm-close" title="Close (Esc)">&times;</button>' +
-        '</div>' +
-        '<div class="zoom-container"></div>';
-      var container = overlay.querySelector('.zoom-container');
-      var clone = svg.cloneNode(true);
-      clone.style.cursor = 'grab';
-      clone.removeAttribute('width');
-      clone.removeAttribute('height');
-      clone.style.minWidth = '80vw';
-      container.appendChild(clone);
-      overlay.style.display = 'block';
-      applyTransform(container);
-
-      overlay.querySelector('#zm-in').onclick = function(e) { e.stopPropagation(); scale *= 1.3; applyTransform(container); };
-      overlay.querySelector('#zm-out').onclick = function(e) { e.stopPropagation(); scale /= 1.3; applyTransform(container); };
-      overlay.querySelector('#zm-reset').onclick = function(e) { e.stopPropagation(); scale = 1; panX = 0; panY = 0; applyTransform(container); };
-      overlay.querySelector('#zm-close').onclick = function() { overlay.style.display = 'none'; };
-
-      container.addEventListener('mousedown', function(e) {
-        isDragging = true; startX = e.clientX - panX; startY = e.clientY - panY;
-        clone.style.cursor = 'grabbing';
-        e.preventDefault();
-      });
-      document.addEventListener('mousemove', function(e) {
-        if (!isDragging) return;
-        panX = e.clientX - startX; panY = e.clientY - startY;
-        applyTransform(container);
-      });
-      document.addEventListener('mouseup', function() {
-        isDragging = false;
-        if (clone) clone.style.cursor = 'grab';
-      });
-      overlay.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        var delta = e.deltaY > 0 ? 0.9 : 1.1;
-        scale *= delta;
-        scale = Math.max(0.2, Math.min(scale, 10));
-        applyTransform(container);
-      }, {passive: false});
+  function scaleSVG(svg) {
+    if (svg.closest('#mermaid-overlay')) return;
+    if (svg.dataset.scaled === 'true') return;
+    // Check SVG has real dimensions set by mermaid
+    var w = parseFloat(svg.getAttribute('width'));
+    var h = parseFloat(svg.getAttribute('height'));
+    if (!w || !h || w < 10 || h < 10) return;
+    // Use viewBox from existing attributes rather than getBBox
+    // to avoid layout-not-ready issues
+    if (!svg.getAttribute('viewBox')) {
+      svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
     }
+    svg.setAttribute('width',  w * SCALE_FACTOR);
+    svg.setAttribute('height', h * SCALE_FACTOR);
+    svg.dataset.scaled = 'true';
 
-    function applyTransform(container) {
-      container.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + scale + ')';
-    }
+    // Attach click-to-overlay
+    svg.addEventListener('click', function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      openOverlay(svg);
+    });
+  }
 
-    document.querySelectorAll('.mermaid-js svg, .mermaid svg').forEach(function(svg) {
-      svg.addEventListener('click', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        openOverlay(svg);
+  // Watch for mermaid SVGs being added or modified
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      mutation.addedNodes.forEach(function(node) {
+        if (node.nodeType !== 1) return;
+        // Direct SVG insertion
+        if (node.tagName === 'svg') { scaleSVG(node); }
+        // SVG inside added container
+        node.querySelectorAll && node.querySelectorAll('svg').forEach(scaleSVG);
       });
+      // Also catch attribute changes on existing SVGs (mermaid sets width/height late)
+      if (mutation.type === 'attributes' && mutation.target.tagName === 'svg') {
+        scaleSVG(mutation.target);
+      }
     });
+  });
 
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') overlay.style.display = 'none';
-    });
-  }, 2000);
-});
-</script>
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['width', 'height']
+  });
+
+  // Overlay logic
+  var overlay;
+  var scale = 1, panX = 0, panY = 0;
+  var isDragging = false, startX, startY;
+  var currentClone = null;
+
+  function openOverlay(svg) {
+    scale = 1; panX = 0; panY = 0;
+    overlay.innerHTML =
+      '<div class="controls">' +
+        '<button id="zm-in" title="Zoom in">+</button>' +
+        '<button id="zm-out" title="Zoom out">&minus;</button>' +
+        '<button id="zm-reset" title="Reset">&#8634;</button>' +
+        '<button id="zm-close" title="Close (Esc)">&times;</button>' +
+      '</div>' +
+      '<div class="zoom-container"></div>';
+    var container = overlay.querySelector('.zoom-container');
+    currentClone = svg.cloneNode(true);
+    currentClone.style.cursor = 'grab';
+    currentClone.removeAttribute('width');
+    currentClone.removeAttribute('height');
+    currentClone.removeAttribute('data-scaled');
+    currentClone.style.minWidth = '80vw';
+    container.appendChild(currentClone);
+    overlay.style
