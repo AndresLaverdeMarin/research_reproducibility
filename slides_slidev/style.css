@@ -1,0 +1,13 @@
+.slidev-layout footer,
+.slidev-layout .footer,
+footer,
+.footer {
+  color: white !important;
+}
+
+.slidev-layout footer *,
+.slidev-layout .footer *,
+footer *,
+.footer * {
+  color: white !important;
+}

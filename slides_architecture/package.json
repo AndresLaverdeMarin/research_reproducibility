@@ -1,0 +1,13 @@
+{
+  "name": "slides-architecture",
+  "private": true,
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build",
+    "export": "slidev export"
+  },
+  "devDependencies": {
+    "@slidev/cli": "^52.11.3",
+    "slidev-theme-scholarly": "^1.3.1"
+  }
+}

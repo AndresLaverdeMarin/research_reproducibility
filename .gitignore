@@ -177,3 +177,10 @@ jrc_transport_analysis/analysis_outputs/*.pkl
 .DS_Store
 Thumbs.db
 .Rproj.user
+
+# Slidev / Node.js
+node_modules/
+package-lock.json
+
+# Archived build artifacts
+slides_archived/
