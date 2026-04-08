@@ -1,0 +1,675 @@
+\documentclass{article}
+
+% NeurIPS 2025 style — download neurips_2025.sty from the official submission kit
+% and place it alongside this file.
+\usepackage{neurips_2025}
+
+% ---------------------------------------------------------------
+% Standard packages
+% ---------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{enumitem}
+
+% ---------------------------------------------------------------
+% Outline helpers — remove before submission
+% ---------------------------------------------------------------
+\newcommand{\outline}[1]{\textcolor{gray}{\textit{[#1]}}}
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+\newcommand{\N}{$N$}
+
+% ---------------------------------------------------------------
+% Paper metadata
+% ---------------------------------------------------------------
+\title{ReproScore: An Agentic Framework for Automated\\
+       Reproducibility Assessment of Scientific Publications}
+
+\author{%
+  \textbf{Author 1} \\
+  Affiliation \\
+  \texttt{email@institution.edu}
+  \And
+  \textbf{Author 2} \\
+  Affiliation \\
+  \texttt{email@institution.edu}
+}
+
+% ---------------------------------------------------------------
+\begin{document}
+
+\maketitle
+
+% ==============================================================
+\begin{abstract}
+% Target: ~250 words
+\outline{%
+  Open with the reproducibility crisis (quantify the scope: 1.82\% of
+  transportation simulation studies provide reproducible repositories;
+  broader estimates suggest fewer than one-third of computational studies
+  can be independently reproduced).
+  %
+  State the core problem: existing reproducibility audits rely on manual
+  human effort and binary pass/fail verdicts that do not scale and provide
+  no actionable guidance to authors.
+  %
+  Introduce \textbf{ReproScore}: an agentic pipeline that automatically
+  assigns a continuous, multi-dimensional Reproducibility Index (0--100)
+  to any computational paper given its PDF or DOI.
+  %
+  Briefly describe the five agents (Analyst, Retriever, Builder, Runner,
+  Auditor) and the five scoring dimensions (Artefact Availability,
+  Environment Reproducibility, Execution Success, Output Fidelity,
+  Documentation Quality).
+  %
+  Validation sentence: we validate ReproScore against \N{} papers from
+  ReScience~C, where independent human reviewers rendered reproduction
+  verdicts; report top-line agreement metric (e.g., band accuracy,
+  Spearman $\rho$).
+  %
+  Close with broader impact: journals, preprint servers, and funding
+  agencies can integrate ReproScore into submission and review workflows
+  without additional human overhead.
+}
+\end{abstract}
+
+% ==============================================================
+\section{Introduction}
+\label{sec:intro}
+
+\outline{%
+  \textbf{Hook (1--2 paragraphs).}
+  The reproducibility crisis in computational science.
+  Cite: meta-analysis finding that only 1.82\% of transportation
+  simulation papers (2000--2024, $n = 46{,}015$) provide working
+  repositories~\cite{riehl2025}; 64\% of researchers cite time
+  constraints as the primary barrier to sharing materials.
+  Broader estimates: fewer than 40\% of ML results reproduce under
+  independent re-implementation.
+  Cost: wasted research effort, erosion of public trust.
+}
+
+\outline{%
+  \textbf{Limitations of current solutions (1 paragraph).}
+  Manual reproduction efforts (ReScience~C~\cite{rescience}, ML
+  Reproducibility Challenge) deliver high-quality verdicts but cannot
+  scale to the thousands of papers published weekly.
+  Static checklists and author-reported artifact badges (ACM, Nature)
+  are unverified and binary.
+  No existing system automatically \emph{executes} a paper's code and
+  compares outputs to published results.
+}
+
+\outline{%
+  \textbf{Our approach (1 paragraph).}
+  ReproScore addresses the gap: given any computational paper, it
+  automatically (i) extracts methodology, datasets, and artifacts,
+  (ii) retrieves and builds the computational environment,
+  (iii) executes the pipeline in a sandbox, and (iv) compares outputs
+  to published figures and tables using quantitative thresholds,
+  yielding a reproducibility score that correlates with human verdicts.
+}
+
+\outline{%
+  \textbf{Contributions (bullet list).}
+  \begin{enumerate}[label=\arabic*.]
+    \item \textbf{Reproducibility Index.} A 5-dimensional, continuous
+          scoring scheme (0--100) with validated per-dimension thresholds
+          (SSIM $\geq$ 0.85 for figures, $\leq$1\% per-cell error for
+          tables, etc.).
+    \item \textbf{ReproScore pipeline.} An open-source, domain-agnostic
+          agentic framework that assigns the index automatically from a
+          paper PDF or DOI, with human-in-the-loop gates for ambiguous cases.
+    \item \textbf{Empirical validation.} Agreement analysis between
+          ReproScore and human reviewer verdicts on \N{} ReScience~C papers,
+          including ablation over scoring dimensions.
+    \item \textbf{Case studies.} Three end-to-end traces in the
+          transportation domain illustrating graceful degradation when
+          artifacts are unavailable.
+  \end{enumerate}
+}
+
+% ==============================================================
+\section{Related Work}
+\label{sec:related}
+
+\outline{%
+  Keep to 1--1.5 pages. Organise into four paragraphs below.
+  End each paragraph with a sentence positioning ReproScore against that
+  line of work.
+}
+
+\paragraph{Manual reproducibility initiatives.}
+\outline{%
+  ReScience~C~\cite{rescience}: peer-reviewed journal for explicit
+  replications.
+  ML Reproducibility Challenge: community effort; covers only ML papers;
+  not scalable; no continuous score.
+  Papers With Code leaderboards: track results but do not verify them.
+  \textbf{Gap:} all are manual; none produce a continuous score.
+}
+
+\paragraph{Artifact badging and reporting checklists.}
+\outline{%
+  ACM artifact review (Functional / Reusable / Available badges).
+  Nature and Science structured reporting checklists.
+  NeurIPS reproducibility checklist.
+  Limitations: author-reported, unverified, binary.
+  \textbf{Gap:} badges require a human reviewer; checklists do not test
+  execution.
+}
+
+\paragraph{Automated code and metadata analysis.}
+\outline{%
+  Static analysis tools (CodeCarbon, dependency scanners).
+  Automated metadata extraction from papers (CERMINE, GROBID, SciSpacy).
+  Recent LLM-based extraction~\cite{todo_llm_extraction}: high recall but
+  hallucination risk for version numbers and dataset URLs.
+  \textbf{Gap:} no existing tool executes code and validates outputs.
+}
+
+\paragraph{Source-grounded information extraction.}
+\outline{%
+  Retrieval-augmented generation (RAG) reduces hallucination but does not
+  guarantee answers are grounded in the \emph{specific} source document.
+  NotebookLM-style closed-corpus grounding: answers are restricted to
+  uploaded documents, eliminating cross-document contamination.
+  We use this property in Agent~1 (Section~\ref{sec:analyst}).
+}
+
+% ==============================================================
+\section{The Reproducibility Index}
+\label{sec:index}
+
+\outline{%
+  Self-contained section (~1 page). Readers should be able to apply the
+  index manually after reading this section.
+}
+
+\subsection{Dimensions}
+\label{sec:dimensions}
+
+\outline{%
+  Introduce the five dimensions as orthogonal axes of reproducibility.
+  Justify orthogonality: a paper can have perfect documentation but
+  broken code (low Execution Success, high Documentation Quality).
+  Present as a table:
+}
+
+\begin{table}[h]
+  \centering
+  \caption{The five dimensions of the Reproducibility Index (20 points each).}
+  \label{tab:dimensions}
+  \begin{tabular}{clp{7cm}}
+    \toprule
+    \textbf{Pts} & \textbf{Dimension} & \textbf{What it measures} \\
+    \midrule
+    20 & Artefact Availability       & Code, data, and models are publicly retrievable at the claimed locations. \\
+    20 & Environment Reproducibility & All dependencies resolve without manual intervention; environment builds cleanly. \\
+    20 & Execution Success           & The computational pipeline runs to completion without errors. \\
+    20 & Output Fidelity             & Reproduced outputs match published figures and tables within defined tolerances. \\
+    20 & Documentation Quality       & README and inline comments are sufficient for independent reproduction. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Quantitative Thresholds}
+\label{sec:thresholds}
+
+\outline{%
+  For each output modality, state the threshold and justify it.
+  \begin{itemize}
+    \item \textbf{Figures:} Structural Similarity Index (SSIM)~\cite{wang2004ssim}
+          $\geq 0.85$; perceptual hash distance $\leq 10$.
+          Justify: SSIM 0.85 corresponds to visually near-identical images
+          in standard benchmarks.
+    \item \textbf{Tables:} Per-cell relative error $\leq 1\%$;
+          report percentage of cells within tolerance.
+    \item \textbf{Statistical results:} $p$-values within one order of
+          magnitude; regression coefficients within 5\% relative error;
+          $R^2$ within 0.02 absolute.
+    \item \textbf{Stochastic outputs:} Pipeline run 5$\times$ with different
+          seeds; distributions compared (KS test, $p > 0.05$).
+  \end{itemize}
+  Note that thresholds are calibrated on the ReScience~C validation set
+  (Section~\ref{sec:validation}) and may be tightened in domain-specific plugins.
+}
+
+\subsection{Score Interpretation and Mapping to Existing Schemes}
+\label{sec:mapping}
+
+\outline{%
+  \begin{itemize}
+    \item Present the five bands: 90--100 Fully Reproducible,
+          70--89 Largely Reproducible, 40--69 Partially Reproducible,
+          10--39 Minimally Reproducible, 0--9 Not Reproducible.
+    \item Map bands to ACM artifact badges and FAIR data principles
+          (Findable, Accessible, Interoperable, Reusable)~\cite{wilkinson2016}.
+    \item Note that the mapping allows ReproScore to serve as a
+          \emph{verified} replacement for self-reported badges.
+  \end{itemize}
+}
+
+% ==============================================================
+\section{The ReproScore Pipeline}
+\label{sec:pipeline}
+
+\outline{%
+  ~2 pages. Lead with the system overview figure (Mermaid/TikZ diagram
+  of the state machine and five agents). Then one subsection per agent.
+  Emphasise design decisions: source-grounding, containerisation,
+  append-only ledger.
+}
+
+\subsection{System Overview}
+\label{sec:overview}
+
+\outline{%
+  State machine: INTAKE $\to$ ANALYSE $\to$ RETRIEVE $\to$ BUILD
+  $\to$ EXECUTE $\to$ VALIDATE $\to$ REPORT.
+  Each transition logged to the append-only JSON-lines audit ledger.
+  Graceful degradation: any blocking failure transitions to
+  PARTIAL\_REPORT rather than silent failure.
+  \textbf{[Figure: architecture diagram]}
+}
+
+\subsection{Agent 1 — Paper Analyst}
+\label{sec:analyst}
+
+\outline{%
+  \textbf{Input:} PDF or DOI.
+  \textbf{Mechanism:} DOI resolved via CrossRef API for metadata.
+  Paper uploaded to a closed-corpus LLM (Google NotebookLM via MCP);
+  a 5-query sequence targets each \texttt{PaperProfile} field:
+  (1) methodology steps and tools, (2) datasets and licenses,
+  (3) artifact locations, (4) figures/tables to reproduce,
+  (5) hyperparameters and hardware requirements.
+  Source-grounding eliminates hallucinated tool versions or dataset URLs;
+  confidence scored from citation density in responses.
+  \textbf{Fallback:} Gemini API with PDF upload (lower source-grounding guarantee).
+  \textbf{Output:} \texttt{PaperProfile} JSON (Pydantic schema).
+}
+
+\subsection{Agent 2 — Artefact Retriever}
+\label{sec:retriever}
+
+\outline{%
+  Resolves repository and dataset links from \texttt{PaperProfile}.
+  Fallback chain for dead links: Wayback Machine $\to$ GitHub search
+  $\to$ author profile $\to$ Papers With Code $\to$ Zenodo/Figshare.
+  Handles ``available upon request'' data: logs as UNAVAILABLE\_GATED;
+  optionally generates synthetic data from published summary statistics.
+  \textbf{Output:} \texttt{ArtefactInventory} JSON.
+}
+
+\subsection{Agent 3 — Environment Builder}
+\label{sec:builder}
+
+\outline{%
+  Reads dependency manifests (\texttt{requirements.txt},
+  \texttt{environment.yml}, \texttt{renv.lock}, \texttt{Project.toml}).
+  Version resolution strategy: pin $\to$ range $\to$ latest (progressive
+  relaxation on conflict).
+  Builds a Docker image for isolation; image hash logged for provenance.
+  Flags proprietary software dependencies (e.g., MATLAB, VISSIM) and
+  suggests open-source alternatives.
+  \textbf{Output:} Docker image tag + build log.
+}
+
+\subsection{Agent 4 — Execution Runner}
+\label{sec:runner}
+
+\outline{%
+  Executes the pipeline inside the Docker container with resource limits
+  (CPU, memory, wall-clock time).
+  Human-in-the-loop gate triggered if runtime exceeds 1 hour or GPU is
+  required (COMPUTE\_APPROVAL).
+  Captures stdout/stderr, exit codes, and all generated artifacts.
+  Stochastic components run 5$\times$ with different random seeds.
+  \textbf{Output:} Execution logs + reproduced artifact files.
+}
+
+\subsection{Agent 5 — Validation Auditor}
+\label{sec:auditor}
+
+\outline{%
+  Compares reproduced artifacts to targets extracted by Agent~1.
+  Per-modality comparison (thresholds from Section~\ref{sec:thresholds}).
+  Computes per-dimension scores (Table~\ref{tab:dimensions}) and
+  aggregates into the Reproducibility Index.
+  Generates human-readable recommendations for each failed check.
+  \textbf{Output:} \texttt{ReproducibilityReport} JSON + PDF report.
+}
+
+\subsection{Human-in-the-Loop Gates}
+\label{sec:hitl}
+
+\outline{%
+  Four defined gates prevent fully autonomous action on ambiguous inputs:
+  \begin{enumerate}[label=\arabic*.]
+    \item \textbf{LICENCE\_REVIEW} — non-OSI license or missing license.
+    \item \textbf{CODE\_SAFETY} — untrusted code with network calls or
+          file writes outside sandbox.
+    \item \textbf{COMPUTE\_APPROVAL} — runtime $>$ 1 hour or GPU required.
+    \item \textbf{AMBIGUITY\_RESOLUTION} — multiple candidate datasets
+          or repos; paper description insufficient to disambiguate.
+  \end{enumerate}
+  Justify: fully autonomous execution of arbitrary code introduces legal
+  and security risks; gates bound the blast radius.
+}
+
+\subsection{Audit Trail}
+\label{sec:ledger}
+
+\outline{%
+  Every agent action appended to an immutable JSON-lines ledger:
+  \texttt{\{timestamp, phase, action, data\}}.
+  Enables full provenance reconstruction; supports re-running from any
+  checkpoint after a gate resolution.
+  Ledger is a first-class output of ReproScore and can itself be archived
+  for meta-reproducibility (reproducing the reproduction).
+}
+
+% ==============================================================
+\section{Validation Against ReScience~C}
+\label{sec:validation}
+
+\outline{%
+  Core empirical section. Target: ~1.5 pages. This is what makes the
+  paper publishable: we have ground truth from human experts.
+}
+
+\subsection{ReScience~C as Ground Truth}
+\label{sec:rescience}
+
+\outline{%
+  Describe ReScience~C: peer-reviewed journal for explicit replications of
+  computational studies; each submission attempts to reproduce a prior
+  paper and is reviewed by independent experts.
+  Verdicts map to three bands: Fully Reproduced, Partially Reproduced,
+  Not Reproduced.
+  Justify as ideal ground truth: independent of authors, transparent
+  review, documented failure modes, multi-domain.
+  Acknowledge limitation: reviewer expertise and effort vary; we treat
+  verdicts as noisy but reliable labels.
+}
+
+\subsection{Dataset Construction}
+\label{sec:dataset}
+
+\outline{%
+  Inclusion criteria: (i) computational paper with claimed code/data,
+  (ii) original paper PDF accessible, (iii) ReScience~C article provides
+  a clear verdict.
+  Exclusion: hardware-specific papers (FPGAs, custom chips) where
+  execution is infeasible without specialized hardware.
+  Annotation mapping: Fully Reproduced $\to$ expected score $\in [70, 100]$;
+  Partially Reproduced $\to [40, 69]$; Not Reproduced $\to [0, 39]$.
+  \textbf{[Table: dataset statistics — N papers, domain breakdown, year range,
+  verdict distribution]}
+  \todo{Fill in N and statistics after dataset construction.}
+}
+
+\subsection{Experimental Protocol}
+\label{sec:protocol}
+
+\outline{%
+  For each paper in the validation set:
+  \begin{enumerate}[label=\arabic*.]
+    \item Run the full ReproScore pipeline (or log the gate that halted it).
+    \item Record per-dimension scores and aggregate Reproducibility Index.
+    \item Classify into the three verdict bands using the mapping in
+          Section~\ref{sec:mapping}.
+    \item Compare to the ReScience~C human verdict.
+  \end{enumerate}
+  Metrics: band-level accuracy (exact match), Spearman rank correlation
+  between aggregate score and ordinal human verdict, confusion matrix,
+  per-dimension Pearson correlation with verdict.
+  Hardware and runtime budget per paper: \todo{specify}.
+}
+
+\subsection{Results}
+\label{sec:results}
+
+\outline{%
+  \textbf{[Table: confusion matrix — ReproScore band vs.\ human verdict]}\\
+  \textbf{[Table: per-metric results — band accuracy, Spearman $\rho$,
+  per-dimension correlation]}\\
+  Key findings to discuss:
+  \begin{itemize}
+    \item Overall band accuracy and $\rho$; compare to a majority-class baseline.
+    \item Which dimension is the strongest predictor of human verdict?
+          (Hypothesis: Output Fidelity, but Artefact Availability may
+          dominate due to many ``not available'' cases.)
+    \item Error analysis: where does ReproScore disagree with human reviewers
+          and why? (e.g., human reviewer had domain expertise to fix an
+          undocumented step; pipeline could not).
+  \end{itemize}
+}
+
+\subsection{Ablation Studies}
+\label{sec:ablation}
+
+\outline{%
+  \begin{enumerate}[label=\arabic*.]
+    \item \textbf{Dimension ablation.} Remove each dimension in turn;
+          measure drop in band accuracy. Quantifies each dimension's
+          marginal contribution.
+    \item \textbf{Source-grounding ablation.} Replace Agent~1 (NotebookLM)
+          with a naive prompted LLM (GPT-4o / Gemini); measure downstream
+          accuracy loss due to hallucinated metadata.
+    \item \textbf{Threshold sensitivity.} Vary SSIM threshold from 0.70
+          to 0.95; report accuracy vs.\ threshold curve to justify the
+          chosen 0.85 cutoff.
+  \end{enumerate}
+}
+
+% ==============================================================
+\section{Case Studies}
+\label{sec:cases}
+
+\outline{%
+  Three end-to-end traces from the transportation domain.
+  Goal: qualitative illustration of how ReproScore handles varying levels
+  of artifact availability; not the primary validation (that is
+  Section~\ref{sec:validation}).
+  Present as a summary table + one paragraph per paper.
+  Move detailed traces to Appendix~\ref{app:traces} if space is tight.
+}
+
+\begin{table}[h]
+  \centering
+  \caption{ReproScore results for three transportation-domain case studies.}
+  \label{tab:cases}
+  \begin{tabular}{lcccccc}
+    \toprule
+    \textbf{Paper} & \textbf{AA} & \textbf{ER} & \textbf{ES} & \textbf{OF} & \textbf{DQ} & \textbf{Total} \\
+    \midrule
+    Riehl et al.\ (2025)~\cite{riehl2025}  & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+    JRC OBFCM emissions study               & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+    DRL ramp metering study                 & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} & \todo{} \\
+    \bottomrule
+  \end{tabular}
+  \smallskip
+
+  \footnotesize AA = Artefact Availability, ER = Environment Reproducibility,
+  ES = Execution Success, OF = Output Fidelity, DQ = Documentation Quality.
+  All scores out of 20.
+\end{table}
+
+\paragraph{Riehl et al.\ (2025) — Meta-analysis of 46,015 transportation papers.}
+\outline{%
+  Open repository; Python 3.9; 7 pipeline steps; all figures and tables
+  reproducible from raw data.
+  Expected high score ($\geq 70$).
+  Key insight: documentation quality penalised by absent data dictionary
+  for one intermediate CSV.
+}
+
+\paragraph{JRC OBFCM EU Emissions Study.}
+\outline{%
+  7.7 million vehicle records; multi-step regression.
+  Data publicly available from EU open data portal.
+  Tests retrieval and environment-building agents at scale.
+  Expected moderate-to-high score; flag any version conflict in
+  statistical packages.
+}
+
+\paragraph{DRL Ramp Metering Study.}
+\outline{%
+  ``Data available upon request''; SUMO simulation required.
+  Artefact Availability score: near zero (no public repo, no public data).
+  Illustrates graceful degradation: pipeline produces a PARTIAL\_REPORT
+  with score = \todo{} and recommendation to authors.
+  Execution Success and Output Fidelity cannot be evaluated; documented
+  as UNAVAILABLE\_GATED in the audit ledger.
+}
+
+% ==============================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Limitations}
+\label{sec:limitations}
+
+\outline{%
+  \begin{itemize}
+    \item \textbf{Execution cost.} Running each paper's code at scale
+          requires non-trivial compute; mitigated by the COMPUTE\_APPROVAL
+          gate and partial scoring when execution is infeasible.
+    \item \textbf{Proprietary dependencies.} Papers relying on MATLAB,
+          VISSIM, or licensed datasets cannot be fully scored;
+          ReproScore flags these and scores available dimensions only.
+    \item \textbf{Extraction noise.} Agent~1 accuracy bounds all
+          downstream agents; ablation (Section~\ref{sec:ablation})
+          quantifies this.
+    \item \textbf{ReScience~C coverage.} Validation set is skewed toward
+          ML and computational biology; transportation and physical
+          simulation papers are underrepresented.
+    \item \textbf{Threshold calibration.} Current thresholds are
+          calibrated on the validation set; they may not transfer to
+          domains with inherently noisier outputs (e.g., climate simulation).
+  \end{itemize}
+}
+
+\subsection{Ethical Considerations}
+\label{sec:ethics}
+
+\outline{%
+  \begin{itemize}
+    \item \textbf{Code safety.} Execution sandboxed in Docker with no
+          network access and restricted filesystem writes; CODE\_SAFETY
+          gate provides a human review layer for flagged patterns.
+    \item \textbf{Data privacy.} ReproScore never redistributes gated or
+          proprietary data; UNAVAILABLE\_GATED papers are scored on
+          available dimensions only.
+    \item \textbf{Framing.} Scores are descriptive and author-facing, not
+          punitive; the report includes actionable recommendations rather
+          than a pass/fail verdict.
+    \item \textbf{Potential for misuse.} A low score could be weaponised
+          in peer review; we recommend scores be shared with authors before
+          reviewers and that journals adopt a minimum improvement period.
+  \end{itemize}
+}
+
+\subsection{Broader Impact and Future Work}
+\label{sec:impact}
+
+\outline{%
+  \begin{itemize}
+    \item \textbf{Journal integration.} Journals could require
+          ReproScore $\geq 70$ at submission, shifting the burden of
+          proof from reviewers to authors at submission time.
+    \item \textbf{Preprint servers.} arXiv/bioRxiv could display
+          ReproScore badges alongside papers, providing readers with
+          verified reproducibility signals.
+    \item \textbf{Funding audits.} Agencies could run ReproScore as a
+          post-award check on funded computational outputs.
+    \item \textbf{Future work:} domain-specific plugins (climate science,
+          genomics); MCP migration for distributed, language-agnostic
+          execution; community-contributed threshold calibration datasets;
+          longitudinal tracking of a paper's score as authors improve
+          their repositories.
+  \end{itemize}
+}
+
+% ==============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+\outline{%
+  Three paragraphs.
+  \textbf{(1)} Restate the problem: reproducibility audits at scale
+  require automation; no prior work executes papers and validates outputs.
+  \textbf{(2)} Summarise ReproScore: five agents, five scoring dimensions,
+  human-in-the-loop gates, validated against \N{} ReScience~C papers
+  (top-line metric).
+  \textbf{(3)} Call to action: open-source release; invite the NeurIPS
+  community to contribute papers to the validation benchmark and to
+  integrate ReproScore into their own submission workflows.
+}
+
+% ==============================================================
+\section*{Acknowledgements}
+\outline{%
+  Funding sources, compute credits, and any human annotators who verified
+  ReScience~C verdicts.
+}
+
+% ==============================================================
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+% ==============================================================
+\appendix
+
+\section{PaperProfile and ReproducibilityReport Schemas}
+\label{app:schemas}
+
+\outline{%
+  Full Pydantic JSON schemas for \texttt{PaperProfile} and
+  \texttt{ReproducibilityReport}.
+  Include: field names, types, allowed values for enums
+  (\texttt{DataAvailability}, \texttt{FigureType}).
+}
+
+\section{Analyst Query Prompts}
+\label{app:prompts}
+
+\outline{%
+  Verbatim text of all five versioned queries sent to the closed-corpus
+  LLM (from \texttt{prompts/analyst\_queries\_v1.md}).
+  Include the fallback prompt (\texttt{analyst\_fallback\_v1.md}).
+}
+
+\section{ReScience~C Dataset Construction}
+\label{app:dataset}
+
+\outline{%
+  Detailed inclusion/exclusion criteria.
+  Inter-rater reliability: if multiple ReScience~C reviewers rendered
+  different verdicts on the same paper, describe the resolution protocol.
+  Full paper list with DOIs, verdicts, and domain labels.
+}
+
+\section{Full Pipeline Traces for Case Studies}
+\label{app:traces}
+
+\outline{%
+  For each of the three case studies (Section~\ref{sec:cases}):
+  per-agent timing, full audit ledger excerpt, per-figure SSIM scores,
+  and complete \texttt{ReproducibilityReport} JSON.
+}
+
+% ==============================================================
+\end{document}
