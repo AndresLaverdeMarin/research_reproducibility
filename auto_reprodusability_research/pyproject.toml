@@ -1,0 +1,14 @@
+[project]
+name = "auto-reprodusability-research"
+version = "0.1.0"
+description = "Autonomous reproducibility evaluation pipeline for computational research papers"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "markitdown[pdf]",
+    "pandas",
+    "pyarrow",
+    "requests",
+    "matplotlib",
+    "seaborn",
+]
