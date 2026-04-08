@@ -164,6 +164,8 @@ An automated system that **reads**, **extracts**, and **generates code** to vali
 - **Generate Code**: Produces executable reproduction scripts from extracted information
 - **Validate**: Runs the code and compares outputs against published results to compute a reproducibility score
 
+> For the first NeurIPS publication, the focus will be on the **Analyst** agent -- the component that reads, extracts, and evaluates paper transparency and reproducibility.
+
 ---
 layout: default
 

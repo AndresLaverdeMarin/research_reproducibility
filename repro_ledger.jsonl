@@ -1,0 +1,23 @@
+{"timestamp": "2026-03-31T07:46:01.185642+00:00", "phase": "ANALYSE", "action": "start", "data": {"paper": "papers/Computer aided Civil Eng - 2023 - Chen - Real\u2010time ergonomic risk assessment in construction using a co\u2010learning\u2010powered 3D.pdf", "doi": "10.1111/mice.13139"}}
+{"timestamp": "2026-03-31T07:46:01.990865+00:00", "phase": "ANALYSE", "action": "fallback_gemini", "data": {"reason": "NotebookLM query failed (exit 1): "}}
+{"timestamp": "2026-03-31T07:57:27.761677+00:00", "phase": "ANALYSE", "action": "start", "data": {"notebook_url": "https://notebooklm.google.com/notebook/46d04802-96e2-402a-8902-a7132c91cbbc", "doi": "10.1111/mice.13116"}}
+{"timestamp": "2026-03-31T07:58:43.129048+00:00", "phase": "ANALYSE", "action": "query_methodology", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T07:59:46.303313+00:00", "phase": "ANALYSE", "action": "query_datasets", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:00:11.605150+00:00", "phase": "ANALYSE", "action": "query_artefacts", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:00:32.101777+00:00", "phase": "ANALYSE", "action": "query_figures_tables", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:00:50.899149+00:00", "phase": "ANALYSE", "action": "query_parameters", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:00:50.900379+00:00", "phase": "ANALYSE", "action": "complete", "data": {"title": "Coloring and fusing architectural sketches by combining a Y\u2010shaped generative adversarial network and a denoising diffusion implicit model"}}
+{"timestamp": "2026-03-31T08:23:13.027788+00:00", "phase": "ANALYSE", "action": "start", "data": {"notebook_url": "https://notebooklm.google.com/notebook/46d04802-96e2-402a-8902-a7132c91cbbc", "doi": "10.1111/mice.13116"}}
+{"timestamp": "2026-03-31T08:25:43.641501+00:00", "phase": "ANALYSE", "action": "query_methodology", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:28:31.818250+00:00", "phase": "ANALYSE", "action": "query_datasets", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:30:13.911359+00:00", "phase": "ANALYSE", "action": "query_artefacts", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:32:03.267574+00:00", "phase": "ANALYSE", "action": "query_figures_tables", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:33:22.495361+00:00", "phase": "ANALYSE", "action": "query_parameters", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:33:22.496895+00:00", "phase": "ANALYSE", "action": "complete", "data": {"title": "Coloring and fusing architectural sketches by combining a Y\u2010shaped generative adversarial network and a denoising diffusion implicit model"}}
+{"timestamp": "2026-03-31T08:54:35.771258+00:00", "phase": "ANALYSE", "action": "start", "data": {"notebook_url": "https://notebooklm.google.com/notebook/46d04802-96e2-402a-8902-a7132c91cbbc", "doi": "10.1111/mice.13116"}}
+{"timestamp": "2026-03-31T08:55:48.997970+00:00", "phase": "ANALYSE", "action": "query_methodology", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:57:23.807670+00:00", "phase": "ANALYSE", "action": "query_datasets", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:58:27.388842+00:00", "phase": "ANALYSE", "action": "query_artefacts", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T08:59:29.681559+00:00", "phase": "ANALYSE", "action": "query_figures_tables", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T09:00:19.327651+00:00", "phase": "ANALYSE", "action": "query_parameters", "data": {"confidence": 0.8}}
+{"timestamp": "2026-03-31T09:00:19.330206+00:00", "phase": "ANALYSE", "action": "complete", "data": {"title": "Coloring and fusing architectural sketches by combining a Y\u2010shaped generative adversarial network and a denoising diffusion implicit model"}}

@@ -1,0 +1,204 @@
+{
+  "doi": "10.1111/mice.13116",
+  "title": "Coloring and fusing architectural sketches by combining a Y‐shaped generative adversarial network and a denoising diffusion implicit model",
+  "authors": [
+    "Liang Zhao",
+    "Dexuan Song",
+    "Weizhen Chen",
+    "Qi Kang"
+  ],
+  "methodology_steps": [
+    {
+      "order": 1,
+      "description": "Data Collection and Augmentation: The researchers collected a base set of architectural photos and expanded them into a larger dataset using common augmentation methods such as scaling, cutting, and mirror transition to ensure model robustness",
+      "tools_mentioned": [],
+      "data_inputs": [
+        "600 initial photos of low-rise buildings collected from the internet\nSoftware Tools/Libraries: Version not stated"
+      ],
+      "expected_outputs": [
+        "An augmented architectural dataset consisting of 10,000 images"
+      ],
+      "confidence": 0.7
+    },
+    {
+      "order": 2,
+      "description": "Input Pre-processing and Standardization: Each color image is converted into a corresponding sketch using the XDoG operator to create a paired training set\n. Additionally, all sketches and color images are resized to a uniform resolution of 256 × 256 pixels",
+      "tools_mentioned": [
+        "XDoG"
+      ],
+      "data_inputs": [
+        "RGB architectural images from the augmented dataset\nSoftware Tools/Libraries: extended difference-of-Gaussians (XDoG) operator",
+        "version not stated"
+      ],
+      "expected_outputs": [
+        "A standardized dataset of paired 256 × 256 pixel sketches and RGB images"
+      ],
+      "confidence": 0.7
+    },
+    {
+      "order": 3,
+      "description": "Neural Network Training: The Y-shaped GAN is trained for one day to minimize reconstruction, adversarial, and perceptual losses\n. The U-Net-based DDIM is trained for five days on colorful architectural data to learn the distribution of realistic building structures",
+      "tools_mentioned": [
+        "Adam",
+        "DDIM",
+        "GAN",
+        "U-Net",
+        "VGG-19"
+      ],
+      "data_inputs": [
+        "Standardized pairs of sketches and color images (for GAN training) and colorful architectural data (for DDIM training)\nSoftware Tools/Libraries: Adam solver for optimization",
+        "VGG-19 model pretrained on ImageNet for perceptual losses",
+        "versions not stated\n. Training was performed on one 12-GB NVIDIA GeForce RTX 4070Ti GPU"
+      ],
+      "expected_outputs": [
+        "A trained Y-shaped GAN generator and a trained DDIM noise estimator"
+      ],
+      "confidence": 0.7
+    },
+    {
+      "order": 4,
+      "description": "Reference-Based Sketch Coloring (Phase I): The input sketch is standardized via XDoG\n. The GAN uses a two-headed encoder to separate the sketch's spatial information from the reference's color information\n. The AM module matches these domains, while a bifurcated flow (via skip connections) sends sketch features directly to the decoder to ensure the output respects the original building layout",
+      "tools_mentioned": [
+        "GAN",
+        "ResNet",
+        "XDoG"
+      ],
+      "data_inputs": [
+        "A target architectural sketch (Is) and a temporarily specified reference image (Ir)\nSoftware Tools/Libraries: Y-shaped GAN (proposed by the authors) utilizing an Attention Mechanism (AM) module and ResNet layers",
+        "versions not stated"
+      ],
+      "expected_outputs": [
+        "A color rendering that correctly matches the spatial layout of the sketch with the color palette, textures, and atmospheric \"mood\" of the reference image"
+      ],
+      "confidence": 0.7
+    },
+    {
+      "order": 5,
+      "description": "Design Fusion — Intermediate Coloring: Both target sketches are first colored using the same reference image via the Y-shaped GAN to ensure they share a common color distribution",
+      "tools_mentioned": [
+        "GAN"
+      ],
+      "data_inputs": [
+        "Two different architectural sketches and a shared reference image\nSoftware Tools/Libraries: Y-shaped GAN",
+        "version not stated"
+      ],
+      "expected_outputs": [
+        "A pair of color-similar intermediate images"
+      ],
+      "confidence": 0.7
+    },
+    {
+      "order": 6,
+      "description": "Linear Interpolation (The \"Interpolation Trick\"): Instead of interpolating latent vectors after encoding, the researchers perform linear interpolation on the image pixels themselves before encoding\n. This \"trick\" is necessary to avoid generating \"meaningless intermediate states\" during the fusion process",
+      "tools_mentioned": [],
+      "data_inputs": [
+        "The pair of color-similar intermediate images\nSoftware Tools/Libraries: Version not stated"
+      ],
+      "expected_outputs": [
+        "An interim \"fuzzy\" image (It=0) representing the blended state of the two designs"
+      ],
+      "confidence": 0.7
+    },
+    {
+      "order": 7,
+      "description": "Deterministic Encoding via DDIM: The fuzzy image is encoded into latent vectors (It=T) using a deterministic iterative process where the random factor (σ\nt\n\t​\n\n) is eliminated to ensure stable mapping",
+      "tools_mentioned": [
+        "DDIM"
+      ],
+      "data_inputs": [
+        "The interim fuzzy image\nSoftware Tools/Libraries: Denoising Diffusion Implicit Model (DDIM)",
+        "version not stated"
+      ],
+      "expected_outputs": [
+        "Latent vectors that represent the fused architectural state"
+      ],
+      "confidence": 0.7
+    },
+    {
+      "order": 8,
+      "description": "Structural Refinement and Sampling: The latent vectors are decoded through the DDIM reverse process. During this stage, the DDIM acts as a deblurring network, using a random factor (σ) of approximately 0.1 to remove blurs and restore structural logic",
+      "tools_mentioned": [
+        "DDIM"
+      ],
+      "data_inputs": [
+        "Latent vectors from the encoding step\nSoftware Tools/Libraries: DDIM reverse sampling process",
+        "version not stated"
+      ],
+      "expected_outputs": [
+        "A final harmonious architectural design that preserves linear, rectangular, and gravity-based characteristics of buildings"
+      ],
+      "confidence": 0.7
+    }
+  ],
+  "datasets": [
+    {
+      "name": "",
+      "description": "A collection of architectural images representing low-rise buildings used for training and evaluation [2].",
+      "size_estimate": "10,000 images (augmented from 600 original photos) [2].",
+      "availability": "not_mentioned"
+    },
+    {
+      "name": "",
+      "description": "Corresponding sketch images created using the extended difference-of-Gaussians (XDoG) operator [2, 5].",
+      "size_estimate": "10,000 images [2].",
+      "availability": "not_mentioned"
+    },
+    {
+      "name": "",
+      "description": "A large-scale image database used for pre-training the VGG-19 model [6].",
+      "size_estimate": "version not stated",
+      "availability": "not_mentioned"
+    },
+    {
+      "name": "",
+      "description": "A dataset containing multiple categories of objects used for diverse sketch-to-image synthesis [7].",
+      "size_estimate": "50 categories (including motorcycles, horses, and couches) [8].",
+      "availability": "not_mentioned"
+    },
+    {
+      "name": "",
+      "description": "Labeled images of apartment floor plans used for recognizing and generating architectural drawings [9, 10].",
+      "size_estimate": "version not stated",
+      "availability": "not_mentioned"
+    },
+    {
+      "name": "",
+      "description": "Datasets used in prior multiheaded GAN research, such as Lee's GAN and SC-FEGAN, for reference-based coloring [11, 12].",
+      "size_estimate": "version not stated",
+      "availability": "not_mentioned"
+    }
+  ],
+  "repository_links": [
+    "https://doi.org/10.1111/mice.13116",
+    "https://github.com/abc637725/muti-headed-Y-GAN",
+    "http://www.y-gan.net/",
+    "https://onlinelibrary.wiley.com/doi/10.1111/mice.13116",
+    "https://arxiv.org/abs/1701.07875",
+    "https://arxiv.org/abs/2010.02502",
+    "http://doi.org/10.48550/ARXIV.2006.11239"
+  ],
+  "figures_to_reproduce": [
+    {
+      "id": "fig_4",
+      "caption": "\"identifier\": \"Figure 4\",",
+      "type": "other",
+      "data_source": ""
+    },
+    {
+      "id": "fig_5",
+      "caption": "\"identifier\": \"Figure 5\",",
+      "type": "other",
+      "data_source": ""
+    }
+  ],
+  "tables_to_reproduce": [
+    {
+      "id": "table_1",
+      "caption": "\"identifier\": \"Table 1\",",
+      "columns": [],
+      "data_source": "",
+      "key_values": {}
+    }
+  ],
+  "hardware_requirements": "one 12-GB NVIDIA GeForce RTX 4070Ti GPU\nHyperparameters: lambda_r: 20 (Weight for reconstruction loss in the Y-shaped GAN objective function); lambda_a: 1 (Weight for adversarial loss in the Y-shaped GAN objective function); lambda_f: 0.01 (Weight for feature reconstruction loss in the Y-shaped GAN objective function); lambda_s: 1 (Weight for style reconstruction loss in the Y-shaped GAN objective function); learning rate: 0.0002 (Constant rate applied to both the generator and discriminator using the Adam solver); batch size: 1 (Setting used for all training processes in the study); T (diffusion steps): 1000 (Default number of steps for training the denoising diffusion implicit model (DDIM)); sigma (random factor): 0.1 (Preferable setting used during the DDIM reverse sampling process to remove blurs and restore architectural logic; utilized within a tested range of 0 to 0.2); m (interpolation factor): 0 to 1 (Range used to balance the fusion of two disparate architectural designs)"
+}
