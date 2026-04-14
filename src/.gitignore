@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.egg-info/
+.env
+
+# Large PDF caches (rebuild with pdf_downloader.py)
+data/pdf_cache/
+data/pdf_original_cache/
+
+# Per-run pipeline outputs
+data/pdf_original_cache/*.profile.json

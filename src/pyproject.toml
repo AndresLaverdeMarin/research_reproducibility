@@ -1,0 +1,14 @@
+[project]
+name = "src"
+version = "0.1.0"
+description = "ReScience PDF extraction pipeline using MarkItDown"
+requires-python = ">=3.11"
+dependencies = [
+    "markitdown[pdf]",
+    "pandas",
+    "openpyxl",
+    "requests",
+    "google-genai",
+    "pydantic",
+    "python-dotenv",
+]
