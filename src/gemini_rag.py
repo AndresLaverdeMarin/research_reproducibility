@@ -269,8 +269,6 @@ class GeminiPaperAnalyst:
 
     def __init__(
         self,
-        # The above code appears to be a Python code snippet with a variable named `api_key` being
-        # declared but not assigned any value. The `
         api_key: str | None = None,
         model: str = "gemini-2.5-flash",
     ) -> None:
