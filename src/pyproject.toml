@@ -11,4 +11,13 @@ dependencies = [
     "google-genai",
     "pydantic",
     "python-dotenv",
+    "matplotlib>=3.10.8",
+    "networkx>=3.6.1",
+    "scipy>=1.17.1",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.2.0",
+    "jupyter>=1.1.1",
 ]

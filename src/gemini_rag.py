@@ -155,6 +155,7 @@ class PaperProfile(BaseModel):
     """Structured, source-grounded representation of a research paper."""
 
     pdf_path: str
+    extraction_model: str = ""
     title: str = ""
     authors: list[str] = Field(default_factory=list)
     methodology_steps: list[MethodologyStep] = Field(default_factory=list)
@@ -197,9 +198,26 @@ PROMPT_METHODOLOGY = (
     "List every step of the research methodology in sequential order. "
     "For each step, state: a description of what is done, any software "
     "tools / libraries / frameworks used (with version numbers if stated), "
-    "the input data required, and the expected output produced. If a "
-    "version number is not mentioned, say 'version not stated'. Include a "
-    "short literal quote (source_quote) anchoring each step."
+    "the input data required (data_inputs), and the expected output "
+    "produced (expected_outputs). If a version number is not mentioned, "
+    "say 'version not stated'. Include a short literal quote "
+    "(source_quote) anchoring each step.\n\n"
+    "LABEL CONSISTENCY RULES (critical):\n"
+    "- Use the SAME label for the same artefact across steps. If step N "
+    "  produces an output that feeds step N+1, the string in step N's "
+    "  'expected_outputs' MUST appear verbatim in step N+1's "
+    "  'data_inputs'. Do not paraphrase, pluralise, or reorder words "
+    "  between steps; pick one canonical name per artefact and reuse it.\n"
+    "- When a step splits, partitions, or divides data (e.g. train/test "
+    "  split, k-fold, train/val/test, stratified sampling), the "
+    "  'expected_outputs' MUST list each resulting partition as a "
+    "  separate named item (e.g. 'training_set', 'validation_set', "
+    "  'test_set' -- use whatever names the paper uses if stated). The "
+    "  'description' MUST state the split percentages / proportions / "
+    "  fold count exactly as reported in the paper (e.g. '80/20 split', "
+    "  '70/15/15', '5-fold cross-validation'). Downstream steps that "
+    "  consume a partition MUST reference it by the same name in "
+    "  'data_inputs'."
 )
 
 PROMPT_DATASETS = (
@@ -251,6 +269,8 @@ class GeminiPaperAnalyst:
 
     def __init__(
         self,
+        # The above code appears to be a Python code snippet with a variable named `api_key` being
+        # declared but not assigned any value. The `
         api_key: str | None = None,
         model: str = "gemini-2.5-flash",
     ) -> None:
@@ -360,6 +380,7 @@ class GeminiPaperAnalyst:
 
         return PaperProfile(
             pdf_path=str(pdf_path),
+            extraction_model=self.model,
             title=header.title,
             authors=header.authors,
             methodology_steps=methodology.steps,
