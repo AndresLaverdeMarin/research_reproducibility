@@ -1,0 +1,13 @@
+ValidationError: 4 validation errors for ProcessNodesResponse
+nodes_process.4.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_01', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.5.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_02', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.7.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_03', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.8.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_04', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch

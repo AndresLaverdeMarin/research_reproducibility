@@ -1,0 +1,363 @@
+{
+  "metadata": {
+    "pdf_path": "data/specific_cases/simple_paper.pdf",
+    "extraction_model": "gemini-3-flash-preview",
+    "title": "A Deep Reinforcement Learning Approach for Ramp Metering Based on Traffic Video Data",
+    "authors": [
+      "Bing Liu",
+      "Yu Tang",
+      "Yuxiong Ji",
+      "Yu Shen",
+      "Yuchuan Du"
+    ],
+    "repository_links": [
+      "https://arxiv.org/abs/2012.12104",
+      "https://arxiv.org/abs/1705.02755",
+      "https://arxiv.org/abs/1412.6980",
+      "https://arxiv.org/abs/1312.5602"
+    ],
+    "supplementary_materials": [
+      "data used to support the results of this study are available from the corresponding author upon request"
+    ],
+    "hyperparameters": [
+      {
+        "name": "State matrix dimension",
+        "value": "(3, 4, 512)",
+        "context": "Dimension of the visual representation extracted from raw images to represent traffic states",
+        "source_quote": "State matrix dimension: (3, 4, 512)"
+      },
+      {
+        "name": "Replay buffer size B",
+        "value": "2 * 10^5",
+        "context": "Size of the buffer that stores data prepared for training into the replay buffer",
+        "source_quote": "Replay buffer size B: 2 * 10^5"
+      },
+      {
+        "name": "Learning rate eta",
+        "value": "2.5 * 10^-4",
+        "context": "Step size used for updating weights in the Q-network by the Adam optimizer",
+        "source_quote": "Learning rate eta: 2.5 * 10^-4"
+      },
+      {
+        "name": "Batch size k",
+        "value": "32",
+        "context": "Number of transitions uniformly sampled from the replay buffer to compute gradients",
+        "source_quote": "Batch size k: 32"
+      },
+      {
+        "name": "Exploration rate epsilon",
+        "value": "0.1",
+        "context": "Probability of taking a random action to explore unknown policies",
+        "source_quote": "Exploration rate epsilon: 0.1"
+      },
+      {
+        "name": "Freeze interval F",
+        "value": "10^4",
+        "context": "Frequency at which target network parameters are updated by copying the Q-network weights",
+        "source_quote": "Freeze interval F: 10^4"
+      },
+      {
+        "name": "Decision step size L",
+        "value": "4 s",
+        "context": "Fixed time interval at which the ramp meter takes actions to determine signal phases",
+        "source_quote": "Decision step size L: 4 s"
+      },
+      {
+        "name": "Loss weight lambda",
+        "value": "0.001",
+        "context": "Weight applied to the multitask learning prediction loss function",
+        "source_quote": "Loss weight lambda: 0.001"
+      }
+    ],
+    "stated_software_versions": {},
+    "hardware_requirements": "computing server with NVIDIA Quadro K620 GPU and Intel Xeon CPU E5-1650 (3.6 GHz, 6 cores)"
+  },
+  "nodes_source": [
+    {
+      "node_id": "src_qingdao_huangdao_traffic_data",
+      "node_name": "Qingdao and Huangdao real-world traffic data",
+      "source_quote": "A series of simulation experiments based on real-world traffic data are conducted to evaluate the proposed approach.",
+      "description": "Empirical traffic volume and behavioral data from a freeway connecting Qingdao and Huangdao in Shandong, China, used to calibrate simulation parameters in the SUMO microscopic traffic simulator.",
+      "size_estimate": "7:50 a.m. to 9:00 a.m.",
+      "license": null,
+      "availability": "upon_request",
+      "url": null,
+      "reproducibility_score": 50,
+      "reproducibility_rationale": "The paper explicitly states in the Data Availability section that data are available from the corresponding author upon request."
+    }
+  ],
+  "nodes_process": [
+    {
+      "node_id": "meth_01",
+      "node_name": "Extract vehicle position matrices",
+      "source_quote": "Vehicle locations are extracted from the traffic video frames and are reformed as position matrices.",
+      "description": "Vehicles are represented by a location point (xi, yi) in raw images. A control area of size X by Y is mapped to a position matrix mt, where pixels with vehicles are assigned constant UV.",
+      "process_type": "method",
+      "input_ids": [
+        "src_qingdao_huangdao_traffic_data"
+      ],
+      "outcomes": [
+        "position_matrices"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "feature extraction"
+      ],
+      "tools_mentioned": [
+        "version not stated"
+      ],
+      "parameters_required": [
+        "control_area_size"
+      ],
+      "parameters_mentioned": [
+        "control_area_size=(3, 4, 512)"
+      ],
+      "reproducibility_score": 100,
+      "reproducibility_rationale": "clarity=4, generic tool stated, all params in Table 1."
+    },
+    {
+      "node_id": "meth_02",
+      "node_name": "Stack temporal matrices",
+      "source_quote": "we stack the matrices of consecutive N time steps to represent the state st",
+      "description": "N consecutive matrices are stacked to represent vehicle dynamics. Down-sampling is used to reduce input dimensions while maintaining vehicle position information.",
+      "process_type": "method",
+      "input_ids": [
+        "position_matrices"
+      ],
+      "outcomes": [
+        "traffic_states"
+      ],
+      "algorithm_clarity": 3,
+      "tools_required": [
+        "temporal stacking"
+      ],
+      "tools_mentioned": [],
+      "parameters_required": [
+        "number_consecutive_steps"
+      ],
+      "parameters_mentioned": [
+        "number_consecutive_steps=3"
+      ],
+      "reproducibility_score": 75,
+      "reproducibility_rationale": "clarity=3, stacking logic specified but down-sampling factor unclear."
+    },
+    {
+      "node_id": "meth_03",
+      "node_name": "Deep Q-Network Training",
+      "source_quote": "The algorithm for training the ramp metering policy is presented in Algorithm 1.",
+      "description": "Train a multitask DRL agent with experience replay and a target network using Adam. Losses L1 (DQN) and L2 (speed/queue prediction) are combined with weight lambda. Uses epsilon-greedy exploration.",
+      "process_type": "method",
+      "input_ids": [
+        "traffic_states"
+      ],
+      "outcomes": [
+        "trained_dqn_model"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "Deep Q-learning",
+        "convolutional neural network"
+      ],
+      "tools_mentioned": [
+        "Adam version not stated"
+      ],
+      "parameters_required": [
+        "learning_rate",
+        "batch_size",
+        "gamma",
+        "lambda",
+        "exploration_rate"
+      ],
+      "parameters_mentioned": [
+        "learning_rate=2.5x10-4",
+        "batch_size=32",
+        "lambda=0.001",
+        "exploration_rate=0.1"
+      ],
+      "reproducibility_score": 90,
+      "reproducibility_rationale": "clarity=4, algorithm and architecture (Figure 7) detailed, but gamma omitted in Table 1."
+    },
+    {
+      "node_id": "meth_04",
+      "node_name": "SUMO Simulation Evaluation",
+      "source_quote": "The proposed method is evaluated in SUMO, an open-source microscopic traffic simulator",
+      "description": "The trained policy is evaluated against No-Control and PI-ALINEA baselines in 20 simulation experiments of a real-world freeway merge in Shandong, China.",
+      "process_type": "experiment",
+      "input_ids": [
+        "trained_dqn_model"
+      ],
+      "outcomes": [
+        "sink_fig8",
+        "sink_fig9",
+        "sink_tab2",
+        "sink_fig10",
+        "sink_fig11",
+        "sink_fig12",
+        "sink_fig13",
+        "sink_fig14",
+        "sink_fig16"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "microscopic traffic simulation"
+      ],
+      "tools_mentioned": [
+        "SUMO version not stated"
+      ],
+      "parameters_required": [
+        "simulation_time",
+        "decision_step_size"
+      ],
+      "parameters_mentioned": [
+        "simulation_time=7:50-9:00",
+        "decision_step_size=4s"
+      ],
+      "reproducibility_score": 100,
+      "reproducibility_rationale": "clarity=4, simulation environment and scenario (Figure 5) fully specified."
+    }
+  ],
+  "nodes_sink": [
+    {
+      "node_id": "sink_fig8",
+      "node_name": "Figure 8",
+      "source_quote": "The training process, presented in Figure 8, can be finished in less than 24 hours on a computing server with NVIDIA Quadro K620 GPU.",
+      "description": "Convergence curves showing (a) episode reward and (b) mean travel time (s) across 1 million training frames.",
+      "input_ids": [
+        "src_qingdao_huangdao_traffic_data",
+        "training_logs"
+      ],
+      "size_estimate": "2 panels x 1 million steps",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 70,
+      "reproducibility_rationale": "Hardware and hyperparameters defined; specific training trace requires seed replication."
+    },
+    {
+      "node_id": "sink_fig9",
+      "node_name": "Figure 9",
+      "source_quote": "Overall, the proposed DRL method results in shorter travel times with narrower travel time ranges than that of the fine-tuned PI-ALINEA method.",
+      "description": "Mainline travel times (min) for three scenarios (No control, PI-ALINEA, Deep RL) over time intervals from 8:00 to 9:00.",
+      "input_ids": [
+        "src_qingdao_huangdao_traffic_data",
+        "performance_metrics"
+      ],
+      "size_estimate": "3 time-series over 60 mins",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 75,
+      "reproducibility_rationale": "Comparison based on SUMO simulation results with specified calibrated behavior parameters."
+    },
+    {
+      "node_id": "sink_tab2",
+      "node_name": "Table 2",
+      "source_quote": "Table 2 presents mean vehicle travel times in 20 simulation experiments. ... DRL method consistently results in a shorter travel time than that of the no-control scenario.",
+      "description": "Numerical mean travel times (s) and percentage improvements for 20 independent simulation experiments under three control scenarios.",
+      "input_ids": [
+        "src_qingdao_huangdao_traffic_data",
+        "simulation_metrics"
+      ],
+      "size_estimate": "20 experiments x 3 columns",
+      "type": "table",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 85,
+      "reproducibility_rationale": "Explicit trial counts and comparative values provided; logically derivable from aggregate metrics."
+    },
+    {
+      "node_id": "sink_fig10",
+      "node_name": "Figure 10",
+      "source_quote": "Figure 10 presents the temporal-spatial distribution of the mean speeds along the mainline. ... better performance of the proposed method.",
+      "description": "Temporal-spatial speed heatmaps comparing freeway segments (distance 0-4000m) and time (8:00-9:00) for (a) no-control, (b) PI-ALINEA, and (c) DRL.",
+      "input_ids": [
+        "src_qingdao_huangdao_traffic_data",
+        "speed_spatial_data"
+      ],
+      "size_estimate": "3 heatmaps",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 70,
+      "reproducibility_rationale": "Heatmap resolution not precisely specified; outcomes plausibly follow from simulation trajectories."
+    },
+    {
+      "node_id": "sink_fig11",
+      "node_name": "Figure 11",
+      "source_quote": "Nevertheless, the queues produced by the proposed method are shorter than those produced by the PI-ALINEA method.",
+      "description": "Time-series comparison of on-ramp queue length distributions (Q1, Q2, Q3) for No control, PI-ALINEA, and Deep RL scenarios.",
+      "input_ids": [
+        "src_qingdao_huangdao_traffic_data",
+        "queue_metrics"
+      ],
+      "size_estimate": "3 shaded series over 60 mins",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 75,
+      "reproducibility_rationale": "Standard SUMO queue metrics; scenario results are clearly distinguished and supported by Tab 2."
+    },
+    {
+      "node_id": "sink_fig12",
+      "node_name": "Figure 12",
+      "source_quote": "queue length generally increases with the red ratio. However ... the queues produced by the DRL method are shorter.",
+      "description": "Scatter plot and linear regression showing the relationship between queue length and signal red ratio for two metering methods.",
+      "input_ids": [
+        "simulation_metrics"
+      ],
+      "size_estimate": "2 scatter groups x 20 points",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 80,
+      "reproducibility_rationale": "Clear statistical visualization of control efficiency using outputs from the 20 simulation trials."
+    },
+    {
+      "node_id": "sink_fig13",
+      "node_name": "Figure 13",
+      "source_quote": "queue length and the occupancy are highly correlated when the PI-ALINEA method is adopted. ... the correlation is relatively low when the DRL method is implemented.",
+      "description": "Correlation comparison (rho=0.93 vs rho=0.50) between mainline occupancy and on-ramp queue length for PI-ALINEA and Deep RL.",
+      "input_ids": [
+        "simulation_metrics"
+      ],
+      "size_estimate": "2 time-series dual-axis plots",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 80,
+      "reproducibility_rationale": "Directly summarizes simulation observations; correlation coefficients explicitly stated."
+    },
+    {
+      "node_id": "sink_fig14",
+      "node_name": "Figure 14",
+      "source_quote": "During the peak period between 8:10-8:35, the flows resulting from the DRL method are higher and more stable.",
+      "description": "Box plots of downstream traffic volume (veh/h) sampled across time intervals for No control, PI-ALINEA, and Deep RL scenarios.",
+      "input_ids": [
+        "src_qingdao_huangdao_traffic_data",
+        "flow_metrics"
+      ],
+      "size_estimate": "13 time bins x 3 series",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 75,
+      "reproducibility_rationale": "Aggregates flow data from simulations; 5-minute sampling interval is evident but not explicit."
+    },
+    {
+      "node_id": "sink_fig16",
+      "node_name": "Figure 16",
+      "source_quote": "information from other subareas such as subarea 3 and 4 also influences the control performance obviously.",
+      "description": "Sensitivity analysis box plot showing mean travel time variations when video input from specific road subareas is perturbed or removed.",
+      "input_ids": [
+        "src_qingdao_huangdao_traffic_data",
+        "perturbation_results"
+      ],
+      "size_estimate": "9 box-and-whisker groups",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 70,
+      "reproducibility_rationale": "Procedure for input perturbation specified via subareas defined in Fig 15; outcomes logically feasible."
+    }
+  ]
+}

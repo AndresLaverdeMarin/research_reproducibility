@@ -1,0 +1,22 @@
+ValidationError: 7 validation errors for ProcessNodesResponse
+nodes_process.7.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_01', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.8.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_02', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.9.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_03', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.10.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_04', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.11.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_05', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.12.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_06', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.13.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_07', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch

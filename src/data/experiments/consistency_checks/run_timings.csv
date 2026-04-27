@@ -1,0 +1,222 @@
+timestamp_utc,paper,model,temperature,sample,status,duration_seconds,output_path,error
+2026-04-27T16:56:24+00:00,simple_paper.pdf,gemini-2.5-flash,0.0,3,ok,116.084,data/experiments/consistency_checks/simple_paper_T0_exe3_gemini-2_5-flash.profile.json,
+2026-04-27T16:56:32+00:00,simple_paper.pdf,gemini-2.5-flash,0.0,6,ok,124.093,data/experiments/consistency_checks/simple_paper_T0_exe6_gemini-2_5-flash.profile.json,
+2026-04-27T16:56:35+00:00,simple_paper.pdf,gemini-2.5-flash,0.0,2,ok,127.062,data/experiments/consistency_checks/simple_paper_T0_exe2_gemini-2_5-flash.profile.json,
+2026-04-27T16:56:43+00:00,simple_paper.pdf,gemini-2.5-flash,0.0,8,ok,135.049,data/experiments/consistency_checks/simple_paper_T0_exe8_gemini-2_5-flash.profile.json,
+2026-04-27T16:56:52+00:00,simple_paper.pdf,gemini-2.5-flash,0.0,9,ok,144.268,data/experiments/consistency_checks/simple_paper_T0_exe9_gemini-2_5-flash.profile.json,
+2026-04-27T16:57:03+00:00,simple_paper.pdf,gemini-2.5-flash,0.0,4,ok,155.262,data/experiments/consistency_checks/simple_paper_T0_exe4_gemini-2_5-flash.profile.json,
+2026-04-27T16:57:12+00:00,simple_paper.pdf,gemini-2.5-flash,0.0,5,ok,163.925,data/experiments/consistency_checks/simple_paper_T0_exe5_gemini-2_5-flash.profile.json,
+2026-04-27T16:57:12+00:00,simple_paper.pdf,gemini-2.5-flash,0.0,7,ok,164.500,data/experiments/consistency_checks/simple_paper_T0_exe7_gemini-2_5-flash.profile.json,
+2026-04-27T16:57:33+00:00,simple_paper.pdf,gemini-2.5-flash,0.0,1,ok,184.917,data/experiments/consistency_checks/simple_paper_T0_exe1_gemini-2_5-flash.profile.json,
+2026-04-27T16:57:33+00:00,simple_paper.pdf,gemini-2.5-flash,0.0,10,ok,184.916,data/experiments/consistency_checks/simple_paper_T0_exe10_gemini-2_5-flash.profile.json,
+2026-04-27T16:58:44+00:00,simple_paper.pdf,gemini-2.5-flash,0.5,5,err:ValidationError,111.634,data/experiments/consistency_checks/simple_paper_T0p5_exe5_gemini-2_5-flash.profile.json,"ValidationError: 2 validation errors for ProcessNodesResponse
+nodes_process.8.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_01', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.9.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_02', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch"
+2026-04-27T16:58:56+00:00,simple_paper.pdf,gemini-2.5-flash,0.5,2,ok,144.151,data/experiments/consistency_checks/simple_paper_T0p5_exe2_gemini-2_5-flash.profile.json,
+2026-04-27T16:59:02+00:00,simple_paper.pdf,gemini-2.5-flash,0.5,4,ok,139.085,data/experiments/consistency_checks/simple_paper_T0p5_exe4_gemini-2_5-flash.profile.json,
+2026-04-27T16:59:10+00:00,simple_paper.pdf,gemini-2.5-flash,0.5,1,ok,165.753,data/experiments/consistency_checks/simple_paper_T0p5_exe1_gemini-2_5-flash.profile.json,
+2026-04-27T16:59:20+00:00,simple_paper.pdf,gemini-2.5-flash,0.5,8,ok,127.119,data/experiments/consistency_checks/simple_paper_T0p5_exe8_gemini-2_5-flash.profile.json,
+2026-04-27T16:59:32+00:00,simple_paper.pdf,gemini-2.5-flash,0.5,6,ok,148.578,data/experiments/consistency_checks/simple_paper_T0p5_exe6_gemini-2_5-flash.profile.json,
+2026-04-27T16:59:37+00:00,simple_paper.pdf,gemini-2.5-flash,0.5,3,ok,182.181,data/experiments/consistency_checks/simple_paper_T0p5_exe3_gemini-2_5-flash.profile.json,
+2026-04-27T16:59:53+00:00,simple_paper.pdf,gemini-2.5-flash,0.5,7,ok,161.588,data/experiments/consistency_checks/simple_paper_T0p5_exe7_gemini-2_5-flash.profile.json,
+2026-04-27T17:00:18+00:00,simple_paper.pdf,gemini-2.5-flash,0.5,10,ok,164.972,data/experiments/consistency_checks/simple_paper_T0p5_exe10_gemini-2_5-flash.profile.json,
+2026-04-27T17:00:39+00:00,simple_paper.pdf,gemini-2.5-flash,0.5,9,ok,186.170,data/experiments/consistency_checks/simple_paper_T0p5_exe9_gemini-2_5-flash.profile.json,
+2026-04-27T17:01:13+00:00,simple_paper.pdf,gemini-2.5-flash,1.0,1,ok,149.555,data/experiments/consistency_checks/simple_paper_T1_exe1_gemini-2_5-flash.profile.json,
+2026-04-27T17:01:25+00:00,simple_paper.pdf,gemini-2.5-flash,1.0,3,ok,143.341,data/experiments/consistency_checks/simple_paper_T1_exe3_gemini-2_5-flash.profile.json,
+2026-04-27T17:01:35+00:00,simple_paper.pdf,gemini-2.5-flash,1.0,5,ok,135.367,data/experiments/consistency_checks/simple_paper_T1_exe5_gemini-2_5-flash.profile.json,
+2026-04-27T17:01:45+00:00,simple_paper.pdf,gemini-2.5-flash,1.0,4,ok,154.888,data/experiments/consistency_checks/simple_paper_T1_exe4_gemini-2_5-flash.profile.json,
+2026-04-27T17:01:50+00:00,simple_paper.pdf,gemini-2.5-flash,1.0,2,ok,174.321,data/experiments/consistency_checks/simple_paper_T1_exe2_gemini-2_5-flash.profile.json,
+2026-04-27T17:01:54+00:00,simple_paper.pdf,gemini-2.5-flash,1.0,7,ok,137.006,data/experiments/consistency_checks/simple_paper_T1_exe7_gemini-2_5-flash.profile.json,
+2026-04-27T17:02:15+00:00,simple_paper.pdf,gemini-2.5-flash,1.0,6,ok,163.096,data/experiments/consistency_checks/simple_paper_T1_exe6_gemini-2_5-flash.profile.json,
+2026-04-27T17:02:28+00:00,simple_paper.pdf,gemini-2.5-flash,1.0,9,ok,130.501,data/experiments/consistency_checks/simple_paper_T1_exe9_gemini-2_5-flash.profile.json,
+2026-04-27T17:03:11+00:00,simple_paper.pdf,gemini-2.5-flash,1.0,10,ok,152.073,data/experiments/consistency_checks/simple_paper_T1_exe10_gemini-2_5-flash.profile.json,
+2026-04-27T17:03:14+00:00,simple_paper.pdf,gemini-2.5-flash,1.0,8,ok,200.659,data/experiments/consistency_checks/simple_paper_T1_exe8_gemini-2_5-flash.profile.json,
+2026-04-27T17:03:36+00:00,simple_paper.pdf,gemini-2.5-flash,1.5,1,ok,142.768,data/experiments/consistency_checks/simple_paper_T1p5_exe1_gemini-2_5-flash.profile.json,
+2026-04-27T17:03:43+00:00,simple_paper.pdf,gemini-2.5-flash,1.5,6,err:ValidationError,109.039,data/experiments/consistency_checks/simple_paper_T1p5_exe6_gemini-2_5-flash.profile.json,"ValidationError: 1 validation error for ProcessNodesResponse
+nodes_process.7.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_01', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch"
+2026-04-27T17:04:01+00:00,simple_paper.pdf,gemini-2.5-flash,1.5,3,ok,146.048,data/experiments/consistency_checks/simple_paper_T1p5_exe3_gemini-2_5-flash.profile.json,
+2026-04-27T17:04:03+00:00,simple_paper.pdf,gemini-2.5-flash,1.5,2,err:ValidationError,157.723,data/experiments/consistency_checks/simple_paper_T1p5_exe2_gemini-2_5-flash.profile.json,"ValidationError: 7 validation errors for ProcessNodesResponse
+nodes_process.7.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_01', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.8.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_02', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.9.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_03', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.10.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_04', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.11.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_05', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.12.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_06', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.13.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exper_07', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch"
+2026-04-27T17:04:17+00:00,simple_paper.pdf,gemini-2.5-flash,1.5,5,ok,146.553,data/experiments/consistency_checks/simple_paper_T1p5_exe5_gemini-2_5-flash.profile.json,
+2026-04-27T17:04:43+00:00,simple_paper.pdf,gemini-2.5-flash,1.5,4,ok,178.007,data/experiments/consistency_checks/simple_paper_T1p5_exe4_gemini-2_5-flash.profile.json,
+2026-04-27T17:05:19+00:00,simple_paper.pdf,gemini-2.5-flash,1.5,7,ok,184.287,data/experiments/consistency_checks/simple_paper_T1p5_exe7_gemini-2_5-flash.profile.json,
+2026-04-27T17:05:35+00:00,simple_paper.pdf,gemini-2.5-flash,1.5,8,ok,186.339,data/experiments/consistency_checks/simple_paper_T1p5_exe8_gemini-2_5-flash.profile.json,
+2026-04-27T17:05:50+00:00,simple_paper.pdf,gemini-2.5-flash,2.0,2,ok,127.204,data/experiments/consistency_checks/simple_paper_T2_exe2_gemini-2_5-flash.profile.json,
+2026-04-27T17:06:28+00:00,simple_paper.pdf,gemini-2.5-flash,1.5,10,ok,194.200,data/experiments/consistency_checks/simple_paper_T1p5_exe10_gemini-2_5-flash.profile.json,
+2026-04-27T17:06:37+00:00,simple_paper.pdf,gemini-2.5-flash,2.0,3,ok,156.426,data/experiments/consistency_checks/simple_paper_T2_exe3_gemini-2_5-flash.profile.json,
+2026-04-27T17:06:41+00:00,simple_paper.pdf,gemini-2.5-flash,2.0,4,ok,158.093,data/experiments/consistency_checks/simple_paper_T2_exe4_gemini-2_5-flash.profile.json,
+2026-04-27T17:06:42+00:00,simple_paper.pdf,gemini-2.5-flash,2.0,1,ok,185.977,data/experiments/consistency_checks/simple_paper_T2_exe1_gemini-2_5-flash.profile.json,
+2026-04-27T17:06:45+00:00,simple_paper.pdf,gemini-2.5-flash,1.5,9,ok,214.311,data/experiments/consistency_checks/simple_paper_T1p5_exe9_gemini-2_5-flash.profile.json,
+2026-04-27T17:06:46+00:00,simple_paper.pdf,gemini-2.5-flash,2.0,5,ok,148.770,data/experiments/consistency_checks/simple_paper_T2_exe5_gemini-2_5-flash.profile.json,
+2026-04-27T17:06:56+00:00,simple_paper.pdf,gemini-2.5-flash,2.0,6,ok,133.294,data/experiments/consistency_checks/simple_paper_T2_exe6_gemini-2_5-flash.profile.json,
+2026-04-27T17:07:34+00:00,simple_paper.pdf,gemini-2.5-flash,2.0,7,ok,134.383,data/experiments/consistency_checks/simple_paper_T2_exe7_gemini-2_5-flash.profile.json,
+2026-04-27T17:07:55+00:00,simple_paper.pdf,gemini-2.5-flash,2.0,8,err:ValidationError,140.389,data/experiments/consistency_checks/simple_paper_T2_exe8_gemini-2_5-flash.profile.json,"ValidationError: 4 validation errors for ProcessNodesResponse
+nodes_process.4.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_01', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.5.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_02', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.7.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_03', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.8.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_04', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch"
+2026-04-27T17:08:21+00:00,simple_paper.pdf,gemini-2.5-flash,2.0,9,err:ValidationError,150.116,data/experiments/consistency_checks/simple_paper_T2_exe9_gemini-2_5-flash.profile.json,"ValidationError: 10 validation errors for ProcessNodesResponse
+nodes_process.7.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_01', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.8.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_02', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.9.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_03', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.10.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_04', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.11.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_05', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.12.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_06', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.13.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_07', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.14.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_08', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.16.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_09', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch
+nodes_process.17.node_id
+  String should match pattern '^meth_\d{2}$' [type=string_pattern_mismatch, input_value='exp_10', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_pattern_mismatch"
+2026-04-27T17:09:24+00:00,simple_paper.pdf,gemini-2.5-flash,2.0,10,ok,175.515,data/experiments/consistency_checks/simple_paper_T2_exe10_gemini-2_5-flash.profile.json,
+2026-04-27T17:12:46+00:00,simple_paper.pdf,gemini-3-flash-preview,0.0,4,ok,78.231,data/experiments/consistency_checks/simple_paper_T0_exe4_gemini-3-flash-preview.profile.json,
+2026-04-27T17:14:05+00:00,simple_paper.pdf,gemini-3-flash-preview,0.5,1,ok,79.578,data/experiments/consistency_checks/simple_paper_T0p5_exe1_gemini-3-flash-preview.profile.json,
+2026-04-27T17:16:19+00:00,simple_paper.pdf,gemini-3-flash-preview,0.5,2,ok,133.843,data/experiments/consistency_checks/simple_paper_T0p5_exe2_gemini-3-flash-preview.profile.json,
+2026-04-27T17:17:05+00:00,simple_paper.pdf,gemini-3-flash-preview,0.0,10,ok,337.834,data/experiments/consistency_checks/simple_paper_T0_exe10_gemini-3-flash-preview.profile.json,
+2026-04-27T17:17:06+00:00,simple_paper.pdf,gemini-3-flash-preview,0.0,2,ok,338.310,data/experiments/consistency_checks/simple_paper_T0_exe2_gemini-3-flash-preview.profile.json,
+2026-04-27T17:17:14+00:00,simple_paper.pdf,gemini-3-flash-preview,0.0,1,ok,346.132,data/experiments/consistency_checks/simple_paper_T0_exe1_gemini-3-flash-preview.profile.json,
+2026-04-27T17:17:15+00:00,simple_paper.pdf,gemini-3-flash-preview,0.0,7,ok,347.676,data/experiments/consistency_checks/simple_paper_T0_exe7_gemini-3-flash-preview.profile.json,
+2026-04-27T17:17:24+00:00,simple_paper.pdf,gemini-3-flash-preview,0.0,6,ok,356.781,data/experiments/consistency_checks/simple_paper_T0_exe6_gemini-3-flash-preview.profile.json,
+2026-04-27T17:17:26+00:00,simple_paper.pdf,gemini-3-flash-preview,0.0,3,ok,358.515,data/experiments/consistency_checks/simple_paper_T0_exe3_gemini-3-flash-preview.profile.json,
+2026-04-27T17:17:40+00:00,simple_paper.pdf,gemini-3-flash-preview,0.0,9,ok,372.181,data/experiments/consistency_checks/simple_paper_T0_exe9_gemini-3-flash-preview.profile.json,
+2026-04-27T17:17:48+00:00,simple_paper.pdf,gemini-3-flash-preview,0.0,5,ok,380.436,data/experiments/consistency_checks/simple_paper_T0_exe5_gemini-3-flash-preview.profile.json,
+2026-04-27T17:17:50+00:00,simple_paper.pdf,gemini-3-flash-preview,0.0,8,ok,382.477,data/experiments/consistency_checks/simple_paper_T0_exe8_gemini-3-flash-preview.profile.json,
+2026-04-27T17:19:14+00:00,simple_paper.pdf,gemini-3-flash-preview,1.0,2,ok,83.946,data/experiments/consistency_checks/simple_paper_T1_exe2_gemini-3-flash-preview.profile.json,
+2026-04-27T17:19:27+00:00,simple_paper.pdf,gemini-3-flash-preview,0.5,3,ok,188.050,data/experiments/consistency_checks/simple_paper_T0p5_exe3_gemini-3-flash-preview.profile.json,
+2026-04-27T17:19:29+00:00,simple_paper.pdf,gemini-3-flash-preview,0.5,10,ok,108.831,data/experiments/consistency_checks/simple_paper_T0p5_exe10_gemini-3-flash-preview.profile.json,
+2026-04-27T17:19:32+00:00,simple_paper.pdf,gemini-3-flash-preview,0.5,8,ok,127.601,data/experiments/consistency_checks/simple_paper_T0p5_exe8_gemini-3-flash-preview.profile.json,
+2026-04-27T17:20:04+00:00,simple_paper.pdf,gemini-3-flash-preview,0.5,4,ok,178.391,data/experiments/consistency_checks/simple_paper_T0p5_exe4_gemini-3-flash-preview.profile.json,
+2026-04-27T17:20:05+00:00,simple_paper.pdf,gemini-3-flash-preview,0.5,7,ok,169.515,data/experiments/consistency_checks/simple_paper_T0p5_exe7_gemini-3-flash-preview.profile.json,
+2026-04-27T17:20:14+00:00,simple_paper.pdf,gemini-3-flash-preview,0.5,9,ok,167.736,data/experiments/consistency_checks/simple_paper_T0p5_exe9_gemini-3-flash-preview.profile.json,
+2026-04-27T17:20:15+00:00,simple_paper.pdf,gemini-3-flash-preview,0.5,6,ok,181.156,data/experiments/consistency_checks/simple_paper_T0p5_exe6_gemini-3-flash-preview.profile.json,
+2026-04-27T17:20:15+00:00,simple_paper.pdf,gemini-3-flash-preview,1.0,1,ok,147.019,data/experiments/consistency_checks/simple_paper_T1_exe1_gemini-3-flash-preview.profile.json,
+2026-04-27T17:21:03+00:00,simple_paper.pdf,gemini-3-flash-preview,1.0,4,ok,96.223,data/experiments/consistency_checks/simple_paper_T1_exe4_gemini-3-flash-preview.profile.json,
+2026-04-27T17:21:32+00:00,simple_paper.pdf,gemini-3-flash-preview,1.0,3,ok,138.380,data/experiments/consistency_checks/simple_paper_T1_exe3_gemini-3-flash-preview.profile.json,
+2026-04-27T17:21:51+00:00,simple_paper.pdf,gemini-3-flash-preview,1.0,5,ok,142.636,data/experiments/consistency_checks/simple_paper_T1_exe5_gemini-3-flash-preview.profile.json,
+2026-04-27T17:21:55+00:00,simple_paper.pdf,gemini-3-flash-preview,1.0,6,ok,143.313,data/experiments/consistency_checks/simple_paper_T1_exe6_gemini-3-flash-preview.profile.json,
+2026-04-27T17:22:15+00:00,simple_paper.pdf,gemini-3-flash-preview,1.0,8,ok,130.622,data/experiments/consistency_checks/simple_paper_T1_exe8_gemini-3-flash-preview.profile.json,
+2026-04-27T17:22:37+00:00,simple_paper.pdf,gemini-3-flash-preview,1.0,9,ok,142.740,data/experiments/consistency_checks/simple_paper_T1_exe9_gemini-3-flash-preview.profile.json,
+2026-04-27T17:22:45+00:00,simple_paper.pdf,gemini-3-flash-preview,1.0,10,ok,150.535,data/experiments/consistency_checks/simple_paper_T1_exe10_gemini-3-flash-preview.profile.json,
+2026-04-27T17:22:54+00:00,simple_paper.pdf,gemini-3-flash-preview,1.0,7,ok,170.212,data/experiments/consistency_checks/simple_paper_T1_exe7_gemini-3-flash-preview.profile.json,
+2026-04-27T17:23:18+00:00,simple_paper.pdf,gemini-3-flash-preview,1.5,2,ok,134.971,data/experiments/consistency_checks/simple_paper_T1p5_exe2_gemini-3-flash-preview.profile.json,
+2026-04-27T17:23:44+00:00,simple_paper.pdf,gemini-3-flash-preview,0.5,5,err:RuntimeError,398.010,data/experiments/consistency_checks/simple_paper_T0p5_exe5_gemini-3-flash-preview.profile.json,RuntimeError: parameters: Gemini hit max_output_tokens before closing JSON -- raise max_output_tokens or tighten the prompt.
+2026-04-27T17:23:51+00:00,simple_paper.pdf,gemini-3-flash-preview,1.5,4,ok,119.402,data/experiments/consistency_checks/simple_paper_T1p5_exe4_gemini-3-flash-preview.profile.json,
+2026-04-27T17:23:58+00:00,simple_paper.pdf,gemini-3-flash-preview,1.5,5,ok,123.036,data/experiments/consistency_checks/simple_paper_T1p5_exe5_gemini-3-flash-preview.profile.json,
+2026-04-27T17:24:07+00:00,simple_paper.pdf,gemini-3-flash-preview,1.5,7,ok,90.845,data/experiments/consistency_checks/simple_paper_T1p5_exe7_gemini-3-flash-preview.profile.json,
+2026-04-27T17:24:16+00:00,simple_paper.pdf,gemini-3-flash-preview,1.5,8,ok,90.733,data/experiments/consistency_checks/simple_paper_T1p5_exe8_gemini-3-flash-preview.profile.json,
+2026-04-27T17:24:23+00:00,simple_paper.pdf,gemini-3-flash-preview,1.5,3,ok,170.708,data/experiments/consistency_checks/simple_paper_T1p5_exe3_gemini-3-flash-preview.profile.json,
+2026-04-27T17:25:16+00:00,simple_paper.pdf,gemini-3-flash-preview,1.5,6,ok,181.055,data/experiments/consistency_checks/simple_paper_T1p5_exe6_gemini-3-flash-preview.profile.json,
+2026-04-27T17:25:20+00:00,simple_paper.pdf,gemini-3-flash-preview,1.5,10,ok,121.757,data/experiments/consistency_checks/simple_paper_T1p5_exe10_gemini-3-flash-preview.profile.json,
+2026-04-27T17:25:42+00:00,simple_paper.pdf,gemini-3-flash-preview,2.0,4,ok,94.807,data/experiments/consistency_checks/simple_paper_T2_exe4_gemini-3-flash-preview.profile.json,
+2026-04-27T17:25:48+00:00,simple_paper.pdf,gemini-3-flash-preview,2.0,2,ok,117.456,data/experiments/consistency_checks/simple_paper_T2_exe2_gemini-3-flash-preview.profile.json,
+2026-04-27T17:25:53+00:00,simple_paper.pdf,gemini-3-flash-preview,2.0,1,ok,129.600,data/experiments/consistency_checks/simple_paper_T2_exe1_gemini-3-flash-preview.profile.json,
+2026-04-27T17:26:16+00:00,simple_paper.pdf,gemini-3-flash-preview,1.5,1,err:RuntimeError,360.705,data/experiments/consistency_checks/simple_paper_T1p5_exe1_gemini-3-flash-preview.profile.json,RuntimeError: parameters: Gemini hit max_output_tokens before closing JSON -- raise max_output_tokens or tighten the prompt.
+2026-04-27T17:26:36+00:00,simple_paper.pdf,gemini-3-flash-preview,2.0,5,ok,139.668,data/experiments/consistency_checks/simple_paper_T2_exe5_gemini-3-flash-preview.profile.json,
+2026-04-27T17:26:36+00:00,simple_paper.pdf,gemini-3-flash-preview,2.0,3,ok,157.575,data/experiments/consistency_checks/simple_paper_T2_exe3_gemini-3-flash-preview.profile.json,
+2026-04-27T17:26:46+00:00,simple_paper.pdf,gemini-3-flash-preview,2.0,6,ok,143.264,data/experiments/consistency_checks/simple_paper_T2_exe6_gemini-3-flash-preview.profile.json,
+2026-04-27T17:27:16+00:00,simple_paper.pdf,gemini-3-flash-preview,2.0,10,ok,88.378,data/experiments/consistency_checks/simple_paper_T2_exe10_gemini-3-flash-preview.profile.json,
+2026-04-27T17:27:30+00:00,simple_paper.pdf,gemini-3-flash-preview,2.0,9,ok,107.953,data/experiments/consistency_checks/simple_paper_T2_exe9_gemini-3-flash-preview.profile.json,
+2026-04-27T17:27:33+00:00,simple_paper.pdf,gemini-3-flash-preview,2.0,7,ok,136.708,data/experiments/consistency_checks/simple_paper_T2_exe7_gemini-3-flash-preview.profile.json,
+2026-04-27T17:27:57+00:00,simple_paper.pdf,gemini-3-flash-preview,2.0,8,ok,156.827,data/experiments/consistency_checks/simple_paper_T2_exe8_gemini-3-flash-preview.profile.json,
+2026-04-27T17:29:00+00:00,simple_paper.pdf,gemini-3-flash-preview,1.5,9,err:RuntimeError,365.774,data/experiments/consistency_checks/simple_paper_T1p5_exe9_gemini-3-flash-preview.profile.json,RuntimeError: parameters: Gemini hit max_output_tokens before closing JSON -- raise max_output_tokens or tighten the prompt.
+2026-04-27T17:29:01+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.0,1,ok,187.464,data/experiments/consistency_checks/simple_paper_T0_exe1_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:29:17+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.0,4,ok,161.313,data/experiments/consistency_checks/simple_paper_T0_exe4_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:29:26+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.0,2,ok,189.857,data/experiments/consistency_checks/simple_paper_T0_exe2_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:29:31+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.0,3,ok,174.805,data/experiments/consistency_checks/simple_paper_T0_exe3_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:29:37+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.0,5,ok,170.497,data/experiments/consistency_checks/simple_paper_T0_exe5_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:30:57+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.0,6,ok,220.561,data/experiments/consistency_checks/simple_paper_T0_exe6_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:31:03+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.0,7,ok,212.889,data/experiments/consistency_checks/simple_paper_T0_exe7_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:31:07+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.0,8,ok,214.328,data/experiments/consistency_checks/simple_paper_T0_exe8_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:31:32+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.5,1,ok,151.474,data/experiments/consistency_checks/simple_paper_T0p5_exe1_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:31:42+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.0,9,ok,224.720,data/experiments/consistency_checks/simple_paper_T0_exe9_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:31:55+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.0,10,ok,175.690,data/experiments/consistency_checks/simple_paper_T0_exe10_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:32:23+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.5,3,ok,177.834,data/experiments/consistency_checks/simple_paper_T0p5_exe3_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:32:37+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.5,4,ok,186.431,data/experiments/consistency_checks/simple_paper_T0p5_exe4_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:32:50+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.5,2,ok,212.439,data/experiments/consistency_checks/simple_paper_T0p5_exe2_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:33:03+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.5,5,ok,205.981,data/experiments/consistency_checks/simple_paper_T0p5_exe5_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:34:03+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.5,6,ok,186.224,data/experiments/consistency_checks/simple_paper_T0p5_exe6_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:34:05+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.5,8,ok,177.646,data/experiments/consistency_checks/simple_paper_T0p5_exe8_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:34:22+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.5,9,ok,169.839,data/experiments/consistency_checks/simple_paper_T0p5_exe9_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:34:25+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.5,7,ok,201.883,data/experiments/consistency_checks/simple_paper_T0p5_exe7_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:34:40+00:00,simple_paper.pdf,gemini-3.1-pro-preview,0.5,10,ok,178.022,data/experiments/consistency_checks/simple_paper_T0p5_exe10_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:35:17+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.0,1,ok,201.797,data/experiments/consistency_checks/simple_paper_T1_exe1_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:35:39+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.0,3,ok,181.734,data/experiments/consistency_checks/simple_paper_T1_exe3_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:35:39+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.0,2,ok,196.012,data/experiments/consistency_checks/simple_paper_T1_exe2_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:35:47+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.0,4,ok,177.641,data/experiments/consistency_checks/simple_paper_T1_exe4_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:36:26+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.0,5,ok,203.039,data/experiments/consistency_checks/simple_paper_T1_exe5_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:37:17+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.0,7,ok,191.438,data/experiments/consistency_checks/simple_paper_T1_exe7_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:37:35+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.0,8,ok,192.775,data/experiments/consistency_checks/simple_paper_T1_exe8_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:37:39+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.0,6,ok,216.055,data/experiments/consistency_checks/simple_paper_T1_exe6_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:38:08+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.0,9,ok,223.012,data/experiments/consistency_checks/simple_paper_T1_exe9_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:38:10+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.0,10,ok,209.825,data/experiments/consistency_checks/simple_paper_T1_exe10_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:38:22+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.5,1,ok,184.507,data/experiments/consistency_checks/simple_paper_T1p5_exe1_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:38:58+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.5,3,ok,198.498,data/experiments/consistency_checks/simple_paper_T1p5_exe3_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:39:16+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.5,4,ok,208.583,data/experiments/consistency_checks/simple_paper_T1p5_exe4_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:39:18+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.5,2,ok,219.331,data/experiments/consistency_checks/simple_paper_T1p5_exe2_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:39:59+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.5,7,ok,143.819,data/experiments/consistency_checks/simple_paper_T1p5_exe7_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:40:00+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.5,5,ok,213.717,data/experiments/consistency_checks/simple_paper_T1p5_exe5_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:41:01+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.5,6,ok,224.663,data/experiments/consistency_checks/simple_paper_T1p5_exe6_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:41:21+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.5,9,ok,192.616,data/experiments/consistency_checks/simple_paper_T1p5_exe9_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:41:27+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.5,8,ok,227.618,data/experiments/consistency_checks/simple_paper_T1p5_exe8_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:41:40+00:00,simple_paper.pdf,gemini-3.1-pro-preview,2.0,1,ok,198.153,data/experiments/consistency_checks/simple_paper_T2_exe1_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:42:04+00:00,simple_paper.pdf,gemini-3.1-pro-preview,2.0,2,ok,186.370,data/experiments/consistency_checks/simple_paper_T2_exe2_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:42:25+00:00,simple_paper.pdf,gemini-3.1-pro-preview,1.5,10,ok,255.574,data/experiments/consistency_checks/simple_paper_T1p5_exe10_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:43:02+00:00,simple_paper.pdf,gemini-3.1-pro-preview,2.0,3,ok,226.572,data/experiments/consistency_checks/simple_paper_T2_exe3_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:43:18+00:00,simple_paper.pdf,gemini-3.1-pro-preview,2.0,6,ok,198.749,data/experiments/consistency_checks/simple_paper_T2_exe6_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:43:43+00:00,simple_paper.pdf,gemini-3.1-pro-preview,2.0,4,ok,265.017,data/experiments/consistency_checks/simple_paper_T2_exe4_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:43:47+00:00,simple_paper.pdf,gemini-3.1-pro-preview,2.0,5,ok,227.958,data/experiments/consistency_checks/simple_paper_T2_exe5_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:44:31+00:00,simple_paper.pdf,gemini-3.1-pro-preview,2.0,7,ok,209.922,data/experiments/consistency_checks/simple_paper_T2_exe7_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:44:33+00:00,simple_paper.pdf,gemini-3.1-pro-preview,2.0,9,ok,186.001,data/experiments/consistency_checks/simple_paper_T2_exe9_gemini-3_1-pro-preview.profile.json,
+2026-04-27T17:46:14+00:00,simple_paper.pdf,gemini-3.1-pro-preview,2.0,10,ok,274.228,data/experiments/consistency_checks/simple_paper_T2_exe10_gemini-3_1-pro-preview.profile.json,

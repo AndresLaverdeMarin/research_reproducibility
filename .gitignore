@@ -170,6 +170,9 @@ CLAUDE.md
 jrc_transport_analysis/obfcm_data.csv
 jrc_transport_analysis/analysis_outputs/*.pkl
 
+# PDFs under src/data (paper inputs — keep out of git)
+src/data/**/*.pdf
+
 # Editor / IDE history
 .history/
 

@@ -1,0 +1,404 @@
+{
+  "metadata": {
+    "pdf_path": "data/specific_cases/simple_paper.pdf",
+    "extraction_model": "gemini-3-flash-preview",
+    "title": "A Deep Reinforcement Learning Approach for Ramp Metering Based on Traffic Video Data",
+    "authors": [
+      "Bing Liu",
+      "Yu Tang",
+      "Yuxiong Ji",
+      "Yu Shen",
+      "Yuchuan Du"
+    ],
+    "repository_links": [
+      "https://arxiv.org/abs/2012.12104 (\"submitted as a preprint\")",
+      "SUMO (\"open-source microscopic traffic simulator\")",
+      "https://arxiv.org/abs/1705.02755 (\"arxiv.org/abs/1705.02755\")",
+      "https://arxiv.org/abs/1412.6980 (\"arxiv.org/abs/1412.6980\")",
+      "https://arxiv.org/abs/1312.5602 (\"arxiv.org/abs/1312.5602\")",
+      "https://doi.org/10.1155/2021/6669028 (\"10.1155/2021/6669028\")"
+    ],
+    "supplementary_materials": [
+      "Data on request (\"available... upon request.\")"
+    ],
+    "hyperparameters": [
+      {
+        "name": "State matrix dimension",
+        "value": "(3, 4, 512)",
+        "context": "Deep Q-learning input size",
+        "source_quote": "State matrix dimension (3, 4, 512)"
+      },
+      {
+        "name": "Replay buffer size",
+        "value": "2 x 10^5",
+        "context": "Experience replay buffer capacity",
+        "source_quote": "Replay buffer size B 2 x 10^5"
+      },
+      {
+        "name": "Training steps",
+        "value": "4200",
+        "context": "Decision time steps per episode",
+        "source_quote": "Training steps T 4200"
+      },
+      {
+        "name": "Learning rate",
+        "value": "2.5 x 10^-4",
+        "context": "Adam optimizer learning rate",
+        "source_quote": "Learning rate eta 2.5 x 10-4"
+      },
+      {
+        "name": "Batch size",
+        "value": "32",
+        "context": "Training batch size",
+        "source_quote": "Batch size k 32"
+      },
+      {
+        "name": "Exploration rate",
+        "value": "0.1",
+        "context": "Epsilon-greedy exploration probability",
+        "source_quote": "Exploration rate epsilon 0.1"
+      },
+      {
+        "name": "Freeze interval",
+        "value": "10^4",
+        "context": "Target network update frequency",
+        "source_quote": "Freeze interval F 10^4"
+      },
+      {
+        "name": "Decision step size",
+        "value": "4 s",
+        "context": "Fixed control decision interval",
+        "source_quote": "Decision step size L 4 s"
+      }
+    ],
+    "stated_software_versions": {
+      "SUMO": "null"
+    },
+    "hardware_requirements": "NVIDIA Quadro K620 GPU, Intel Xeon CPU E5-1650 (\"NVIDIA Quadro K620 GPU and Intel Xeon CPU E5-1650 (3.6 GHz, 6 cores)\")"
+  },
+  "nodes_source": [
+    {
+      "node_id": "src_real_world_traffic_data",
+      "node_name": "Real-world traffic data",
+      "source_quote": "A series of simulation experiments based on real-world traffic data are conducted to evaluate the proposed approach.",
+      "description": "Empirical traffic volume and road network information from the freeway connecting Qingdao and Huangdao in Shandong, China, used to calibrate the SUMO microscopic traffic simulator.",
+      "size_estimate": null,
+      "license": null,
+      "availability": "upon_request",
+      "url": null,
+      "reproducibility_score": 50,
+      "reproducibility_rationale": "The Data Availability section states that data used to support the results are available from the corresponding author upon request."
+    }
+  ],
+  "nodes_process": [
+    {
+      "node_id": "meth_01",
+      "node_name": "Vehicle location extraction",
+      "source_quote": "Vehicle locations are extracted from the traffic video frames and are reformed as position matrices.",
+      "description": "Extracts vehicle coordinates (xi, yi) from raw video frames to create position matrices mt.",
+      "process_type": "method",
+      "input_ids": [
+        "src_real_world_traffic_data"
+      ],
+      "outcomes": [
+        "position_matrices"
+      ],
+      "algorithm_clarity": 3,
+      "tools_required": [
+        "object detection"
+      ],
+      "tools_mentioned": [
+        "version not stated"
+      ],
+      "parameters_required": [
+        "control_area_size"
+      ],
+      "parameters_mentioned": [
+        "control_area_size=X by Y"
+      ],
+      "reproducibility_score": 60,
+      "reproducibility_rationale": "clarity=3, generic tool, generic parameters"
+    },
+    {
+      "node_id": "meth_02",
+      "node_name": "State representation preprocessing",
+      "source_quote": "After zooming and down-sampling, the size of one observation is 4 x 512 in pixels. Three consecutive observations are stacked to represent the traffic state.",
+      "description": "Down-samples position matrices to 4x512 and stacks N=3 consecutive frames to form state st.",
+      "process_type": "method",
+      "input_ids": [
+        "position_matrices"
+      ],
+      "outcomes": [
+        "traffic_states"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "downsampling",
+        "frame stacking"
+      ],
+      "tools_mentioned": [
+        "version not stated"
+      ],
+      "parameters_required": [
+        "state_matrix_dimension",
+        "stack_size"
+      ],
+      "parameters_mentioned": [
+        "state_matrix_dimension=(3, 4, 512)",
+        "stack_size=3"
+      ],
+      "reproducibility_score": 90,
+      "reproducibility_rationale": "clarity=4, all parameters stated in Table 1"
+    },
+    {
+      "node_id": "meth_03",
+      "node_name": "Deep Q-Network Training",
+      "source_quote": "The training problem can be viewed as the regression problem with the loss function defined by the following: L(wi) = L1(wi) + lambda*L2(wi).",
+      "description": "Trains a DRL agent using a multitask learning strategy with experience replay and a target network. Uses CNN layers for feature extraction and FC layers for Q-value and speed/queue prediction.",
+      "process_type": "method",
+      "input_ids": [
+        "traffic_states"
+      ],
+      "outcomes": [
+        "trained_dqn_model"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "deep reinforcement learning",
+        "multitask learning",
+        "CNN",
+        "Adam optimizer"
+      ],
+      "tools_mentioned": [
+        "Adam version not stated"
+      ],
+      "parameters_required": [
+        "learning_rate",
+        "batch_size",
+        "replay_buffer_size",
+        "freeze_interval",
+        "loss_weight",
+        "reward_weights"
+      ],
+      "parameters_mentioned": [
+        "learning_rate=2.5e-4",
+        "batch_size=32",
+        "replay_buffer_size=2e5",
+        "freeze_interval=1e4",
+        "loss_weight=0.001",
+        "reward_weight_mu=0.5",
+        "reward_weight_omega=-0.1"
+      ],
+      "reproducibility_score": 95,
+      "reproducibility_rationale": "clarity=4, architecture and hyperparameters fully specified in Table 1 and Fig 7"
+    },
+    {
+      "node_id": "meth_04",
+      "node_name": "Simulation Evaluation",
+      "source_quote": "The proposed method is evaluated in SUMO, an open-source microscopic traffic simulator.",
+      "description": "Evaluates the trained model in a real-world freeway tunnel scenario using SUMO. Compares against No Control and PI-ALINEA baselines.",
+      "process_type": "experiment",
+      "input_ids": [
+        "trained_dqn_model",
+        "src_real_world_traffic_data"
+      ],
+      "outcomes": [
+        "sink_fig8",
+        "sink_fig9",
+        "sink_tab2",
+        "sink_fig10",
+        "sink_fig11",
+        "sink_fig12",
+        "sink_fig13",
+        "sink_fig14"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "microscopic traffic simulation"
+      ],
+      "tools_mentioned": [
+        "SUMO version not stated"
+      ],
+      "parameters_required": [
+        "simulation_time",
+        "decision_step_size",
+        "training_steps"
+      ],
+      "parameters_mentioned": [
+        "simulation_time=7:50 a.m. to 9:00 a.m.",
+        "decision_step_size=4s",
+        "training_steps=4200"
+      ],
+      "reproducibility_score": 90,
+      "reproducibility_rationale": "clarity=4, simulator and scenario parameters well-defined"
+    },
+    {
+      "node_id": "meth_05",
+      "node_name": "Perturbation Analysis",
+      "source_quote": "A perturbation analysis is conducted to evaluate the impact of information contained in video data.",
+      "description": "Divides control area into 8 subareas and removes information from each to test model sensitivity.",
+      "process_type": "experiment",
+      "input_ids": [
+        "trained_dqn_model",
+        "src_real_world_traffic_data"
+      ],
+      "outcomes": [
+        "sink_fig16"
+      ],
+      "algorithm_clarity": 3,
+      "tools_required": [
+        "sensitivity analysis"
+      ],
+      "tools_mentioned": [
+        "version not stated"
+      ],
+      "parameters_required": [
+        "subarea_count"
+      ],
+      "parameters_mentioned": [
+        "subarea_count=8"
+      ],
+      "reproducibility_score": 70,
+      "reproducibility_rationale": "clarity=3, subarea division logic described but specific pixel boundaries omitted"
+    }
+  ],
+  "nodes_sink": [
+    {
+      "node_id": "sink_fig8",
+      "node_name": "Figure 8",
+      "source_quote": "The episode reward and mean travel time are both converged in 400,000 training frames and can maintain a stable value until the end of the training process.",
+      "description": "Convergence curves for episode reward and mean travel time during the DRL training phase.",
+      "input_ids": [
+        "src_real_world_traffic_data",
+        "drl_training_process"
+      ],
+      "size_estimate": "2 panels",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 60,
+      "reproducibility_rationale": "Input data available only upon request; simulation parameters and model architecture are well-documented."
+    },
+    {
+      "node_id": "sink_fig9",
+      "node_name": "Figure 9",
+      "source_quote": "Figure 9 presents the Q1 (25%), Q2 (50%), and Q3 (75%) of the travel times in the mainline for three scenarios.",
+      "description": "Comparison of mainline travel times over time for No control, PI-ALINEA, and Deep RL scenarios.",
+      "input_ids": [
+        "simulation_outputs"
+      ],
+      "size_estimate": "1 panel",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 65,
+      "reproducibility_rationale": "Results derived from SUMO simulation with stated parameters; data availability is the primary constraint."
+    },
+    {
+      "node_id": "sink_tab2",
+      "node_name": "Table 2",
+      "source_quote": "Table 2 presents mean vehicle travel times in 20 simulation experiments.",
+      "description": "Mean vehicle travel times (s) for 20 simulation experiments across three control scenarios.",
+      "input_ids": [
+        "simulation_outputs"
+      ],
+      "size_estimate": "20 rows x 4 columns",
+      "type": "table",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 65,
+      "reproducibility_rationale": "Tabulated comparison of simulation outcomes; parameters for methods are provided but raw data is restricted."
+    },
+    {
+      "node_id": "sink_fig10",
+      "node_name": "Figure 10",
+      "source_quote": "Figure 10 presents the temporal-spatial distribution of the mean speeds along the mainline.",
+      "description": "Heatmaps showing speed distribution across time and distance for three control scenarios.",
+      "input_ids": [
+        "simulation_outputs"
+      ],
+      "size_estimate": "3 panels",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 60,
+      "reproducibility_rationale": "Visual representation of simulation data; aggregation details for mean speed are partially specified."
+    },
+    {
+      "node_id": "sink_fig11",
+      "node_name": "Figure 11",
+      "source_quote": "Figure 11 presents the Q1, Q2, and Q3 of the queue lengths at the on-ramp in three scenarios.",
+      "description": "Time-series of on-ramp queue length quantiles for No control, PI-ALINEA, and Deep RL.",
+      "input_ids": [
+        "simulation_outputs"
+      ],
+      "size_estimate": "1 panel",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 65,
+      "reproducibility_rationale": "Standard simulation output; scenarios and metrics are clearly defined."
+    },
+    {
+      "node_id": "sink_fig12",
+      "node_name": "Figure 12",
+      "source_quote": "Figure 12 presents the mean queue lengths at the on-ramp and the red ratios... in each simulation for the two ramp metering methods.",
+      "description": "Scatter plot showing the relationship between red signal ratio and mean queue length.",
+      "input_ids": [
+        "simulation_outputs"
+      ],
+      "size_estimate": "1 panel",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 60,
+      "reproducibility_rationale": "Derived from simulation data; logic for comparison is clear but data is not public."
+    },
+    {
+      "node_id": "sink_fig13",
+      "node_name": "Figure 13",
+      "source_quote": "Figure 13 presents the queue lengths at the on-ramp and the occupancy downstream of the merging area for the two ramp metering methods.",
+      "description": "Time-series comparison of occupancy and queue length for PI-ALINEA and DRL.",
+      "input_ids": [
+        "simulation_outputs"
+      ],
+      "size_estimate": "2 panels",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 65,
+      "reproducibility_rationale": "Direct visualization of simulation variables; method parameters provided."
+    },
+    {
+      "node_id": "sink_fig14",
+      "node_name": "Figure 14",
+      "source_quote": "Figure 14: Downstream volume in three scenarios.",
+      "description": "Box plots of downstream traffic volume at different time intervals for three scenarios.",
+      "input_ids": [
+        "simulation_outputs"
+      ],
+      "size_estimate": "1 panel",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 65,
+      "reproducibility_rationale": "Standard volume output from SUMO simulation using stated traffic demand."
+    },
+    {
+      "node_id": "sink_fig16",
+      "node_name": "Figure 16",
+      "source_quote": "Figure 16 presents the box plot of travel time when the information of different subareas is removed",
+      "description": "Sensitivity analysis of travel time when input data from specific road subareas is masked.",
+      "input_ids": [
+        "src_real_world_traffic_data",
+        "perturbation_analysis"
+      ],
+      "size_estimate": "9 boxes",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 60,
+      "reproducibility_rationale": "Systematic evaluation of model reliance on spatial features; masking procedure described briefly."
+    }
+  ]
+}

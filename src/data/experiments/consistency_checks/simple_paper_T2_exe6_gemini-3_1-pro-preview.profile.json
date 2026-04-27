@@ -1,0 +1,425 @@
+{
+  "metadata": {
+    "pdf_path": "data/specific_cases/simple_paper.pdf",
+    "extraction_model": "gemini-3.1-pro-preview",
+    "title": "A Deep Reinforcement Learning Approach for Ramp Metering Based on Traffic Video Data",
+    "authors": [
+      "Bing Liu",
+      "Yu Tang",
+      "Yuxiong Ji",
+      "Yu Shen",
+      "Yuchuan Du"
+    ],
+    "repository_links": [],
+    "supplementary_materials": [
+      "Data ['available from the corresponding author']",
+      "arxiv.org/abs/2012.12104 ['submitted as a preprint']"
+    ],
+    "hyperparameters": [
+      {
+        "name": "Replay buffer size B",
+        "value": "2 x 10^5",
+        "context": "deep Q-learning for ramp metering",
+        "source_quote": "Replay buffer size B 2 x 10^5"
+      },
+      {
+        "name": "Training steps T",
+        "value": "4200",
+        "context": "deep Q-learning for ramp metering",
+        "source_quote": "Training steps T 4200"
+      },
+      {
+        "name": "Learning rate",
+        "value": "2.5 x 10^-4",
+        "context": "deep Q-learning for ramp metering",
+        "source_quote": "Learning rate eta 2.5 x 10^-4"
+      },
+      {
+        "name": "Batch size k",
+        "value": "32",
+        "context": "deep Q-learning for ramp metering",
+        "source_quote": "Batch size k 32"
+      },
+      {
+        "name": "Exploration rate",
+        "value": "0.1",
+        "context": "deep Q-learning for ramp metering",
+        "source_quote": "Exploration rate epsilon 0.1"
+      },
+      {
+        "name": "Freeze interval F",
+        "value": "10^4",
+        "context": "deep Q-learning for ramp metering",
+        "source_quote": "Freeze interval F 10^4"
+      },
+      {
+        "name": "Decision step size L",
+        "value": "4 s",
+        "context": "deep Q-learning for ramp metering",
+        "source_quote": "Decision step size L 4 s"
+      },
+      {
+        "name": "Loss weight",
+        "value": "0.001",
+        "context": "deep Q-learning for ramp metering",
+        "source_quote": "Loss weight lambda 0.001"
+      }
+    ],
+    "stated_software_versions": {},
+    "hardware_requirements": "NVIDIA Quadro K620 GPU, Intel Xeon CPU E5-1650 ['computing server with NVIDIA Quadro K620 GPU and Intel Xeon CPU E5-1650 (3.6 GHz, 6 cores)']"
+  },
+  "nodes_source": [
+    {
+      "node_id": "src_real_world_traffic_data",
+      "node_name": "Real-world traffic data",
+      "source_quote": "A series of simulation experiments based on real-world traffic data are conducted to evaluate the proposed approach.",
+      "description": "Empirical traffic volume and video data collected at a freeway connecting Qingdao and Huangdao in Shandong, China, from 7:50 a.m. to 9:00 a.m., used to calibrate driving behaviors in the SUMO simulator.",
+      "size_estimate": null,
+      "license": null,
+      "availability": "upon_request",
+      "url": null,
+      "reproducibility_score": 50,
+      "reproducibility_rationale": "The Data Availability section explicitly states that the data are available from the corresponding author upon request; no open repository, direct URL, or DOI is provided."
+    }
+  ],
+  "nodes_process": [
+    {
+      "node_id": "meth_01",
+      "node_name": "Calibrate microscopic simulation environment",
+      "source_quote": "The proposed method is evaluated in SUMO, an open-source microscopic traffic simulator [31].",
+      "description": "Construct and calibrate the traffic system using an open-source microscopic traffic simulator modeled after real-world traffic scenarios on the freeway connecting Qingdao and Huangdao.",
+      "process_type": "method",
+      "input_ids": [
+        "src_real_world_traffic_data"
+      ],
+      "outcomes": [
+        "simulated_environment"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "microscopic traffic simulator"
+      ],
+      "tools_mentioned": [
+        "SUMO version not stated"
+      ],
+      "parameters_required": [
+        "mainline_speed_limit",
+        "ramp_speed_limit",
+        "simulation_start_time",
+        "simulation_end_time"
+      ],
+      "parameters_mentioned": [
+        "mainline_speed_limit=80 km/h",
+        "ramp_speed_limit=40 km/h",
+        "simulation_duration=7:50 a.m. to 9:00 a.m."
+      ],
+      "reproducibility_score": 85,
+      "reproducibility_rationale": "clarity=4, 1/1 tool named, 3/4 parameters explicitly assigned."
+    },
+    {
+      "node_id": "meth_02",
+      "node_name": "State reconstruction from video matrices",
+      "source_quote": "Three consecutive frames of the traffic video in the controlled area are needed as the observation input... After zooming and down-sampling, the size of one observation is 4x512 in pixels.",
+      "description": "Vehicle coordinates extracted from traffic system camera views are structured as position matrices mapping visual spatial data, combined over a window sequence and zoomed/down-sampled.",
+      "process_type": "method",
+      "input_ids": [
+        "simulated_environment"
+      ],
+      "outcomes": [
+        "preprocessed_real_world_traffic_data"
+      ],
+      "algorithm_clarity": 3,
+      "tools_required": [
+        "matrix stacking",
+        "spatial down-sampling"
+      ],
+      "tools_mentioned": [],
+      "parameters_required": [
+        "stacked_frames",
+        "pixel_height",
+        "pixel_width"
+      ],
+      "parameters_mentioned": [
+        "consecutive_frames=3",
+        "observation_dimension=4 x 512"
+      ],
+      "reproducibility_score": 60,
+      "reproducibility_rationale": "clarity=3, tools are general matrix manipulation, core dimension hyperparams stated but minor scale/filter detail absent."
+    },
+    {
+      "node_id": "meth_03",
+      "node_name": "Train Multi-Task DRL Agent",
+      "source_quote": "A multitask learning strategy is implemented in the training process... A deep neural network termed Q-network to approximate Q*(s,a).",
+      "description": "Train a multi-task Q-network architecture via Adam optimizer combining action estimation, speed output and queue regressions. The step handles memory replay extraction to unbias sampling streams.",
+      "process_type": "method",
+      "input_ids": [
+        "preprocessed_real_world_traffic_data"
+      ],
+      "outcomes": [
+        "trained_drl_agent",
+        "sink_fig8"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "Deep Q-Learning",
+        "Convolutional Neural Network",
+        "Stochastic Gradient Descent Optimizer"
+      ],
+      "tools_mentioned": [
+        "Adam version not stated",
+        "NVIDIA Quadro K620 GPU"
+      ],
+      "parameters_required": [
+        "learning_rate",
+        "batch_size",
+        "exploration_rate",
+        "decision_step_size",
+        "loss_weights"
+      ],
+      "parameters_mentioned": [
+        "batch_size=32",
+        "learning_rate=2.5x10^-4",
+        "decision_step_size_L=4s",
+        "exploration_rate=0.1",
+        "reward_weight_speed=0.5",
+        "reward_weight_queue=-0.1"
+      ],
+      "reproducibility_score": 90,
+      "reproducibility_rationale": "clarity=4, comprehensive tool declarations matching Table 1 metrics entirely, missing precise platform-level details."
+    },
+    {
+      "node_id": "meth_04",
+      "node_name": "Calibrate PI-ALINEA Method baseline",
+      "source_quote": "The PI-ALINEA method fixes the length of the green phase and determines the length of the red phase in the current signal cycle based on... downstream occupancies",
+      "description": "Establish parameter presets tuning the deterministic dynamic metering rule for feedback adaptation proportional loops targeting specific freeway capacity downstream saturation volumes.",
+      "process_type": "method",
+      "input_ids": [
+        "simulated_environment"
+      ],
+      "outcomes": [
+        "baseline_pi_alinea_agent"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "Proportional-Integral Controller"
+      ],
+      "tools_mentioned": [],
+      "parameters_required": [
+        "desired_occupancy_setpoint",
+        "kr_regulator",
+        "kp_regulator"
+      ],
+      "parameters_mentioned": [
+        "desired_occupancy=16%",
+        "KR=90",
+        "KP=50"
+      ],
+      "reproducibility_score": 90,
+      "reproducibility_rationale": "clarity=4, methodology uses highly precise closed-form standard equation specifying parameters openly without novel hidden dependencies."
+    },
+    {
+      "node_id": "meth_05",
+      "node_name": "Comparison test under multi-seeding",
+      "source_quote": "each scenario is evaluated in 20 simulation experiments. The simulations for the training phase and each experiment are initialized with different random seeds.",
+      "description": "Calculate temporal-spatial travel statistics matching performance profiles crosschecking trained RL agents over zero-intervention baselines versus proportional control schemes simulating separate seed instances.",
+      "process_type": "experiment",
+      "input_ids": [
+        "simulated_environment",
+        "trained_drl_agent",
+        "baseline_pi_alinea_agent"
+      ],
+      "outcomes": [
+        "sink_fig9",
+        "sink_tab2",
+        "sink_fig10",
+        "sink_fig11",
+        "sink_fig12",
+        "sink_fig13",
+        "sink_fig14"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "experiment looping mechanism"
+      ],
+      "tools_mentioned": [],
+      "parameters_required": [
+        "evaluation_repeats"
+      ],
+      "parameters_mentioned": [
+        "evaluation_runs=20"
+      ],
+      "reproducibility_score": 95,
+      "reproducibility_rationale": "clarity=4, procedural simulation test looping fully disclosed, random iterations logged alongside complete visualization arrays."
+    },
+    {
+      "node_id": "meth_06",
+      "node_name": "Input occlusion and sensitivity mapping test",
+      "source_quote": "A perturbation analysis is conducted... the control area is divided into eight subareas... The information in the subarea is removed from original data to generate perturbed data for each subarea.",
+      "description": "Selectively mask or blackout regions from initial full observation frames forming subzones to execute forward paths measuring spatial dependence vulnerability compared over iterated episode sweeps.",
+      "process_type": "experiment",
+      "input_ids": [
+        "simulated_environment",
+        "trained_drl_agent"
+      ],
+      "outcomes": [
+        "sink_fig16"
+      ],
+      "algorithm_clarity": 3,
+      "tools_required": [
+        "Image / Input Occlusion Masking"
+      ],
+      "tools_mentioned": [],
+      "parameters_required": [
+        "divided_masking_subzones",
+        "test_iterations"
+      ],
+      "parameters_mentioned": [
+        "control_area_subareas=8",
+        "simulation_experiments_perturbed=20"
+      ],
+      "reproducibility_score": 75,
+      "reproducibility_rationale": "clarity=3, geometric mapping of partitioned segments relies on graphical figures loosely explaining explicit masking logic but iteration values clear."
+    }
+  ],
+  "nodes_sink": [
+    {
+      "node_id": "sink_fig8",
+      "node_name": "Figure 8",
+      "source_quote": "The training process, presented in Figure 8, can be finished in less than 24 hours on a computing server with NVIDIA Quadro K620 GPU",
+      "description": "Convergence curves showing episode reward and mean travel time across the training frame horizon.",
+      "input_ids": [
+        "drl_training_logs",
+        "src_real_world_traffic_data"
+      ],
+      "size_estimate": "2 panels",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 40,
+      "reproducibility_rationale": "Uses explicit DRL parameters, but the real-world dataset and trained models are not open source."
+    },
+    {
+      "node_id": "sink_fig9",
+      "node_name": "Figure 9",
+      "source_quote": "Figure 9 presents the Q1 (25%), Q2 (50%), and Q3 (75%) of the travel times in the mainline for three scenarios.",
+      "description": "Mainline vehicle travel time distributions across time-of-day comparing no control, PI-ALINEA, and Deep RL.",
+      "input_ids": [
+        "sumo_eval_travel_times",
+        "src_real_world_traffic_data"
+      ],
+      "size_estimate": "1 plot with 3 bounded curves",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 40,
+      "reproducibility_rationale": "Clear plot of travel times. Reproducibility hindered by unreleased initial traffic volumes and empirical dataset."
+    },
+    {
+      "node_id": "sink_tab2",
+      "node_name": "Table 2",
+      "source_quote": "Table 2 presents mean vehicle travel times in 20 simulation experiments.",
+      "description": "Lists the mean travel times (in seconds) for each of the 20 simulation runs using random seeds, covering No controls, PI-ALINEA, and DRL strategies.",
+      "input_ids": [
+        "sumo_eval_travel_times"
+      ],
+      "size_estimate": "20 rows x 4 columns",
+      "type": "table",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 40,
+      "reproducibility_rationale": "Detailed experiment run results reported; score capped by reliance on non-public proprietary simulator initialisation."
+    },
+    {
+      "node_id": "sink_fig10",
+      "node_name": "Figure 10",
+      "source_quote": "Figure 10 presents the temporal-spatial distribution of the mean speeds along the mainline.",
+      "description": "Contour plots of mean spatial-temporal speeds corresponding to no-control, PI-ALINEA, and DRL scenarios.",
+      "input_ids": [
+        "sumo_eval_speeds"
+      ],
+      "size_estimate": "3 contour plots",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 40,
+      "reproducibility_rationale": "Valid visual output of mainline performance metric, subject to simulation accessibility constraints."
+    },
+    {
+      "node_id": "sink_fig11",
+      "node_name": "Figure 11",
+      "source_quote": "Figure 11 presents the Q1, Q2, and Q3 of the queue lengths at the on-ramp in three scenarios.",
+      "description": "Time-series graph showing median and quartile boundaries for on-ramp queue lengths.",
+      "input_ids": [
+        "sumo_eval_queue_lengths"
+      ],
+      "size_estimate": "1 shaded line chart panel",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported",
+      "reproducibility_score": 40,
+      "reproducibility_rationale": "Requires execution of PI-ALINEA baseline alongside unavailable empirical dataset. Visually well aligned with method claim."
+    },
+    {
+      "node_id": "sink_fig12",
+      "node_name": "Figure 12",
+      "source_quote": "Figure 12 presents the mean queue lengths at the on-ramp and the red ratios... in each simulation for the two ramp metering methods.",
+      "description": "Scatter plot measuring linear correlations between metering red-phase proportions and formed queue lengths.",
+      "input_ids": [
+        "sumo_eval_queue_lengths",
+        "sumo_eval_signal_states"
+      ],
+      "size_estimate": "1 scatter plot",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 40,
+      "reproducibility_rationale": "Clear statistical visualization tracking directly defined variables; reproduction suffers from closed code."
+    },
+    {
+      "node_id": "sink_fig13",
+      "node_name": "Figure 13",
+      "source_quote": "Figure 13 presents the queue lengths at the on-ramp and the occupancy downstream of the merging area for the two ramp metering methods.",
+      "description": "Dual-metric timeline comparing occupancy dynamics relative to varying queue lengths.",
+      "input_ids": [
+        "sumo_eval_queue_lengths",
+        "sumo_eval_occupancy"
+      ],
+      "size_estimate": "2 time series panels",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 40,
+      "reproducibility_rationale": "Presents derived system stats over explicitly tracked timescales, heavily coupled with proprietary simulator."
+    },
+    {
+      "node_id": "sink_fig14",
+      "node_name": "Figure 14",
+      "source_quote": "The better performance of the proposed DRL method is further revealed when considering traffic flows downstream of the merge area, which is demonstrated in Figure 14.",
+      "description": "Comparative distributions of vehicle output volumes using distinct operational strategies binned every 5-minutes.",
+      "input_ids": [
+        "sumo_eval_downstream_volumes"
+      ],
+      "size_estimate": "Grouped boxplots covering 13 time intervals",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 40,
+      "reproducibility_rationale": "Averages simulator outcome aggregates successfully without releasing source logic mapping."
+    },
+    {
+      "node_id": "sink_fig16",
+      "node_name": "Figure 16",
+      "source_quote": "Figure 16 presents the box plot of travel time when the information of different subareas is removed, and the baseline is the result of experiments that take original data as input.",
+      "description": "Systemic evaluations of observation completeness dropping distinct area state tensors to verify data reliance limits.",
+      "input_ids": [
+        "drl_ablation_evaluations"
+      ],
+      "size_estimate": "9 independent column distributions",
+      "type": "figure",
+      "statement_clarity": 4,
+      "statement_validity": "supported",
+      "reproducibility_score": 40,
+      "reproducibility_rationale": "The inputs to perturbation follow detailed rules, yielding understandable bounds given inaccessible simulator specifics."
+    }
+  ]
+}

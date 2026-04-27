@@ -1,0 +1,311 @@
+{
+  "pdf_path": "data/specific_cases/complex_paper.pdf",
+  "extraction_model": "gemini-3-flash-preview",
+  "title": "A Novel Framework Combining MPC and Deep Reinforcement Learning With Application to Freeway Traffic Control",
+  "authors": [
+    "Dingshan Sun",
+    "Anahita Jamshidnejad",
+    "Bart De Schutter"
+  ],
+  "method_nodes": [
+    {
+      "node_id": "meth_01",
+      "node_name": "Initialize DRL and MPC components",
+      "source_quote": "Initialize critic and actor networks... Initialize target network... Initialize experience replay buffer R",
+      "description": "Initialize the DRL agent's actor and critic networks, their corresponding target networks, and the experience replay buffer. This setup prepares the hierarchical framework for training and control.",
+      "input_ids": [
+        "src_benchmark_freeway_network"
+      ],
+      "outcomes": [
+        "initialized_networks",
+        "replay_buffer"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "Deep Deterministic Policy Gradient",
+        "Experience Replay"
+      ],
+      "tools_mentioned": [],
+      "parameters_required": [
+        "maximal_episodes",
+        "mini_batch_size",
+        "replay_buffer_size",
+        "discount_factor",
+        "learning_rate",
+        "target_update_rate",
+        "noise_std",
+        "noise_decay"
+      ],
+      "parameters_mentioned": [
+        "maximal_episodes=3000",
+        "mini_batch_size=512",
+        "replay_buffer_size=2e5",
+        "discount_factor=0.99",
+        "learning_rate=0.001",
+        "target_update_rate=0.01",
+        "noise_std=0.3",
+        "noise_decay=5e-6"
+      ]
+    },
+    {
+      "node_id": "meth_02",
+      "node_name": "High-level MPC optimization",
+      "source_quote": "Perform high-level MPC with freeway model F and prediction horizon Np,s, by solving optimization problem (5)-(A.3)",
+      "description": "The high-level MPC module solves a nonlinear optimization problem at a low frequency (Tc) using a nominal METANET model to generate a baseline control input (ub) that satisfies constraints.",
+      "input_ids": [
+        "src_benchmark_freeway_network"
+      ],
+      "outcomes": [
+        "mpc_output_ub"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "Model Predictive Control",
+        "METANET model",
+        "Nonlinear optimization"
+      ],
+      "tools_mentioned": [
+        "fmincon",
+        "SQP"
+      ],
+      "parameters_required": [
+        "ts",
+        "td",
+        "tc",
+        "npc",
+        "nps",
+        "wtts",
+        "wd",
+        "tolerance"
+      ],
+      "parameters_mentioned": [
+        "ts=10s",
+        "td=60s",
+        "tc=300s",
+        "npc=2",
+        "nps=60",
+        "wtts=1",
+        "wd=0.4",
+        "tolerance=1e-2"
+      ]
+    },
+    {
+      "node_id": "meth_03",
+      "node_name": "Low-level DRL action selection",
+      "source_quote": "Select action url(kd) = pi_theta(xrl(kd)) + wn(kd)",
+      "description": "The low-level DRL agent selects an ancillary action (url) at a high frequency (Td) to modify the MPC output. Exploration noise is added during the learning phase.",
+      "input_ids": [
+        "initialized_networks"
+      ],
+      "outcomes": [
+        "drl_action_url"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "Ornstein-Uhlenbeck process"
+      ],
+      "tools_mentioned": [],
+      "parameters_required": [
+        "scaling_parameter_wu"
+      ],
+      "parameters_mentioned": [
+        "scaling_parameter_wu=0.4"
+      ]
+    },
+    {
+      "node_id": "meth_04",
+      "node_name": "Combined control execution",
+      "source_quote": "Execute action uc(kd) in the freeway network, with the real traffic demand d(ks)",
+      "description": "The combined control input is calculated as the saturated sum of the MPC baseline and DRL modification, then applied to the freeway network simulation.",
+      "input_ids": [
+        "mpc_output_ub",
+        "drl_action_url",
+        "src_benchmark_freeway_network"
+      ],
+      "outcomes": [
+        "transition_data"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "Saturation function"
+      ],
+      "tools_mentioned": [],
+      "parameters_required": [],
+      "parameters_mentioned": []
+    },
+    {
+      "node_id": "meth_05",
+      "node_name": "Experience replay storage",
+      "source_quote": "Store transition (xrl(kd), url(kd), rt(kd), xrl(kd + 1)) in R",
+      "description": "Transitions consisting of states, actions, and rewards are collected and stored in the replay buffer to be used for off-policy training of the DRL agent.",
+      "input_ids": [
+        "transition_data",
+        "replay_buffer"
+      ],
+      "outcomes": [
+        "updated_replay_buffer"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "Data logging"
+      ],
+      "tools_mentioned": [],
+      "parameters_required": [],
+      "parameters_mentioned": []
+    },
+    {
+      "node_id": "meth_06",
+      "node_name": "Actor-critic network training",
+      "source_quote": "Update the critic network... Update the actor network... Update the target networks",
+      "description": "The actor and critic networks are updated using n-step temporal-difference learning and the Adam optimizer. Target networks are slowly updated to maintain stability.",
+      "input_ids": [
+        "updated_replay_buffer",
+        "initialized_networks"
+      ],
+      "outcomes": [
+        "trained_model",
+        "sink_fig5"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "n-step temporal-difference",
+        "Policy gradient"
+      ],
+      "tools_mentioned": [
+        "Adam optimizer"
+      ],
+      "parameters_required": [
+        "n_steps",
+        "penalty_weight_wp"
+      ],
+      "parameters_mentioned": [
+        "n_steps=10",
+        "penalty_weight_wp=10"
+      ]
+    },
+    {
+      "node_id": "meth_07",
+      "node_name": "Performance evaluation and comparison",
+      "source_quote": "The proposed MPC-DRL framework is now implemented and evaluated via a benchmark freeway network",
+      "description": "The trained framework is evaluated on a benchmark freeway network under various noise scenarios and compared against standalone MPC and DRL methods.",
+      "input_ids": [
+        "trained_model",
+        "src_benchmark_freeway_network"
+      ],
+      "outcomes": [
+        "sink_tab5"
+      ],
+      "algorithm_clarity": 4,
+      "tools_required": [
+        "Traffic simulation"
+      ],
+      "tools_mentioned": [
+        "Matlab version 2022a"
+      ],
+      "parameters_required": [
+        "total_sim_time"
+      ],
+      "parameters_mentioned": [
+        "total_sim_time=9000s"
+      ]
+    }
+  ],
+  "source_nodes": [
+    {
+      "node_id": "src_benchmark_freeway_network",
+      "node_name": "benchmark freeway network",
+      "source_quote": "The proposed framework is implemented on a benchmark freeway network in order to coordinate ramp metering and variable speed limits",
+      "description": "A synthetic freeway network consisting of two origins (one mainstream and one on-ramp) and one destination. The main stretch is 6 km long, divided into 6 segments of 1 km each.",
+      "size_estimate": "6 km length, 6 segments, 2 origins, 1 destination",
+      "license": null,
+      "availability": "not_mentioned",
+      "url": null
+    }
+  ],
+  "repository_links": [],
+  "supplementary_materials": [],
+  "sink_nodes": [
+    {
+      "node_id": "sink_fig5",
+      "node_name": "Figure 5",
+      "source_quote": "Learning performance of standalone DRL and combined MPC-DRL with and without 10-step TD for different scenarios.",
+      "description": "Learning curves showing reward over 3000 episodes for standalone DRL and the proposed MPC-DRL framework across six scenarios involving different noise levels and demand profiles.",
+      "input_ids": [
+        "src_benchmark_freeway_network",
+        "training_process"
+      ],
+      "size_estimate": "6 panels",
+      "type": "figure",
+      "statement_clarity": 3,
+      "statement_validity": "supported"
+    },
+    {
+      "node_id": "sink_tab5",
+      "node_name": "Table V",
+      "source_quote": "Comparison of the control performance for different controllers for different scenarios, in terms of TTS, TWT, constraint violation, mean computation time, and max computation time",
+      "description": "Quantitative performance metrics (TTS, TWT, speed, constraint violation, and CPU time) for six control strategies across six simulation scenarios.",
+      "input_ids": [
+        "src_benchmark_freeway_network",
+        "simulation_outputs"
+      ],
+      "size_estimate": "36 rows x 7 columns",
+      "type": "table",
+      "statement_clarity": 4,
+      "statement_validity": "supported"
+    }
+  ],
+  "hyperparameters": [
+    {
+      "name": "Ts",
+      "value": "10 s",
+      "context": "Simulation sampling time",
+      "source_quote": "simulation parameters are Ts = 10 s"
+    },
+    {
+      "name": "Td",
+      "value": "60 s",
+      "context": "DRL control sampling time",
+      "source_quote": "Td = 60 s"
+    },
+    {
+      "name": "Tc",
+      "value": "300 s",
+      "context": "MPC control sampling time",
+      "source_quote": "Tc = 300 s"
+    },
+    {
+      "name": "Np,c",
+      "value": "2",
+      "context": "MPC prediction horizon",
+      "source_quote": "Np,c = 2"
+    },
+    {
+      "name": "M",
+      "value": "3000",
+      "context": "Maximal episodes",
+      "source_quote": "Maximal episodes M 3000"
+    },
+    {
+      "name": "N",
+      "value": "512",
+      "context": "Mini-batch size",
+      "source_quote": "Mini-batch size N 512"
+    },
+    {
+      "name": "Learning rate",
+      "value": "0.001",
+      "context": "Actor and critic networks",
+      "source_quote": "Learning rate (both actor and critic networks) 0.001"
+    },
+    {
+      "name": "n",
+      "value": "10",
+      "context": "n-step TD for DRL module",
+      "source_quote": "n = 10 is chosen for the DRL module"
+    }
+  ],
+  "stated_software_versions": {
+    "Matlab": "2022a"
+  },
+  "hardware_requirements": "PC with Intel Xeon Quad-Core E5-1620 V3 CPU (3.5 GHz) [quote: \"running on a PC with an Intel Xeon Quad-Core E5-1620 V3 CPU with a clock speed of 3.5 GHz\"]"
+}
