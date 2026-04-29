@@ -26,12 +26,12 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
-from gemini_rag import GeminiPaperAnalyst
+from gemini_rag import GeminiPaperAnalyst, GPTPaperAnalyst
 
 # -- experiment grid ----------------------------------------------------------
 
-PAPER_DIR = Path("data/specific_cases")
-OUTPUT_DIR = Path("data/experiments/consistency_checks")
+PAPER_DIR = Path("data/pdf_original_cache")
+OUTPUT_DIR = Path("data/experiments/consistency_checks/rescience_c")
 TIMINGS_CSV = OUTPUT_DIR / "run_timings.csv"
 TIMINGS_FIELDS = [
     "timestamp_utc",
@@ -45,6 +45,23 @@ TIMINGS_FIELDS = [
     "error",
 ]
 _csv_lock = threading.Lock()
+
+# Per-backend concurrency cap. The Gemini and OpenAI quotas live on different
+# accounts; the global --workers value is the Gemini cap, and the GPT semaphore
+# narrows OpenAI calls so a low OpenAI tier doesn't blast 429s. Reconfigured in
+# main() based on --gpt-workers.
+_gpt_semaphore = threading.Semaphore(2)
+
+
+class _NullGate:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+_NULL_GATE = _NullGate()
 
 
 def append_timing(
@@ -77,38 +94,79 @@ def append_timing(
             )
 
 
-# PAPERS = [
-#     "2017_04_article.pdf",
-#     "2020_26_article.pdf",
-#     "2017_01_article.pdf",
-#     "2025_03_article.pdf",
-#     "2017_08_article.pdf",
-#     "2022_30_article.pdf",
-#     "2021_34_article.pdf",
-#     "2023_17_article.pdf",
-#     "2023_15_article.pdf",
-#     "2022_38_article.pdf",
-# ]
-
 PAPERS = [
-    "simple_paper.pdf",
+    "2017_04_article.pdf",
+    "2020_26_article.pdf",
+    "2017_01_article.pdf",
+    "2025_03_article.pdf",
+    "2017_08_article.pdf",
+    "2022_30_article.pdf",
+    "2021_34_article.pdf",
+    "2023_17_article.pdf",
+    "2023_15_article.pdf",
+    "2022_38_article.pdf",
 ]
 
-# Gemini supports temperature in [0, 2]; OSS backends typically [0, 1].
+# PAPERS = [
+#     "simple_paper.pdf",
+# ]
+
+# Gemini supports temperature in [0, 2]; OpenAI chat models also [0, 2];
+# OSS backends typically [0, 1]; reasoning models (gpt-5*, o1/o3) ignore
+# temperature -- one slot is used to drive the sample axis only.
 GEMINI_TEMPS = [0.0, 0.5, 1.0, 1.5, 2.0]
+GPT_TEMPS = [0.0, 0.5, 1.0, 1.5, 2.0]
+GPT_REASONING_TEMPS = [0.0]
 OSS_TEMPS = [0.0, 0.25, 0.5, 0.75, 1.0]
 
-# Per-model temperature grid. Add/remove entries as backends become available.
+GPT_PREFIXES = ("gpt-", "o1", "o3", "o4")
+GPT_REASONING_PREFIXES = ("gpt-5", "o1", "o3", "o4")
+
+
+def is_gpt_model(name: str) -> bool:
+    return name.startswith(GPT_PREFIXES)
+
+
+def is_reasoning_model(name: str) -> bool:
+    return name.startswith(GPT_REASONING_PREFIXES)
+
+
+def default_temps_for(model: str) -> list[float]:
+    """Fallback temperature grid for a model not pre-registered in MODELS."""
+    if is_reasoning_model(model):
+        return GPT_REASONING_TEMPS
+    if is_gpt_model(model):
+        return GPT_TEMPS
+    return GEMINI_TEMPS
+
+
+# Per-model temperature grid. Models passed via --models that are NOT in this
+# dict still work -- they fall back to default_temps_for(model). Override here
+# only when you want a non-default grid.
 # OSS backends (Qwen3, Llama4, local-GPU) plug in here once their analyst
-# adapters land; for now only Gemini-served models are wired.
+# adapters land.
 MODELS: dict[str, list[float]] = {
-    "gemini-2.5-flash": GEMINI_TEMPS,  # best price/perf
+    "gemini-2.5-flash": GEMINI_TEMPS,  # best price/perf (old generation)
+    "gemini-2.5-pro": GEMINI_TEMPS,  # Equivalent to 3.1 pro (old generation)
     "gemini-3-flash-preview": GEMINI_TEMPS,  # SOTA price/perf preview
     "gemini-3.1-pro-preview": GEMINI_TEMPS,  # most capable (expensive)
-    # "qwen3-26b":           OSS_TEMPS,
-    # "llama4-mm-17b":       OSS_TEMPS,
-    # "local-oss-gpu":       OSS_TEMPS,
+    "gpt-4.1-mini": GPT_TEMPS,  # OpenAI cheap chat tier
+    "gpt-4.1": GPT_TEMPS,  # OpenAI flagship chat
+    # "gpt-5-mini":            GPT_REASONING_TEMPS,  # reasoning model, ignores temperature
+    # "qwen3-26b":             OSS_TEMPS,
+    # "llama4-mm-17b":         OSS_TEMPS,
+    # "local-oss-gpu":         OSS_TEMPS,
 }
+
+
+def make_analyst(model: str, temperature: float):
+    """Dispatch to the right backend by model name."""
+    if is_gpt_model(model):
+        # Reasoning models (gpt-5*, o-series) reject 'temperature'.
+        temp_arg = None if is_reasoning_model(model) else temperature
+        return GPTPaperAnalyst(model=model, temperature=temp_arg)
+    return GeminiPaperAnalyst(model=model, temperature=temperature)
+
 
 N_SAMPLES = 10
 
@@ -151,9 +209,11 @@ def execute(run: Run, force: bool = False) -> tuple[Run, str, float]:
         append_timing(TIMINGS_CSV, run, "skip", 0.0)
         return run, "skip", 0.0
     t0 = time.monotonic()
+    gate = _gpt_semaphore if is_gpt_model(run.model) else _NULL_GATE
     try:
-        analyst = GeminiPaperAnalyst(model=run.model, temperature=run.temperature)
-        profile = analyst.analyze(run.paper_pdf, verbose=False)
+        with gate:
+            analyst = make_analyst(run.model, run.temperature)
+            profile = analyst.analyze(run.paper_pdf, verbose=False)
         run.out.parent.mkdir(parents=True, exist_ok=True)
         run.out.write_text(profile.model_dump_json(indent=2))
         # Clear any prior error sidecar from a retry.
@@ -178,7 +238,7 @@ def build_runs(
     papers: list[str] | None = None,
     n_samples: int = N_SAMPLES,
 ) -> list[Run]:
-    selected_models = {m: MODELS[m] for m in (models or list(MODELS))}
+    selected_models = {m: MODELS.get(m, default_temps_for(m)) for m in (models or list(MODELS))}
     selected_papers = papers or PAPERS
     runs: list[Run] = []
     for paper in selected_papers:
@@ -205,6 +265,16 @@ def main() -> int:
         help="parallel API calls; tune to stay under your quota",
     )
     parser.add_argument(
+        "--gpt-workers",
+        type=int,
+        default=2,
+        help=(
+            "max concurrent OpenAI calls (separate from --workers). "
+            "Lower this if you hit RateLimitError. Tier-1 accounts often "
+            "need 1-2; bump as your tier increases."
+        ),
+    )
+    parser.add_argument(
         "--force",
         action="store_true",
         help="re-run even if output JSON already exists",
@@ -217,8 +287,14 @@ def main() -> int:
     parser.add_argument(
         "--models",
         nargs="+",
-        choices=list(MODELS),
-        help="restrict to a subset of models (default: all configured)",
+        help=(
+            "restrict to a subset of models (default: all configured). "
+            "Unregistered names are accepted and routed by prefix: 'gpt-*' / "
+            "'o1*' / 'o3*' / 'o4*' -> OpenAI, anything else -> Gemini. "
+            "Unregistered models use the default grid: "
+            "gpt-5*/o-series -> [0.0]; other gpt-* -> [0,0.5,1,1.5,2]; "
+            "rest -> [0,0.5,1,1.5,2]."
+        ),
     )
     parser.add_argument(
         "--papers",
@@ -232,6 +308,9 @@ def main() -> int:
         help=f"samples per (model, temp, paper); default {N_SAMPLES}",
     )
     args = parser.parse_args()
+
+    global _gpt_semaphore
+    _gpt_semaphore = threading.Semaphore(max(1, args.gpt_workers))
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     runs = build_runs(args.models, args.papers, args.samples)

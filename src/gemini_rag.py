@@ -10,6 +10,7 @@ Design notes -- hallucination control (load-bearing, do not loosen):
 
 from __future__ import annotations
 
+import contextlib
 import os
 from enum import StrEnum
 from pathlib import Path
@@ -17,6 +18,8 @@ from typing import TypeVar
 
 from google import genai
 from google.genai import types
+from openai import OpenAI
+from openai.types.responses import Response as OpenAIResponse
 from pydantic import BaseModel, Field
 
 try:
@@ -788,3 +791,189 @@ def analyze_pdf(
     return GeminiPaperAnalyst(api_key=api_key, model=model, temperature=temperature).analyze(
         pdf_path
     )
+
+
+GPT_PRICING_USD_PER_MTOK = {
+    "gpt-4o": {"input": 2.50, "output": 10.00},
+    "gpt-4o-mini": {"input": 0.15, "output": 0.60},
+    "gpt-4.1": {"input": 2.00, "output": 8.00},
+    "gpt-4.1-mini": {"input": 0.40, "output": 1.60},
+    "gpt-4.1-nano": {"input": 0.10, "output": 0.40},
+    "gpt-5": {"input": 1.25, "output": 10.00},
+    "gpt-5-mini": {"input": 0.25, "output": 2.00},
+    "gpt-5-nano": {"input": 0.05, "output": 0.40},
+}
+
+
+class GPTPaperAnalyst:
+    """Run OpenAI-backed structured extraction on a single PDF.
+
+    Mirrors GeminiPaperAnalyst's surface so call sites (e.g. the consistency
+    sweep) can swap implementations. Uses the OpenAI Responses API with
+    'responses.parse' so the Pydantic schema enforces JSON conformance the
+    same way Gemini's 'response_schema' does.
+
+    Reasoning models (o1, o3, gpt-5*) reject 'temperature'; pass
+    temperature=None to omit it.
+    """
+
+    def __init__(
+        self,
+        api_key: str | None = None,
+        model: str = "gpt-4.1-mini",
+        temperature: float | None = 0.0,
+    ) -> None:
+        key = api_key or os.environ.get("GPT_API_KEY") or os.environ.get("OPENAI_API_KEY")
+        if not key:
+            raise RuntimeError("Set GPT_API_KEY (or OPENAI_API_KEY) or pass api_key= explicitly.")
+        # max_retries: SDK retries 429/5xx with exponential backoff and respects
+        # Retry-After. Default is 2; bumped because the consistency sweep fires
+        # 6 queries per run and easily trips low-tier RPM/TPM caps.
+        self.client = OpenAI(api_key=key, max_retries=10, timeout=600.0)
+        self.model = model
+        self.temperature = float(temperature) if temperature is not None else None
+        self.usage_log: list[tuple[str, OpenAIResponse]] = []
+
+    def upload_pdf(self, pdf_path: str | Path):
+        path = Path(pdf_path)
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        with path.open("rb") as fh:
+            return self.client.files.create(file=fh, purpose="user_data")
+
+    def query(
+        self,
+        file_id: str,
+        prompt: str,
+        response_schema: type[T],
+        query_name: str = "query",
+    ) -> T:
+        kwargs: dict = {
+            "model": self.model,
+            "instructions": SYSTEM_INSTRUCTION,
+            "input": [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "input_file", "file_id": file_id},
+                        {"type": "input_text", "text": prompt},
+                    ],
+                }
+            ],
+            "text_format": response_schema,
+            "max_output_tokens": 65536,
+        }
+        if self.temperature is not None:
+            kwargs["temperature"] = self.temperature
+        response = self.client.responses.parse(**kwargs)
+        self.usage_log.append((query_name, response))
+        if response.status == "incomplete":
+            reason = (
+                response.incomplete_details.reason
+                if response.incomplete_details is not None
+                else "unknown"
+            )
+            if reason == "max_output_tokens":
+                raise RuntimeError(
+                    f"{query_name}: GPT hit max_output_tokens before closing JSON -- "
+                    "raise max_output_tokens or tighten the prompt."
+                )
+            raise RuntimeError(f"{query_name}: response incomplete ({reason}).")
+        parsed = response.output_parsed
+        if parsed is None:
+            raise RuntimeError(f"{query_name}: GPT returned no parsed output.")
+        return parsed
+
+    def usage_summary(self) -> dict:
+        """Aggregate tokens + USD estimate over every query since the last analyze()."""
+        input_tokens = sum(
+            (r.usage.input_tokens or 0) for _, r in self.usage_log if r.usage is not None
+        )
+        output_tokens = sum(
+            (r.usage.output_tokens or 0) for _, r in self.usage_log if r.usage is not None
+        )
+        rates = GPT_PRICING_USD_PER_MTOK.get(self.model)
+        input_usd = input_tokens / 1_000_000 * rates["input"] if rates else None
+        output_usd = output_tokens / 1_000_000 * rates["output"] if rates else None
+        total_usd = input_usd + output_usd if rates else None
+        return {
+            "model": self.model,
+            "calls": len(self.usage_log),
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+            "total_tokens": input_tokens + output_tokens,
+            "input_usd": input_usd,
+            "output_usd": output_usd,
+            "total_usd": total_usd,
+            "per_query": [
+                {
+                    "name": name,
+                    "input_tokens": (r.usage.input_tokens or 0) if r.usage else 0,
+                    "output_tokens": (r.usage.output_tokens or 0) if r.usage else 0,
+                }
+                for name, r in self.usage_log
+            ],
+        }
+
+    def analyze(self, pdf_path: str | Path, verbose: bool = True) -> PaperProfile:
+        """Run the full six-query pipeline on a PDF and return a PaperProfile."""
+        pdf_path = Path(pdf_path)
+        self.usage_log = []
+        if verbose:
+            print(f"Uploading {pdf_path.name} to OpenAI Files API...")
+        fobj = self.upload_pdf(pdf_path)
+        file_id = fobj.id
+
+        def run(name: str, prompt: str, schema: type[T]) -> T:
+            if verbose:
+                print(f"  querying: {name} ...", flush=True)
+            return self.query(file_id, prompt, schema, query_name=name)
+
+        try:
+            header = run("header", PROMPT_HEADER, PaperHeader)
+            sources = run("nodes_source", PROMPT_SOURCE_NODES, SourceNodesResponse)
+            source_ids = [d.node_id for d in sources.nodes_source]
+            sinks = run(
+                "nodes_sink",
+                build_sink_nodes_prompt(source_ids),
+                SinkNodesResponse,
+            )
+            sink_ids = [s.node_id for s in sinks.nodes_sink]
+            processes = run(
+                "nodes_process",
+                build_process_nodes_prompt(source_ids, sink_ids),
+                ProcessNodesResponse,
+            )
+            artefacts = run("artefacts", PROMPT_ARTEFACTS, ArtefactsResponse)
+            params = run("parameters", PROMPT_PARAMETERS, ParametersResponse)
+        finally:
+            with contextlib.suppress(Exception):
+                self.client.files.delete(file_id)
+
+        metadata = PaperMetadata(
+            pdf_path=str(pdf_path),
+            extraction_model=self.model,
+            title=header.title,
+            authors=header.authors,
+            repository_links=artefacts.repository_links,
+            supplementary_materials=artefacts.supplementary_materials,
+            hyperparameters=params.hyperparameters,
+            stated_software_versions={sv.name: sv.version for sv in params.software_versions},
+            hardware_requirements=artefacts.hardware_requirements or params.hardware,
+        )
+        return PaperProfile(
+            metadata=metadata,
+            nodes_source=sources.nodes_source,
+            nodes_process=processes.nodes_process,
+            nodes_sink=sinks.nodes_sink,
+        )
+
+
+def analyze_pdf_gpt(
+    pdf_path: str | Path,
+    api_key: str | None = None,
+    model: str = "gpt-4.1-mini",
+    temperature: float | None = 0.0,
+) -> PaperProfile:
+    """Convenience wrapper: one-shot PDF -> PaperProfile via GPT."""
+    return GPTPaperAnalyst(api_key=api_key, model=model, temperature=temperature).analyze(pdf_path)
