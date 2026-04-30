@@ -176,6 +176,9 @@ src/data/**/*.pdf
 # Experiment outputs
 src/data/experiments/
 
+# Publication figure copies
+src/figures/paper/
+
 # Editor / IDE history
 .history/
 

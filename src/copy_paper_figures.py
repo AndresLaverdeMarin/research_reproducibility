@@ -8,8 +8,11 @@ Body figures (per analysis_summary.md):
   Fig 8  — fig8_cross_validation            (Ch. 1+2 — cross-notebook validation)
 """
 
+import sys
 import shutil
 from pathlib import Path
+
+sys.stdout.reconfigure(encoding="utf-8")
 
 SRC_DIR  = Path("figures")
 DEST_DIR = Path("figures/paper")
@@ -21,6 +24,10 @@ PAPER_FIGURES = [
     "gemini3_1_pro_T0_layer_content",
     "gemini3_1_pro_T0_metadata_richness",
     "fig8_cross_validation",
+    "gemini3_1_pro_T0_wiring_metrics",
+    "gemini3_1_pro_T0_node_counts_vs_repro",
+    "gemini3_1_pro_T0_repro_by_year",
+    "gemini3_1_pro_T0_paper_ranking",
 ]
 
 for stem in PAPER_FIGURES:

@@ -274,6 +274,10 @@ The paper's argument follows four steps: **(1) the pipeline is reliable** → **
 *Justifies T = 0; std doubles from T = 0 to T = 2 across all models.*
 [PDF](figures/fig2_temperature_sensitivity.pdf)
 
+**Description.** A 2 × 3 panel grid with one sub-panel per model. The x-axis is the sampling temperature (0, 0.5, 1.0, 1.5, 2.0) and the y-axis is the within-cell standard deviation of `repro_index` across 10 independent samples. Each line represents one paper, coloured by paper length (viridis, short = dark, long = bright). The colour bar on the right maps word count to colour. A single panel is shown for models with no temperature variation (reasoning/T = 0 only models). Empty panel slots are hidden.
+
+**Caption.** **Fig. A1 — Effect of sampling temperature on reproducibility score variance.** Within-cell standard deviation of the reproducibility index as a function of LLM sampling temperature, disaggregated by model (panels) and paper (lines, coloured by word count). Each point is computed from 10 independent extractions of the same (paper, model, temperature) cell. Std is near-zero at T = 0 for all models and papers, confirming that deterministic inference is a sufficient operating point for corpus-scale analysis. At T ≥ 1.5, variance rises sharply and becomes paper-specific, indicating that high-temperature runs introduce unreliable extractions rather than meaningful diversity.
+
 ![Fig 2 – Temperature sensitivity](figures/fig2_temperature_sensitivity.png)
 
 ---
@@ -282,6 +286,10 @@ The paper's argument follows four steps: **(1) the pipeline is reliable** → **
 *5/10 single-run T = 0 scores fall within ±1 std of the 10-sample consistency band. Promotes to body if a 5th slot is available.*
 [PDF](figures/fig8_cross_validation.pdf)
 
+**Description.** A single-panel chart with the 10 shared papers on the x-axis, ordered by their consistency-sweep mean `repro_index`. For each paper, a blue error bar shows the mean ± 1 std of the 10-sample consistency band from the gemini-3.1-pro-preview at T = 0 (Chapter 1). An orange diamond marks the corresponding single deterministic run from the full-corpus dataset (Chapter 2). Perfect agreement would place every diamond inside its error bar.
+
+**Caption.** **Fig. A2 — Cross-dataset validation of single-run T = 0 scoring.** Comparison of multi-sample (n = 10, blue error bars) and single-run (orange diamonds) reproducibility scores for the 10 papers present in both Chapter 1 and Chapter 2 datasets. Both scores use gemini-3.1-pro-preview at temperature 0. Papers are ordered by their multi-sample mean. Five of ten single-run scores fall within ±1 std of the consistency band, and all ten are within ±2 std, confirming that a single deterministic run is a reliable proxy for the multi-sample mean and validating the experimental design adopted in Chapter 2.
+
 ![Fig 8 – Cross-notebook validation](figures/fig8_cross_validation.png)
 
 ---
@@ -289,6 +297,10 @@ The paper's argument follows four steps: **(1) the pipeline is reliable** → **
 #### Annex A5 — Repro_index vs paper length `figS1_repro_vs_paper_length` · cell `d402fa6a`
 *Null result — no monotonic trend; confirms paper length is not a confound for Fig 1.*
 [PDF](figures/figS1_repro_vs_paper_length.pdf)
+
+**Description.** A line chart with paper length in words on the x-axis and mean `repro_index` (pooled across all temperatures and samples) on the y-axis. One coloured line per model, with a shaded ±1 std band around each mean. Papers are sorted left-to-right by word count (3 372–22 917). Axes share consistent limits (0.3–1.0 on y) to facilitate cross-model comparison.
+
+**Caption.** **Fig. A5 — Reproducibility index as a function of paper length.** Mean reproducibility index per paper (averaged over all temperature × sample combinations) plotted against paper word count for each of the five models evaluated in Chapter 1 (shaded bands = ±1 std). No consistent monotonic relationship is observed: the highest-scoring paper (2023\_17, 14 733 words) is mid-length, and the score ordering across papers is non-linear and model-specific. This confirms that paper length is not a systematic confound for the model-comparison results in Fig. 1.
 
 ![Fig S1 – Repro vs paper length](figures/figS1_repro_vs_paper_length.png)
 
@@ -328,6 +340,10 @@ The paper's argument follows four steps: **(1) the pipeline is reliable** → **
 *Source-to-sink reachability (0.57, highlighted in orange) is the weakest structural metric; elaborates the structural side of Fig 3.*
 [PDF](figures/gemini3_1_pro_T0_wiring_metrics.pdf)
 
+**Description.** A bar chart of the five structural wiring metrics that compose the structural score, showing their corpus-wide mean ± 1 std across all 213 papers. Bars are displayed in the order they appear in the score formula: sources consumed, sinks produced, resolved inputs, source-to-sink reachability, and LWCC fraction. The source-to-sink reachability bar is coloured orange to flag it as the weakest component; all others are blue. Mean values are annotated above each bar.
+
+**Caption.** **Fig. A3 — Structural wiring metrics across 213 ReScience-C papers.** Mean ± std of the five wiring metrics used to compute the structural reproducibility score (gemini-3.1-pro-preview, T = 0). Four of the five metrics exceed 0.81, reflecting that the LLM reliably connects process nodes to both data sources and result sinks. The exception is source-to-sink reachability (mean = 0.57, orange), which measures whether a directed path exists from every source node to at least one sink node. The gap indicates that workflow graphs frequently lack end-to-end connectivity — methods sections describe individual steps but do not trace a continuous data flow from raw inputs to published outputs.
+
 ![Fig 5 – Wiring metrics](figures/gemini3_1_pro_T0_wiring_metrics.png)
 
 ---
@@ -335,6 +351,10 @@ The paper's argument follows four steps: **(1) the pipeline is reliable** → **
 #### Annex A4 — Repro_index by year `gemini3_1_pro_T0_repro_by_year` · cell `year-trend`
 *Null result — no secular trend; 2017 dip plausibly reflects early editorial norms.*
 [PDF](figures/gemini3_1_pro_T0_repro_by_year.pdf)
+
+**Description.** A box plot of `repro_index` distributions grouped by publication year (2015–2023), with individual outliers shown as small dots. An orange line connecting the per-year means is overlaid. Year labels are rotated 45° on the x-axis. The 2015 cohort contains only one paper and is shown for completeness. Box widths and notch positions are not adjusted for sample size.
+
+**Caption.** **Fig. A4 — Reproducibility index by publication year (2015–2023).** Distribution of single-run reproducibility scores across 213 ReScience-C papers, grouped by year of publication (gemini-3.1-pro-preview, T = 0). The orange line tracks the per-year mean. No statistically meaningful secular trend is observed: mean scores remain between 0.71 and 0.79 for all years with n ≥ 7. The 2017 cohort (n = 9) shows the lowest mean (0.648), plausibly reflecting early-cohort publication norms before ReScience-C's reproducibility-oriented editorial standards matured. This temporal stability suggests that the pipeline's scores are not confounded by year-specific writing conventions.
 
 ![Fig 6 – Repro by year](figures/gemini3_1_pro_T0_repro_by_year.png)
 
@@ -344,6 +364,10 @@ The paper's argument follows four steps: **(1) the pipeline is reliable** → **
 *Histograms of repro_index, structural, and content scores across 213 papers.*
 [PDF](figures/gemini3_1_pro_T0_score_distribution.pdf)
 
+**Description.** Three side-by-side histograms (25 bins each) showing the marginal distribution of `repro_index`, `structural`, and `content` scores across the 213-paper corpus. A dashed orange vertical line marks the corpus mean in each panel. The leftmost panel shows the composite score; the other two show its two components. The shared x-scale (0–1) allows direct comparison of spread and skew across the three quantities.
+
+**Caption.** **Fig. A6 — Marginal score distributions across 213 ReScience-C papers.** Histograms of the reproducibility index (left), structural score (centre), and content score (right) computed by gemini-3.1-pro-preview at T = 0. Dashed orange lines indicate corpus means (0.762, 0.864, 0.685 respectively). The structural distribution is left-skewed and concentrated near 1, indicating that graph extraction is reliable for most papers. The content distribution is broader and more symmetric, with a longer left tail. The composite `repro_index` inherits the content score's spread, confirming that content quality — not graph structure — is the binding constraint on reproducibility.
+
 ![Score distributions](figures/gemini3_1_pro_T0_score_distribution.png)
 
 ---
@@ -352,6 +376,10 @@ The paper's argument follows four steps: **(1) the pipeline is reliable** → **
 *Top and bottom 15 papers by repro_index.*
 [PDF](figures/gemini3_1_pro_T0_paper_ranking.pdf)
 
+**Description.** A horizontal bar chart showing the top 15 and bottom 15 papers by `repro_index`, sorted in ascending order (lowest at top, highest at bottom). Bars below the corpus median are coloured orange; bars at or above the median are blue. A dashed vertical line marks the median. Paper labels are the article identifiers (`YYYY_NN_article`) without the `.pdf` suffix.
+
+**Caption.** **Fig. A7 — Top and bottom 15 papers by reproducibility index.** Horizontal bars show single-run `repro_index` for the 15 highest- and 15 lowest-scoring papers in the 213-paper corpus (gemini-3.1-pro-preview, T = 0). Bars are coloured by position relative to the corpus median (dashed line). The top-ranked paper (2020\_27, score 0.979) and the lowest-ranked (2017\_09, score 0.361) span nearly the full theoretical range, illustrating the considerable heterogeneity in reproducibility practice within the ReScience-C corpus despite its editorial focus on replication.
+
 ![Paper ranking](figures/gemini3_1_pro_T0_paper_ranking.png)
 
 ---
@@ -359,6 +387,10 @@ The paper's argument follows four steps: **(1) the pipeline is reliable** → **
 #### Annex — Node counts vs repro_index `gemini3_1_pro_T0_node_counts_vs_repro`
 *Node graph size is uncorrelated with reproducibility (r < 0.13 for all layers).*
 [PDF](figures/gemini3_1_pro_T0_node_counts_vs_repro.pdf)
+
+**Description.** Three side-by-side scatter plots, one for each node layer (source, process, sink). The x-axis is the raw node count extracted for that layer; the y-axis is the paper's `repro_index`. Each dot is one paper (n = 213). The Pearson correlation coefficient r is annotated in each panel title. No regression line is drawn, as the relationship is not expected to be linear.
+
+**Caption.** **Fig. A8 — Node graph size versus reproducibility index.** Scatter plots of source, process, and sink node counts against the reproducibility index for 213 papers (gemini-3.1-pro-preview, T = 0). Pearson r values are near zero for all three layers (r = 0.03, 0.13, 0.02 respectively), indicating that the number of nodes extracted from a paper does not predict its reproducibility score. A larger extracted workflow graph is neither more nor less reproducible on average. This result rules out graph verbosity as a confound and implies that score variation is driven by the *quality* of node descriptions rather than their quantity.
 
 ![Node counts vs repro](figures/gemini3_1_pro_T0_node_counts_vs_repro.png)
 
