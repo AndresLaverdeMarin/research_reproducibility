@@ -173,6 +173,9 @@ jrc_transport_analysis/analysis_outputs/*.pkl
 # PDFs under src/data (paper inputs — keep out of git)
 src/data/**/*.pdf
 
+# Experiment outputs
+src/data/experiments/
+
 # Editor / IDE history
 .history/
 
